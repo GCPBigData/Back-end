@@ -1,0 +1,42 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "br.com.clearinvest.clivserver",
+      "nativeLanguage": "pt-br"
+    },
+    "jhipsterVersion": "5.7.0",
+    "applicationType": "monolith",
+    "baseName": "cliv_server",
+    "packageName": "br.com.clearinvest.clivserver",
+    "packageFolder": "br/com/clearinvest/clivserver",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "OTYzMmE3YmIwYTQ2YWM4NzM4Y2E2YzFmZjhjMTJiODc0YTA3MzlkMDliY2EyYmVhNDQ0YzU0MTIzN2JlOGFkMDhhMjE3M2FiNWY2YmRjMjAxOWZiM2NiMGQxMjNiNjU4YzJiOGJkOGE0MDY2OWEzNTM5NDI0NDQ3ZmZlYzBlYTc=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "pt-br",
+    "languages": [
+      "pt-br",
+      "en",
+      "es"
+    ]
+  }
+}
