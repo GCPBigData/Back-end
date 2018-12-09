@@ -1,14 +1,13 @@
 package br.com.clearinvest.clivserver.service.dto;
 
 import br.com.clearinvest.clivserver.config.Constants;
-
 import br.com.clearinvest.clivserver.domain.Authority;
 import br.com.clearinvest.clivserver.domain.User;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,7 +19,6 @@ public class UserDTO {
 
     private Long id;
 
-    @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;
@@ -30,6 +28,10 @@ public class UserDTO {
 
     @Size(max = 50)
     private String lastName;
+
+    @CPF
+    @Size(max = 11)
+    private String cpf;
 
     @Email
     @Size(min = 5, max = 254)
@@ -62,6 +64,7 @@ public class UserDTO {
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.cpf = user.getCpf();
         this.email = user.getEmail();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
@@ -177,6 +180,14 @@ public class UserDTO {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     @Override

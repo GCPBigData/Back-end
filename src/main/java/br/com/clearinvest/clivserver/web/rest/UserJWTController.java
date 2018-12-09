@@ -2,6 +2,7 @@ package br.com.clearinvest.clivserver.web.rest;
 
 import br.com.clearinvest.clivserver.security.jwt.JWTFilter;
 import br.com.clearinvest.clivserver.security.jwt.TokenProvider;
+import br.com.clearinvest.clivserver.web.rest.errors.InternalServerErrorException;
 import br.com.clearinvest.clivserver.web.rest.vm.LoginVM;
 
 import com.codahale.metrics.annotation.Timed;
@@ -37,7 +38,25 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     @Timed
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+        if (!loginVM.getUsername().equalsIgnoreCase("admin")) {
+            throw new InternalServerErrorException("Na aplicação web, só é permitido acesso de usuário admin.");
+        }
 
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/authenticate/mobile")
+    @Timed
+    public ResponseEntity<JWTToken> authorizeFromMobile(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 

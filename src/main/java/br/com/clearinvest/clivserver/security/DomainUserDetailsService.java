@@ -13,7 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +40,11 @@ public class DomainUserDetailsService implements UserDetailsService {
             return userRepository.findOneWithAuthoritiesByEmail(login)
                 .map(user -> createSpringSecurityUser(login, user))
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+
+        } else if (/*new CPFValidator().isValid(login, null)*/ isCpf(login)) {
+            return userRepository.findOneWithAuthoritiesByCpf(login)
+                .map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with cpf " + login + " was not found in the database"));
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
@@ -46,6 +52,11 @@ public class DomainUserDetailsService implements UserDetailsService {
             .map(user -> createSpringSecurityUser(lowercaseLogin, user))
             .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
 
+    }
+
+    private boolean isCpf(String str) {
+        if (str == null || str.isEmpty()) return false;
+        return str.matches("\\d+") && str.length() == 11;
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {

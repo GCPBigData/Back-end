@@ -35,6 +35,7 @@ public class CacheConfiguration {
         return cm -> {
             cm.createCache(br.com.clearinvest.clivserver.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.repository.UserRepository.USERS_BY_CPF_CACHE, jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.User.class.getName() + ".authorities", jcacheConfiguration);

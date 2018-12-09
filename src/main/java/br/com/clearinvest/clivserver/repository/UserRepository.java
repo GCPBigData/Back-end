@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
 
+    String USERS_BY_CPF_CACHE = "usersByCpf";
+
     Optional<User> findOneByActivationKey(String activationKey);
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
@@ -42,6 +44,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     Optional<User> findOneWithAuthoritiesByEmail(String email);
+
+    @EntityGraph(attributePaths = "authorities")
+    @Cacheable(cacheNames = USERS_BY_CPF_CACHE)
+    Optional<User> findOneWithAuthoritiesByCpf(String cpf);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
 }

@@ -9,6 +9,7 @@ import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.UserDTO;
 import br.com.clearinvest.clivserver.service.util.RandomUtil;
+import br.com.clearinvest.clivserver.util.LangUtil;
 import br.com.clearinvest.clivserver.web.rest.errors.*;
 
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static br.com.clearinvest.clivserver.util.LangUtil.isNullOrEmpty;
 
 /**
  * Service class for managing users.
@@ -87,13 +90,15 @@ public class UserService {
             });
     }
 
+    public static void setUserLogin(User user, UserDTO userDTO) {
+        user.setLogin(userDTO.getLogin() == null ? generateRandomLogin() : userDTO.getLogin().toLowerCase());
+    }
+
+    public static String generateRandomLogin() {
+        return UUID.randomUUID().toString();
+    }
+
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new LoginAlreadyUsedException();
-            }
-        });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -102,14 +107,14 @@ public class UserService {
         });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        setUserLogin(newUser, userDTO);
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setLangKey(isNullOrEmpty(userDTO.getLangKey()) ? Constants.DEFAULT_LANGUAGE : userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -122,6 +127,7 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+
     private boolean removeNonActivatedUser(User existingUser){
         if (existingUser.getActivated()) {
              return false;
@@ -134,7 +140,7 @@ public class UserService {
 
     public User createUser(UserDTO userDTO) {
         User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
+        setUserLogin(user, userDTO);
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
@@ -199,7 +205,6 @@ public class UserService {
             .map(Optional::get)
             .map(user -> {
                 this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 user.setEmail(userDTO.getEmail().toLowerCase());

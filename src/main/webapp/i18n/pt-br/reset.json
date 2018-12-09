@@ -18,7 +18,7 @@
             },
             "messages": {
                 "info": "Escolha uma nova senha",
-                "success": "<strong>Sua senha foi alterada com sucesso!</strong> Por favor ",
+                "success": "<strong>Sua senha foi alterada com sucesso!</strong> Agora você pode se autenticar no App com sua nova senha.",
                 "keymissing": "Chave de reestabelecimento não encontrada.",
                 "error": "Sua senha não pôde ser trocada. Lembre-se, requisição de troca de senha é válida apenas por 24h."
             }

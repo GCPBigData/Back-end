@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.br.CPF;
+
 import javax.validation.constraints.Email;
 
 import javax.persistence.*;
@@ -59,6 +61,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
+
+    @CPF
+    @Size(max = 11)
+    @Column(length = 11, unique = true)
+    private String cpf;
 
     @NotNull
     @Column(nullable = false)
@@ -200,6 +207,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -230,5 +245,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
             "}";
+    }
+
+    public Locale getLocale() {
+        return new Locale("pt", "BR");
+    }
+
+    public String getCompleteName() {
+        return firstName + " " + lastName;
     }
 }
