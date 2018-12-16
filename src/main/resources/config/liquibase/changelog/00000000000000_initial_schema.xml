@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
     </changeSet>
 
     <!--
@@ -138,6 +138,8 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
+
+        <!--<sql dbms="postgresql" endDelimiter=";">select setval('jhi_user_id_seq', 100, true);</sql>-->
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">
