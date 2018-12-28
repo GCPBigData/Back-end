@@ -1,5 +1,9 @@
 # API-first development with OpenAPI
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
+
+# https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-1-introduction/
+# https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-2-the-basics/
+
 openapi: "3.0.1"
 info:
   title: "cliv_server"

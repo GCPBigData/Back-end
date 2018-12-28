@@ -19,7 +19,8 @@ bootRun {
     args = []
 }
 
-task webpackBuildDev(type: NpmTask, dependsOn: 'npm_install') {
+// dependência a task npm_install comentada para tornar builds mais rápidos
+task webpackBuildDev(type: NpmTask, /*dependsOn: 'npm_install'*/) {
     inputs.dir("src/main/webapp/")
     inputs.files(fileTree('src/main/webapp/'))
     outputs.dir("build/www/")

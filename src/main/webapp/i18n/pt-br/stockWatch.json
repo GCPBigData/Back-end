@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "stockWatch": {
+            "home": {
+                "title": "Ações em Vista",
+                "createLabel": "Criar nova Ação em Vista",
+                "createOrEditLabel": "Criar ou editar Ação em Vista"
+            },
+            "created": "Uma nova Ação em Vista foi criada com o identificador {{ param }}",
+            "updated": "Uma Ação em Vista foi atualizada com o identificador {{ param }}",
+            "deleted": "Uma Ação em Vista foi deletada com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir a Ação em Vista {{ id }}?"
+            },
+            "detail": {
+                "title": "Ação em Vista"
+            },
+            "stock": "Ação",
+            "user": "Usuário"
+        }
+    }
+}

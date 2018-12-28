@@ -1,0 +1,14 @@
+id;symbol;company;market_sector_id
+1;BRFS3;BRF SA;1
+2;JBSS3;JBS Friboi;1
+3;BTOW3;B2W Digital;1
+4;ABEV3;Ambev SA;1
+5;ELPL3;Eletropaulo;2
+6;BBAS3;Banco do Brasil;3
+7;NEMO3;Suzano Holding;4
+8;GFSA3;Gafisa;5
+9;EMBR3;Embraer;6
+10;VALE3;Vale;7
+11;COCA34;Coca Cola;8
+12;KLBN11;Klabin SA;9
+13;PETR4;Petrobras;10

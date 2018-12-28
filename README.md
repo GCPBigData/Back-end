@@ -1,3 +1,16 @@
+
+# setup
+
+Instale o node e nvm da distribuição, o nvm não funciona com o gradle e intellij. Outra solução possível é criar links 
+nos diretórios /usr/bin, /usr/local/bin, etc, para uma versão específica instalada pelo nvm.\
+Ver https://objectpartners.com/2016/04/14/using-self-contained-node-js-and-npm-instances-with-gradle/
+
+[Delegue o build do intellij para o gradle](https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle)
+
+
+
+# Antigo (mover para outro arquivo)
+
 # cliv_server
 This application was generated using JHipster 5.7.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.7.0](https://www.jhipster.tech/documentation-archive/v5.7.0).
 

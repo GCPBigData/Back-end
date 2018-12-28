@@ -1,0 +1,23 @@
+{
+    "clivServerApp": {
+        "stock": {
+            "home": {
+                "title": "Ações",
+                "createLabel": "Criar nova Ação",
+                "createOrEditLabel": "Criar ou editar Ação"
+            },
+            "created": "Uma nova Ação foi criada com o identificador {{ param }}",
+            "updated": "Uma Ação foi atualizada com o identificador {{ param }}",
+            "deleted": "Uma Ação foi deletada com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir a Ação {{ id }}?"
+            },
+            "detail": {
+                "title": "Ação"
+            },
+            "symbol": "Símbolo",
+            "company": "Empresa",
+            "marketSector": "Setor"
+        }
+    }
+}

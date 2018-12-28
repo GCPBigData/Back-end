@@ -1,0 +1,21 @@
+{
+    "clivServerApp": {
+        "marketSector": {
+            "home": {
+                "title": "Market Sectors",
+                "createLabel": "Create a new Market Sector",
+                "createOrEditLabel": "Create or edit a Market Sector"
+            },
+            "created": "A new Market Sector is created with identifier {{ param }}",
+            "updated": "A Market Sector is updated with identifier {{ param }}",
+            "deleted": "A Market Sector is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Market Sector {{ id }}?"
+            },
+            "detail": {
+                "title": "Market Sector"
+            },
+            "name": "Name"
+        }
+    }
+}

@@ -39,6 +39,9 @@ public class CacheConfiguration {
             cm.createCache(br.com.clearinvest.clivserver.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.MarketSector.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.Stock.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.StockWatch.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

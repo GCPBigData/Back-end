@@ -1,0 +1,21 @@
+{
+    "clivServerApp": {
+        "marketSector": {
+            "home": {
+                "title": "Setores",
+                "createLabel": "Criar novo Setor",
+                "createOrEditLabel": "Criar ou editar Setor"
+            },
+            "created": "Um novo Setor foi criado com o identificador {{ param }}",
+            "updated": "Um Setor foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Setor foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir o Setor {{ id }}?"
+            },
+            "detail": {
+                "title": "Setor"
+            },
+            "name": "Nome"
+        }
+    }
+}
