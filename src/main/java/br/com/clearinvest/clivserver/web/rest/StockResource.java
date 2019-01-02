@@ -90,10 +90,24 @@ public class StockResource {
      */
     @GetMapping("/stocks")
     @Timed
-    public ResponseEntity<List<StockDTO>> getAllStocks(Pageable pageable, Long marketSectorId) {
+    public ResponseEntity<List<StockDTO>> getAllStocks(Pageable pageable) {
         log.debug("REST request to get a page of Stocks");
         Page<StockDTO> page = stockService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/stocks");
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * GET  /stocks/watched : get all the wathed stocks.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of stocks in body
+     */
+    @GetMapping("/stocks/watched")
+    @Timed
+    public ResponseEntity<List<StockDTO>> getAllWatchedStocks() {
+        log.debug("REST request to get a page of Stocks");
+        Page<StockDTO> page = stockService.findAllWatched(Pageable.unpaged());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/stocks/watched");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

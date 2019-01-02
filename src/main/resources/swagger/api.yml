@@ -2,7 +2,9 @@
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
 
 # https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-1-introduction/
-# https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-2-the-basics/
+# https://swagger.io/resources/articles/adopting-an-api-first-approach/
+# https://www.easyitblog.info/2017/01/08/api-first-approach-with-swagger/
+# https://jsonapi.org/
 
 openapi: "3.0.1"
 info:

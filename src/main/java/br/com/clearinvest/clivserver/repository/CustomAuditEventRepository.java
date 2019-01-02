@@ -48,6 +48,7 @@ public class CustomAuditEventRepository implements AuditEventRepository {
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
 
+    // constraint [pk_jhi_persistent_audit_event] violation - https://github.com/jhipster/generator-jhipster/issues/8029
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void add(AuditEvent event) {

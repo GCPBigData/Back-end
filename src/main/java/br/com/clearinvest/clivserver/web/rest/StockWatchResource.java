@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -122,6 +121,19 @@ public class StockWatchResource {
     public ResponseEntity<Void> deleteStockWatch(@PathVariable Long id) {
         log.debug("REST request to delete StockWatch : {}", id);
         stockWatchService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * DELETE  /stock-watches/stock/:id : remove the stock with "id" from stockWatch.
+     *
+     * @param id the id of the stock to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/stock-watches/stock/{id}")
+    @Timed
+    public ResponseEntity<Void> removeFromStockWatch(@PathVariable Long id) {
+        stockWatchService.deleteByStockId(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

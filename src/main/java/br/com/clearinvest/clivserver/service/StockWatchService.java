@@ -2,6 +2,9 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.StockWatch;
 import br.com.clearinvest.clivserver.repository.StockWatchRepository;
+import br.com.clearinvest.clivserver.repository.UserRepository;
+import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
+import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.StockWatchDTO;
 import br.com.clearinvest.clivserver.service.mapper.StockWatchMapper;
 import org.slf4j.Logger;
@@ -27,9 +30,12 @@ public class StockWatchService {
 
     private final StockWatchMapper stockWatchMapper;
 
-    public StockWatchService(StockWatchRepository stockWatchRepository, StockWatchMapper stockWatchMapper) {
+    private final UserRepository userRepository;
+
+    public StockWatchService(StockWatchRepository stockWatchRepository, StockWatchMapper stockWatchMapper, UserRepository userRepository) {
         this.stockWatchRepository = stockWatchRepository;
         this.stockWatchMapper = stockWatchMapper;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -40,6 +46,14 @@ public class StockWatchService {
      */
     public StockWatchDTO save(StockWatchDTO stockWatchDTO) {
         log.debug("Request to save StockWatch : {}", stockWatchDTO);
+
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            SecurityUtils.getCurrentUserLogin()
+                .flatMap(userRepository::findOneByLogin)
+                .ifPresent(user -> {
+                    stockWatchDTO.setUserId(user.getId());
+                });
+        }
 
         StockWatch stockWatch = stockWatchMapper.toEntity(stockWatchDTO);
         stockWatch = stockWatchRepository.save(stockWatch);
@@ -81,5 +95,18 @@ public class StockWatchService {
     public void delete(Long id) {
         log.debug("Request to delete StockWatch : {}", id);
         stockWatchRepository.deleteById(id);
+    }
+
+    /**
+     * Remove the stock from the stock watch.
+     *
+     * @param stockId the id of the stock
+     */
+    public void deleteByStockId(Long stockId) {
+        log.debug("Request to delete StockWatch by stock id: {}", stockId);
+        Optional<StockWatch> stockWatch = stockWatchRepository.findByStockIdAndCurrentUser(stockId);
+        if (stockWatch.isPresent()) {
+            stockWatchRepository.deleteById(stockWatch.get().getId());
+        }
     }
 }

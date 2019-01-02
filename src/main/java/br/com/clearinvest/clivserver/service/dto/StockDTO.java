@@ -23,6 +23,8 @@ public class StockDTO implements Serializable {
 
     private String marketSectorName;
 
+    private Boolean watch;
+
     public Long getId() {
         return id;
     }
@@ -61,6 +63,14 @@ public class StockDTO implements Serializable {
 
     public void setMarketSectorName(String marketSectorName) {
         this.marketSectorName = marketSectorName;
+    }
+
+    public Boolean getWatch() {
+        return watch;
+    }
+
+    public void setWatch(Boolean watch) {
+        this.watch = watch;
     }
 
     @Override
