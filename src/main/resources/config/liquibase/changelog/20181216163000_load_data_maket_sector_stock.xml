@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="20181216163000-1" author="jhipster" context="dev">
+    <changeSet id="20181216163000-1" author="jhipster"> <!-- context="dev"> -->
         <loadData encoding="UTF-8"
                   file="config/liquibase/market_sectors.csv"
                   separator=";"

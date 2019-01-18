@@ -101,7 +101,8 @@ jhipster:
                 base64-secret: OTYzMmE3YmIwYTQ2YWM4NzM4Y2E2YzFmZjhjMTJiODc0YTA3MzlkMDliY2EyYmVhNDQ0YzU0MTIzN2JlOGFkMDhhMjE3M2FiNWY2YmRjMjAxOWZiM2NiMGQxMjNiNjU4YzJiOGJkOGE0MDY2OWEzNTM5NDI0NDQ3ZmZlYzBlYTc=
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
-                token-validity-in-seconds-for-remember-me: 2592000
+                # Token is valid 1 year
+                token-validity-in-seconds-for-remember-me: 31536000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: cliv_server@localhost
         base-url: http://127.0.0.1:8080

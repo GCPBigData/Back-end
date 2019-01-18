@@ -42,6 +42,7 @@ will generate few files:
 
 To optimize the cliv_server application for production, run:
 
+    ./gradlew -Pprod bootWar
 
 To ensure everything worked, run:
 
