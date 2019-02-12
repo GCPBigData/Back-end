@@ -1,5 +1,6 @@
 package br.com.clearinvest.clivserver.web.rest;
 
+import br.com.clearinvest.clivserver.service.dto.MobileSessionDataDTO;
 import com.codahale.metrics.annotation.Timed;
 
 import br.com.clearinvest.clivserver.domain.User;
@@ -185,5 +186,17 @@ public class AccountResource {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
+    /**
+     * GET  /account/mobile-session-data : get the data for the mobile app current user.
+     *
+     * @return the current user
+     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
+     */
+    @GetMapping("/account/mobile-session-data")
+    @Timed
+    public MobileSessionDataDTO getMobileSessionData() {
+        return userService.getMobileSessionData();
     }
 }

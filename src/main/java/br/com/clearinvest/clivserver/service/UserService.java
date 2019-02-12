@@ -1,12 +1,15 @@
 package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.config.Constants;
+import br.com.clearinvest.clivserver.domain.AppPreference;
 import br.com.clearinvest.clivserver.domain.Authority;
 import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.repository.AuthorityRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
 import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
+import br.com.clearinvest.clivserver.service.dto.AppPreferenceDTO;
+import br.com.clearinvest.clivserver.service.dto.MobileSessionDataDTO;
 import br.com.clearinvest.clivserver.service.dto.UserDTO;
 import br.com.clearinvest.clivserver.service.util.RandomUtil;
 import br.com.clearinvest.clivserver.util.LangUtil;
@@ -44,12 +47,16 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final AppPreferenceService appPreferenceService;
+
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+        AuthorityRepository authorityRepository, AppPreferenceService appPreferenceService, CacheManager cacheManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.appPreferenceService = appPreferenceService;
         this.cacheManager = cacheManager;
     }
 
@@ -294,5 +301,15 @@ public class UserService {
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
+
+    public MobileSessionDataDTO getMobileSessionData() {
+        UserDTO user = getUserWithAuthorities()
+            .map(UserDTO::new)
+            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+
+        List<AppPreferenceDTO> prefs = appPreferenceService.findAllOfCurrentUserWithDefaults();
+
+        return new MobileSessionDataDTO(user, prefs);
     }
 }
