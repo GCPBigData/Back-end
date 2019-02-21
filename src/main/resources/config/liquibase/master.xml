@@ -10,11 +10,14 @@
     <include file="config/liquibase/changelog/20181216181907_added_entity_StockWatch.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190125172628_added_entity_AppPreference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190212230309_added_entity_Brokerage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190219165502_added_entity_BrokerageAccount.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20181216152622_added_entity_constraints_Stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181216181907_added_entity_constraints_StockWatch.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190125172628_added_entity_constraints_AppPreference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190219165502_added_entity_constraints_BrokerageAccount.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20181216163000_load_data_maket_sector_stock.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20181216163000_load_data_maket_sector_stock.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190212230310_load_data_brokerages.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190219165503_load_data_brokerage_accounts.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
