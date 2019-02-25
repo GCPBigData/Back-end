@@ -2,11 +2,13 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
+import br.com.clearinvest.clivserver.repository.UserRepository;
+import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.BrokerageAccountDTO;
 import br.com.clearinvest.clivserver.service.mapper.BrokerageAccountMapper;
+import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,13 @@ public class BrokerageAccountService {
 
     private final BrokerageAccountMapper brokerageAccountMapper;
 
-    public BrokerageAccountService(BrokerageAccountRepository brokerageAccountRepository, BrokerageAccountMapper brokerageAccountMapper) {
+    private final UserRepository userRepository;
+
+    public BrokerageAccountService(BrokerageAccountRepository brokerageAccountRepository,
+        BrokerageAccountMapper brokerageAccountMapper, UserRepository userRepository) {
         this.brokerageAccountRepository = brokerageAccountRepository;
         this.brokerageAccountMapper = brokerageAccountMapper;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -44,6 +50,61 @@ public class BrokerageAccountService {
         BrokerageAccount brokerageAccount = brokerageAccountMapper.toEntity(brokerageAccountDTO);
         brokerageAccount = brokerageAccountRepository.save(brokerageAccount);
         return brokerageAccountMapper.toDto(brokerageAccount);
+    }
+
+    /**
+     * Save a brokerageAccount.
+     *
+     * @param accountDTO the entity to save
+     * @return the persisted entity
+     */
+    public BrokerageAccountDTO saveWithCurrentUser(BrokerageAccountDTO accountDTO) {
+        log.debug("Request to save BrokerageAccount : {}", accountDTO);
+
+        if (accountDTO.getId() == null) {
+            Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
+                .findByBrokerageIdAndCurrentUser(accountDTO.getBrokerageId());
+            if (accountOptional.isPresent()) {
+                throw new BusinessException("Já existe uma conta cadastrada para essa corretora.");
+
+            } else {
+                // TODO validar conta (se email for obrigatório para corretora, verificar se email veio, etc)
+
+                BrokerageAccount account = brokerageAccountMapper.toEntity(accountDTO);
+
+                SecurityUtils.getCurrentUserLogin()
+                    .flatMap(userRepository::findOneByLogin)
+                    .ifPresent(account::setUser);
+
+                account = brokerageAccountRepository.save(account);
+                return brokerageAccountMapper.toDto(account);
+            }
+
+        } else {
+            Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
+                .findByIdAndCurrentUser(accountDTO.getId());
+
+            if (accountOptional.isPresent()) {
+                // TODO validar conta (se email for obrigatório para corretora, verificar se email veio, etc)
+
+                BrokerageAccount account = accountOptional.get();
+
+                SecurityUtils.getCurrentUserLogin()
+                    .flatMap(userRepository::findOneByLogin)
+                    .ifPresent(account::setUser);
+
+                account.setLoginAccessCode(accountDTO.getLoginAccessCode());
+                account.setLoginCpf(accountDTO.getLoginCpf());
+                account.setLoginEmail(accountDTO.getLoginEmail());
+                account.setLoginPassword(accountDTO.getLoginPassword());
+
+                account = brokerageAccountRepository.save(account);
+                return brokerageAccountMapper.toDto(account);
+
+            } else {
+                throw new BusinessException("Conta não encontrada.");
+            }
+        }
     }
 
     /**

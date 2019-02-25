@@ -61,7 +61,7 @@ public class AppPreferenceService {
      * @param appPreferenceDTO the entity to save
      * @return the persisted entity
      */
-    public AppPreferenceDTO saveCurrentUserPref(AppPreferenceDTO appPreferenceDTO) {
+    public AppPreferenceDTO saveWithCurrentUser(AppPreferenceDTO appPreferenceDTO) {
         log.debug("Request to save AppPreference : {}", appPreferenceDTO);
 
         AppPreference appPreference;

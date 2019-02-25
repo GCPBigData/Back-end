@@ -1,13 +1,35 @@
 
-# setup
+# cliv-server
 
-Instale o node e nvm da distribuição, o nvm não funciona com o gradle e intellij. Outra solução possível é criar links 
+Clear Invest - Módulo Servidor
+
+# Setup
+
+- [Instale o JDK 8 Oracle](http://www.webupd8.org/2012/09/install-oracle-java-8-in-ubuntu-via-ppa.html)
+
+- Mude para o Java 8: `sudo update-alternatives --config java`
+
+- Instale o node e npm da distribuição: `apt install nodejs npm`\
+O nvm não funciona com o Gradle e Intellij. Outra solução possível é criar links 
 nos diretórios /usr/bin, /usr/local/bin, etc, para uma versão específica instalada pelo nvm.\
-Ver https://objectpartners.com/2016/04/14/using-self-contained-node-js-and-npm-instances-with-gradle/
+Ver:\
+https://objectpartners.com/2016/04/14/using-self-contained-node-js-and-npm-instances-with-gradle/\
+https://askubuntu.com/questions/529687/how-to-use-update-alternatives-to-manage-multiple-installed-version-of-the-sam
 
-[Delegue o build do intellij para o gradle](https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle)
+- [Instale o nvm](https://github.com/creationix/nvm#install-script)
 
+- Instale a versão v8.11.3 do node pelo nvm: `nvm install v8.11.3`
 
+- [Node.js: what is ENOSPC error and how to solve?](https://stackoverflow.com/questions/22475849/node-js-what-is-enospc-error-and-how-to-solve)
+
+- [Delegue o build do intellij para o gradle](https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle)
+
+- Execute `nvm use` e depois `npm install` na raiz do projeto.
+
+- Execute `./gradlew npmInstall` na raiz do projeto.\
+Se acontecer erro `/usr/bin/env "sh\r" no such file or directory`, instale o dos2unix e execute `dos2unix gradlew`
+
+- [Instale o PostgresSQL 9.5](https://www.postgresql.org/download/linux/ubuntu/)
 
 # Antigo (mover para outro arquivo)
 
@@ -112,3 +134,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.7.0/setting-up-ci/
 
 
+
+
+[]: https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle

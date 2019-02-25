@@ -2,6 +2,7 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.User;
 
+import br.com.clearinvest.clivserver.service.dto.ContactUsMessageDTO;
 import io.github.jhipster.config.JHipsterProperties;
 
 import java.nio.charset.StandardCharsets;
@@ -64,6 +65,43 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.warn("Email could not be sent to user '{}'", to, e);
+            } else {
+                log.warn("Email could not be sent to user '{}': {}", to, e.getMessage());
+            }
+        }
+    }
+
+    @Async
+    public void sendContactUsEmail(ContactUsMessageDTO messageDTO) {
+        String from = "clearinvestapp@gmail.com";
+        String to = "clearinvestapp@gmail.com";
+        String replyTo = messageDTO.getSenderEmail();
+        String subject = String.format("Fale Conosco: %s", messageDTO.getSubject());
+
+        String content = new StringBuilder()
+            .append("De:\n")
+            .append(messageDTO.getSenderEmail())
+            .append("\n\n")
+            .append("Assunto:\n")
+            .append(messageDTO.getSubject())
+            .append("\n\n")
+            .append("Mensagem:\n")
+            .append(messageDTO.getMessage())
+            .toString();
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
+            message.setTo(to);
+            message.setFrom(from);
+            message.setReplyTo(replyTo);
+            message.setSubject(subject);
+            message.setText(content, false);
+            javaMailSender.send(mimeMessage);
+
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
                 log.warn("Email could not be sent to user '{}'", to, e);

@@ -54,7 +54,7 @@ public class BrokerageAccountResource {
         if (brokerageAccountDTO.getId() != null) {
             throw new BadRequestAlertException("A new brokerageAccount cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BrokerageAccountDTO result = brokerageAccountService.save(brokerageAccountDTO);
+        BrokerageAccountDTO result = brokerageAccountService.saveWithCurrentUser(brokerageAccountDTO);
         return ResponseEntity.created(new URI("/api/brokerage-accounts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +76,7 @@ public class BrokerageAccountResource {
         if (brokerageAccountDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BrokerageAccountDTO result = brokerageAccountService.save(brokerageAccountDTO);
+        BrokerageAccountDTO result = brokerageAccountService.saveWithCurrentUser(brokerageAccountDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, brokerageAccountDTO.getId().toString()))
             .body(result);

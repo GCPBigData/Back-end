@@ -49,7 +49,7 @@ public class AppPreferenceResource {
         if (appPreferenceDTO.getId() != null) {
             throw new BadRequestAlertException("A new appPreference cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AppPreferenceDTO result = appPreferenceService.saveCurrentUserPref(appPreferenceDTO);
+        AppPreferenceDTO result = appPreferenceService.saveWithCurrentUser(appPreferenceDTO);
         return ResponseEntity.created(new URI("/api/app-preferences/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
