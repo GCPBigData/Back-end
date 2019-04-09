@@ -3,6 +3,8 @@ package br.com.clearinvest.clivserver;
 import br.com.clearinvest.clivserver.config.ApplicationProperties;
 import br.com.clearinvest.clivserver.config.DefaultProfileUtil;
 
+import br.com.clearinvest.clivserver.quickfixj.ClientApplicationAdapter;
+import io.allune.quickfixj.spring.boot.starter.EnableQuickFixJClient;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +14,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import quickfix.*;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -21,7 +26,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @SpringBootApplication
+@EnableQuickFixJClient
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableScheduling
 public class ClivServerApp {
 
     private static final Logger log = LoggerFactory.getLogger(ClivServerApp.class);
@@ -94,5 +101,19 @@ public class ClivServerApp {
             serverPort,
             contextPath,
             env.getActiveProfiles());
+    }
+
+    @Bean
+    public Application clientApplication() {
+        return new ClientApplicationAdapter();
+    }
+
+    @Bean
+    public Initiator clientInitiator(quickfix.Application clientApplication, MessageStoreFactory clientMessageStoreFactory,
+        SessionSettings clientSessionSettings, LogFactory clientLogFactory,
+        MessageFactory clientMessageFactory) throws ConfigError {
+
+        return new ThreadedSocketInitiator(clientApplication, clientMessageStoreFactory, clientSessionSettings,
+            clientLogFactory, clientMessageFactory);
     }
 }

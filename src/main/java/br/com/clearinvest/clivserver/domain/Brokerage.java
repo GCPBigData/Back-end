@@ -63,14 +63,6 @@ public class Brokerage implements Serializable {
     private Boolean dayTrade;
 
     @NotNull
-    @Column(name = "fee_brokerage", precision = 10, scale = 2, nullable = false)
-    private BigDecimal feeBrokerage;
-
-    @NotNull
-    @Column(name = "fee_iss", precision = 10, scale = 2, nullable = false)
-    private BigDecimal feeIss;
-
-    @NotNull
     @Column(name = "login_email", nullable = false)
     private Boolean loginEmail;
 
@@ -89,6 +81,20 @@ public class Brokerage implements Serializable {
     @NotNull
     @Column(name = "login_token", nullable = false)
     private Boolean loginToken;
+
+    @DecimalMin(value = "0")
+    @Column(name = "fee_value", precision = 10, scale = 2)
+    private BigDecimal feeValue;
+
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "99.99")
+    @Column(name = "fee_percent", precision = 10, scale = 2)
+    private BigDecimal feePercent;
+
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "99.99")
+    @Column(name = "iss", precision = 10, scale = 2)
+    private BigDecimal iss;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -203,32 +209,6 @@ public class Brokerage implements Serializable {
         this.dayTrade = dayTrade;
     }
 
-    public BigDecimal getFeeBrokerage() {
-        return feeBrokerage;
-    }
-
-    public Brokerage feeBrokerage(BigDecimal feeBrokerage) {
-        this.feeBrokerage = feeBrokerage;
-        return this;
-    }
-
-    public void setFeeBrokerage(BigDecimal feeBrokerage) {
-        this.feeBrokerage = feeBrokerage;
-    }
-
-    public BigDecimal getFeeIss() {
-        return feeIss;
-    }
-
-    public Brokerage feeIss(BigDecimal feeIss) {
-        this.feeIss = feeIss;
-        return this;
-    }
-
-    public void setFeeIss(BigDecimal feeIss) {
-        this.feeIss = feeIss;
-    }
-
     public Boolean isLoginEmail() {
         return loginEmail;
     }
@@ -293,6 +273,45 @@ public class Brokerage implements Serializable {
     public void setLoginToken(Boolean loginToken) {
         this.loginToken = loginToken;
     }
+
+    public BigDecimal getFeeValue() {
+        return feeValue;
+    }
+
+    public Brokerage feeValue(BigDecimal feeValue) {
+        this.feeValue = feeValue;
+        return this;
+    }
+
+    public void setFeeValue(BigDecimal feeValue) {
+        this.feeValue = feeValue;
+    }
+
+    public BigDecimal getFeePercent() {
+        return feePercent;
+    }
+
+    public Brokerage feePercent(BigDecimal feePercent) {
+        this.feePercent = feePercent;
+        return this;
+    }
+
+    public void setFeePercent(BigDecimal feePercent) {
+        this.feePercent = feePercent;
+    }
+
+    public BigDecimal getIss() {
+        return iss;
+    }
+
+    public Brokerage iss(BigDecimal iss) {
+        this.iss = iss;
+        return this;
+    }
+
+    public void setIss(BigDecimal iss) {
+        this.iss = iss;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -327,13 +346,14 @@ public class Brokerage implements Serializable {
             ", addressState='" + getAddressState() + "'" +
             ", swingTrade='" + isSwingTrade() + "'" +
             ", dayTrade='" + isDayTrade() + "'" +
-            ", feeBrokerage=" + getFeeBrokerage() +
-            ", feeIss=" + getFeeIss() +
             ", loginEmail='" + isLoginEmail() + "'" +
             ", loginAccessCode='" + isLoginAccessCode() + "'" +
             ", loginCpf='" + isLoginCpf() + "'" +
             ", loginPassword='" + isLoginPassword() + "'" +
             ", loginToken='" + isLoginToken() + "'" +
+            ", feeValue=" + getFeeValue() +
+            ", feePercent=" + getFeePercent() +
+            ", iss=" + getIss() +
             "}";
     }
 }

@@ -19,10 +19,12 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "quickfixjclient"]
     endpoint:
         health:
             show-details: when-authorized
+        quickfixjclient:
+            enabled: true
     info:
         git:
             mode: full
@@ -49,6 +51,9 @@ spring:
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+            id:
+                # https://stackoverflow.com/questions/12745751/hibernate-sequencegenerator-and-allocationsize
+                new_generator_mappings: true
     messages:
         basename: i18n/messages
     mvc:
@@ -111,3 +116,8 @@ jhipster:
 # ===================================================================
 
 # application:
+
+quickfixj:
+    client:
+        config: ${QUIICKFIXJ_CLIENT_CONFIG_FILE:classpath:quickfixj-client.cfg}
+        jmx-enabled: true

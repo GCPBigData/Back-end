@@ -3,6 +3,7 @@ package br.com.clearinvest.clivserver.service;
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
+import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.BrokerageAccountDTO;
 import br.com.clearinvest.clivserver.service.mapper.BrokerageAccountMapper;
@@ -97,6 +98,7 @@ public class BrokerageAccountService {
                 account.setLoginCpf(accountDTO.getLoginCpf());
                 account.setLoginEmail(accountDTO.getLoginEmail());
                 account.setLoginPassword(accountDTO.getLoginPassword());
+                account.setBalance(accountDTO.getBalance());
 
                 account = brokerageAccountRepository.save(account);
                 return brokerageAccountMapper.toDto(account);
@@ -116,10 +118,19 @@ public class BrokerageAccountService {
     @Transactional(readOnly = true)
     public Page<BrokerageAccountDTO> findAll(Pageable pageable) {
         log.debug("Request to get all BrokerageAccounts");
-        return brokerageAccountRepository.findAll(pageable)
-            .map(brokerageAccountMapper::toDto);
-    }
 
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            return brokerageAccountRepository.findAll(pageable)
+                .map(brokerageAccountMapper::toDto);
+
+        } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)) {
+            return brokerageAccountRepository.findAllByUserIsCurrentUser(pageable)
+                .map(brokerageAccountMapper::toDto);
+
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Get one brokerageAccount by id.

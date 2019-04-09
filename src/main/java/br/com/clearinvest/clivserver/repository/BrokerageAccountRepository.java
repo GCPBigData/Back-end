@@ -1,6 +1,8 @@
 package br.com.clearinvest.clivserver.repository;
 
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +20,9 @@ public interface BrokerageAccountRepository extends JpaRepository<BrokerageAccou
 
     @Query("select brokerage_account from BrokerageAccount brokerage_account where brokerage_account.user.login = ?#{principal.username}")
     List<BrokerageAccount> findByUserIsCurrentUser();
+
+    @Query("select brokerage_account from BrokerageAccount brokerage_account where brokerage_account.user.login = ?#{principal.username}")
+    Page<BrokerageAccount> findAllByUserIsCurrentUser(Pageable pageable);
 
     @Query("select ba from BrokerageAccount ba where ba.brokerage.id = :brokerageId and ba.user.login = ?#{principal.username}")
     Optional<BrokerageAccount> findByBrokerageIdAndCurrentUser(@Param("brokerageId") Long brokerageId);

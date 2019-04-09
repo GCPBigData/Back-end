@@ -2,6 +2,7 @@ package br.com.clearinvest.clivserver.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -22,6 +23,9 @@ public class BrokerageAccountDTO implements Serializable {
 
     @Size(max = 100)
     private String loginPassword;
+
+    @NotNull
+    private BigDecimal balance;
 
     private Long userId;
 
@@ -69,6 +73,14 @@ public class BrokerageAccountDTO implements Serializable {
 
     public void setLoginPassword(String loginPassword) {
         this.loginPassword = loginPassword;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public Long getUserId() {
@@ -132,6 +144,7 @@ public class BrokerageAccountDTO implements Serializable {
             ", loginAccessCode='" + getLoginAccessCode() + "'" +
             ", loginCpf='" + getLoginCpf() + "'" +
             ", loginPassword='" + getLoginPassword() + "'" +
+            ", balance=" + getBalance() +
             ", user=" + getUserId() +
             ", user='" + getUserLogin() + "'" +
             ", brokerage=" + getBrokerageId() +

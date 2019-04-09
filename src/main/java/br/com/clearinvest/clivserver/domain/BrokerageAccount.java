@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -40,6 +41,10 @@ public class BrokerageAccount implements Serializable {
     @Size(max = 100)
     @Column(name = "login_password", length = 100)
     private String loginPassword;
+
+    @NotNull
+    @Column(name = "balance", precision = 10, scale = 2, nullable = false)
+    private BigDecimal balance;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -112,6 +117,19 @@ public class BrokerageAccount implements Serializable {
         this.loginPassword = loginPassword;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public BrokerageAccount balance(BigDecimal balance) {
+        this.balance = balance;
+        return this;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     public User getUser() {
         return user;
     }
@@ -167,6 +185,7 @@ public class BrokerageAccount implements Serializable {
             ", loginAccessCode='" + getLoginAccessCode() + "'" +
             ", loginCpf='" + getLoginCpf() + "'" +
             ", loginPassword='" + getLoginPassword() + "'" +
+            ", balance=" + getBalance() +
             "}";
     }
 }

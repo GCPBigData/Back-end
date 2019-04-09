@@ -76,20 +76,6 @@
             ]
         },
         {
-            "fieldName": "feeBrokerage",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "feeIss",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "loginEmail",
             "fieldType": "Boolean",
             "fieldValidateRules": [
@@ -123,6 +109,34 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "feeValue",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
+        },
+        {
+            "fieldName": "feePercent",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "99.99"
+        },
+        {
+            "fieldName": "iss",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "99.99"
         }
     ],
     "changelogDate": "20190212230309",

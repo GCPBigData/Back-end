@@ -1,4 +1,4 @@
-id;name;cnpj;address;address_neighborhood;address_city;address_state;swing_trade;day_trade;fee_brokerage;fee_iss;login_email;login_access_code;login_cpf;login_password;login_token
-1;Corretora A;0000000000000;Rua A, 1;Bairro A;São Paulo;SP;true;true;0.5;2;true;false;false;true;false
-2;Corretora B;0000000000001;Rua B, 2;Bairro B;Rio de Janeiro;RJ;true;true;0.8;1.8;false;true;false;false;false
-3;Corretora C;0000000000002;Rua C, 2;Bairro C;Salvador;BA;true;true;0.7;2.2;false;false;true;true;false
+id;name;cnpj;address;address_neighborhood;address_city;address_state;swing_trade;day_trade;login_email;login_access_code;login_cpf;login_password;login_token;fee_value;fee_percent;iss
+1;Corretora A;0000000000000;Rua A, 1;Bairro A;São Paulo;SP;true;true;true;false;false;true;false;10.0;null;5.0
+2;Corretora B;0000000000001;Rua B, 2;Bairro B;Rio de Janeiro;RJ;true;true;false;true;false;false;false;15.0;null;4.0
+3;Corretora C;0000000000002;Rua C, 2;Bairro C;Salvador;BA;true;true;false;false;true;true;false;20.0;null;6.0

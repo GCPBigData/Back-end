@@ -42,12 +42,6 @@ public class BrokerageDTO implements Serializable {
     private Boolean dayTrade;
 
     @NotNull
-    private BigDecimal feeBrokerage;
-
-    @NotNull
-    private BigDecimal feeIss;
-
-    @NotNull
     private Boolean loginEmail;
 
     @NotNull
@@ -61,6 +55,17 @@ public class BrokerageDTO implements Serializable {
 
     @NotNull
     private Boolean loginToken;
+
+    @DecimalMin(value = "0")
+    private BigDecimal feeValue;
+
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "99.99")
+    private BigDecimal feePercent;
+
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "99.99")
+    private BigDecimal iss;
 
     public Long getId() {
         return id;
@@ -134,22 +139,6 @@ public class BrokerageDTO implements Serializable {
         this.dayTrade = dayTrade;
     }
 
-    public BigDecimal getFeeBrokerage() {
-        return feeBrokerage;
-    }
-
-    public void setFeeBrokerage(BigDecimal feeBrokerage) {
-        this.feeBrokerage = feeBrokerage;
-    }
-
-    public BigDecimal getFeeIss() {
-        return feeIss;
-    }
-
-    public void setFeeIss(BigDecimal feeIss) {
-        this.feeIss = feeIss;
-    }
-
     public Boolean isLoginEmail() {
         return loginEmail;
     }
@@ -190,6 +179,30 @@ public class BrokerageDTO implements Serializable {
         this.loginToken = loginToken;
     }
 
+    public BigDecimal getFeeValue() {
+        return feeValue;
+    }
+
+    public void setFeeValue(BigDecimal feeValue) {
+        this.feeValue = feeValue;
+    }
+
+    public BigDecimal getFeePercent() {
+        return feePercent;
+    }
+
+    public void setFeePercent(BigDecimal feePercent) {
+        this.feePercent = feePercent;
+    }
+
+    public BigDecimal getIss() {
+        return iss;
+    }
+
+    public void setIss(BigDecimal iss) {
+        this.iss = iss;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -223,13 +236,14 @@ public class BrokerageDTO implements Serializable {
             ", addressState='" + getAddressState() + "'" +
             ", swingTrade='" + isSwingTrade() + "'" +
             ", dayTrade='" + isDayTrade() + "'" +
-            ", feeBrokerage=" + getFeeBrokerage() +
-            ", feeIss=" + getFeeIss() +
             ", loginEmail='" + isLoginEmail() + "'" +
             ", loginAccessCode='" + isLoginAccessCode() + "'" +
             ", loginCpf='" + isLoginCpf() + "'" +
             ", loginPassword='" + isLoginPassword() + "'" +
             ", loginToken='" + isLoginToken() + "'" +
+            ", feeValue=" + getFeeValue() +
+            ", feePercent=" + getFeePercent() +
+            ", iss=" + getIss() +
             "}";
     }
 }
