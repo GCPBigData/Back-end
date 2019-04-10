@@ -33,6 +33,9 @@ public class StockOrderDTO implements Serializable {
     @Min(value = 1L)
     private Long quantity;
 
+    @Min(value = 1L)
+    private Long execQuantity;
+
     @NotNull
     @DecimalMin(value = "0.01")
     private BigDecimal unitPrice;
@@ -42,6 +45,8 @@ public class StockOrderDTO implements Serializable {
     private String omsOrderId;
 
     private String status;
+
+    private String statusDescr;
 
     private ZonedDateTime lastExecReportTime;
 
@@ -118,6 +123,14 @@ public class StockOrderDTO implements Serializable {
         this.quantity = quantity;
     }
 
+    public Long getExecQuantity() {
+        return execQuantity;
+    }
+
+    public void setExecQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+    }
+
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -148,6 +161,14 @@ public class StockOrderDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatusDescr() {
+        return statusDescr;
+    }
+
+    public void setStatusDescr(String statusDescr) {
+        this.statusDescr = statusDescr;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -222,10 +243,12 @@ public class StockOrderDTO implements Serializable {
             ", timeInForce='" + getTimeInForce() + "'" +
             ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
+            ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
+            ", statusDescr='" + getStatusDescr() + "'" +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +

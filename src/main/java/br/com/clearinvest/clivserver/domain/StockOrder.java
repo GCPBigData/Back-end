@@ -74,6 +74,10 @@ public class StockOrder implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
+    @Min(value = 1L)
+    @Column(name = "exec_quantity")
+    private Long execQuantity;
+
     @NotNull
     @DecimalMin(value = "0.01")
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
@@ -88,6 +92,9 @@ public class StockOrder implements Serializable {
     @NotNull
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "status_descr")
+    private String statusDescr;
 
     @Column(name = "last_exec_report_time")
     private ZonedDateTime lastExecReportTime;
@@ -203,6 +210,19 @@ public class StockOrder implements Serializable {
         this.quantity = quantity;
     }
 
+    public Long getExecQuantity() {
+        return execQuantity;
+    }
+
+    public StockOrder execQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+        return this;
+    }
+
+    public void setExecQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+    }
+
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -253,6 +273,19 @@ public class StockOrder implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatusDescr() {
+        return statusDescr;
+    }
+
+    public StockOrder statusDescr(String statusDescr) {
+        this.statusDescr = statusDescr;
+        return this;
+    }
+
+    public void setStatusDescr(String statusDescr) {
+        this.statusDescr = statusDescr;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -339,10 +372,12 @@ public class StockOrder implements Serializable {
             ", timeInForce='" + getTimeInForce() + "'" +
             ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
+            ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
+            ", statusDescr='" + getStatusDescr() + "'" +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";

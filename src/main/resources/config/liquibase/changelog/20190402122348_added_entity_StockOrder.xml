@@ -49,6 +49,10 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="exec_quantity" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="unit_price" type="decimal(10,2)">
                 <constraints nullable="false" />
             </column>
@@ -63,6 +67,10 @@
 
             <column name="status" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+
+            <column name="status_descr" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
 
             <column name="last_exec_report_time" type="datetime">

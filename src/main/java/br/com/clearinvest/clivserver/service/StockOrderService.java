@@ -192,6 +192,10 @@ public class StockOrderService {
             String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
             order.setStatus(ordStatusStr);
 
+            /*switch (ordStatusStr) {
+                case
+            }*/
+
             // TODO fill lastExecReportDescr with descriptions from field OrdRejReason (103)
             /*if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
                 order.setLastExecReportDescr("");

@@ -63,7 +63,24 @@
             "fieldValidateRulesMin": "1"
         },
         {
+            "fieldName": "execQuantity",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": "1"
+        },
+        {
             "fieldName": "unitPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0.01"
+        },
+        {
+            "fieldName": "averagePrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required",
