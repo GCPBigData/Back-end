@@ -187,15 +187,20 @@ public class StockOrderService {
         try {
             ClOrdID clOrdID = executionReport.getClOrdID();
             StockOrder order = stockOrderRepository.findById(Long.parseLong(clOrdID.getValue())).get();
+            order.setLastExecReportTime(ZonedDateTime.now());
 
             String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
             order.setStatus(ordStatusStr);
 
+            // TODO fill lastExecReportDescr with descriptions from field OrdRejReason (103)
             /*if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
+                order.setLastExecReportDescr("");
             }*/
 
             if (executionReport.getText() != null) {
                 order.setLastExecReportDescr(executionReport.getText().getValue());
+            } else {
+                order.setLastExecReportDescr(null);
             }
 
         } catch (Exception e) {
