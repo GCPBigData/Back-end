@@ -1,6 +1,6 @@
 package br.com.clearinvest.clivserver.service.dto;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ public class StockOrderDTO implements Serializable {
 
     private Long id;
 
-    private LocalDate day;
+    private ZonedDateTime createdAt;
 
     private Long daySeq;
 
@@ -43,6 +43,10 @@ public class StockOrderDTO implements Serializable {
 
     private String status;
 
+    private ZonedDateTime lastExecReportTime;
+
+    private String lastExecReportDescr;
+
     private Long stockId;
 
     private String stockSymbol;
@@ -58,12 +62,12 @@ public class StockOrderDTO implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getDaySeq() {
@@ -146,6 +150,22 @@ public class StockOrderDTO implements Serializable {
         this.status = status;
     }
 
+    public ZonedDateTime getLastExecReportTime() {
+        return lastExecReportTime;
+    }
+
+    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
+    }
+
+    public String getLastExecReportDescr() {
+        return lastExecReportDescr;
+    }
+
+    public void setLastExecReportDescr(String lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
+    }
+
     public Long getStockId() {
         return stockId;
     }
@@ -195,7 +215,7 @@ public class StockOrderDTO implements Serializable {
     public String toString() {
         return "StockOrderDTO{" +
             "id=" + getId() +
-            ", day='" + getDay() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
             ", daySeq=" + getDaySeq() +
             ", orderType='" + getOrderType() + "'" +
             ", side='" + getSide() + "'" +
@@ -206,6 +226,8 @@ public class StockOrderDTO implements Serializable {
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
+            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
+            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +

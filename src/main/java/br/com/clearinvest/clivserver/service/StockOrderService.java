@@ -10,16 +10,19 @@ import br.com.clearinvest.clivserver.service.mapper.StockOrderMapper;
 import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quickfix.Session;
 import quickfix.SessionNotFound;
 import quickfix.field.*;
+import quickfix.fix44.ExecutionReport;
 import quickfix.fix44.NewOrderSingle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +63,8 @@ public class StockOrderService {
         log.debug("Request to save StockOrder : {}", stockOrderDTO);
 
         StockOrder stockOrder = stockOrderMapper.toEntity(stockOrderDTO);
-        stockOrder.setDay(LocalDate.now());
-        stockOrder.setStatus(StockOrder.STATUS_RECEIVED);
+        stockOrder.setCreatedAt(ZonedDateTime.now());
+        stockOrder.setStatus(StockOrder.STATUS_CREATED);
 
         Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
             .findByIdAndCurrentUser(stockOrder.getBrokerageAccount().getId());
@@ -80,41 +83,44 @@ public class StockOrderService {
 
             DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
-            NewOrderSingle order = new NewOrderSingle(
+            final String omsAccount = "160119";
+
+            NewOrderSingle orderSingle = new NewOrderSingle(
                 new ClOrdID(stockOrder.getId().toString()),
                 new Side(stockOrder.getSide().charAt(0)),
                 new TransactTime(LocalDateTime.now()),
                 new OrdType(FIX_ORD_TYPE_MARKET));
 
-            order.set(new OrderQty(stockOrder.getQuantity()));
+            orderSingle.set(new OrderQty(stockOrder.getQuantity()));
 
             // instrument block
             Stock stock = stockOrder.getStock();
-            order.set(new Symbol(stockOrderDTO.getStockSymbol()));
-            order.set(new SecurityID(stockOrderDTO.getStockSymbol()));
-            order.set(new SecurityIDSource("8"));
-            order.set(new SecurityExchange("XBSP"));
-            order.set(new MaturityDate(localMktDateFormatter.format(LocalDate.now())));
+            orderSingle.set(new Symbol(stockOrderDTO.getStockSymbol()));
+            orderSingle.set(new SecurityID(stockOrderDTO.getStockSymbol()));
+            orderSingle.set(new SecurityIDSource("8"));
+            orderSingle.set(new SecurityExchange("XBSP"));
+            orderSingle.set(new MaturityDate(localMktDateFormatter.format(LocalDate.now())));
 
-            order.set(new Price(stockOrder.getUnitPrice().doubleValue()));
-            order.set(new NoAllocs(1));
+            orderSingle.set(new Price(stockOrder.getUnitPrice().doubleValue()));
 
-            NewOrderSingle.NoAllocs noAllocs = new NewOrderSingle.NoAllocs();
-            noAllocs.set(new AllocAccount("160119"));
-            noAllocs.set(new AllocAcctIDSource(99));
-            order.addGroup(noAllocs);
+            orderSingle.set(new NoAllocs(1));
+            NewOrderSingle.NoAllocs allocs = new NewOrderSingle.NoAllocs();
+            allocs.set(new AllocAccount(omsAccount));
+            allocs.set(new AllocAcctIDSource(99));
+            orderSingle.addGroup(allocs);
 
-            // https://stackoverflow.com/questions/51520982/fix-message-creating-party-message-how-to-do-it
+            // https://stackoverflow.com/questions/51520982/fix-message-creating-party-message-how-to-do-its
+            orderSingle.set(new NoPartyIDs(1));
             NewOrderSingle.NoPartyIDs parties = new NewOrderSingle.NoPartyIDs();
-            parties.set(new PartyID("1"));
+            parties.set(new PartyID(omsAccount));
             parties.set(new PartyIDSource(PartyIDSource.PROPRIETARY_CUSTOM_CODE));
             parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
-            order.addGroup(parties);
+            orderSingle.addGroup(parties);
 
-            order.setString(10122, "DAYTRADE");
+            orderSingle.setString(10122, "DAYTRADE");
 
             try {
-                Session.sendToTarget(order, "160119", "CDRFIX");
+                Session.sendToTarget(orderSingle, omsAccount, "CDRFIX");
             } catch (SessionNotFound sessionNotFound) {
                 throw new BusinessException("Sem comunicação com corretora.");
             }
@@ -153,7 +159,6 @@ public class StockOrderService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
     /**
      * Get one stockOrder by id.
      *
@@ -176,4 +181,26 @@ public class StockOrderService {
         log.debug("Request to delete StockOrder : {}", id);
         stockOrderRepository.deleteById(id);
     }
+
+    @Async
+    public void proccessExecutionReport(ExecutionReport executionReport) {
+        try {
+            ClOrdID clOrdID = executionReport.getClOrdID();
+            StockOrder order = stockOrderRepository.findById(Long.parseLong(clOrdID.getValue())).get();
+
+            String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
+            order.setStatus(ordStatusStr);
+
+            /*if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
+            }*/
+
+            if (executionReport.getText() != null) {
+                order.setLastExecReportDescr(executionReport.getText().getValue());
+            }
+
+        } catch (Exception e) {
+            log.error("unexpected error", e);
+        }
+    }
+
 }

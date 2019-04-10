@@ -3,13 +3,14 @@ package br.com.clearinvest.clivserver.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -22,14 +23,14 @@ public class StockOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** Received by this application */
-    public static final String STATUS_RECEIVED = "rc";
+    /** Created in this application */
+    public static final String STATUS_CREATED = "CL"; // created locally
 
-    /** Accepted by this the OMS */
+    /** Accepted by the OMS */
     public static final String STATUS_ACCEPTED = "ac";
 
-    /** Accepted by this the OMS */
-    public static final String STATUS_REJECTED = "rj";
+    /** Rejected by the OMS */
+    public static final String STATUS_FIX_REJECTED = "8";
 
     /** Currently being executed */
     public static final String STATUS_ACTIVE = "av";
@@ -45,9 +46,9 @@ public class StockOrder implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "day", nullable = false)
-    private LocalDate day;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private ZonedDateTime createdAt;
 
     @Column(name = "day_seq")
     private Long daySeq;
@@ -88,6 +89,12 @@ public class StockOrder implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
+    @Column(name = "last_exec_report_time")
+    private ZonedDateTime lastExecReportTime;
+
+    @Column(name = "last_exec_report_descr")
+    private String lastExecReportDescr;
+
     @ManyToOne
     @JsonIgnoreProperties("")
     private Stock stock;
@@ -105,17 +112,17 @@ public class StockOrder implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public StockOrder day(LocalDate day) {
-        this.day = day;
+    public StockOrder createdAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getDaySeq() {
@@ -248,6 +255,32 @@ public class StockOrder implements Serializable {
         this.status = status;
     }
 
+    public ZonedDateTime getLastExecReportTime() {
+        return lastExecReportTime;
+    }
+
+    public StockOrder lastExecReportTime(ZonedDateTime lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
+        return this;
+    }
+
+    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
+    }
+
+    public String getLastExecReportDescr() {
+        return lastExecReportDescr;
+    }
+
+    public StockOrder lastExecReportDescr(String lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
+        return this;
+    }
+
+    public void setLastExecReportDescr(String lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
+    }
+
     public Stock getStock() {
         return stock;
     }
@@ -299,7 +332,7 @@ public class StockOrder implements Serializable {
     public String toString() {
         return "StockOrder{" +
             "id=" + getId() +
-            ", day='" + getDay() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
             ", daySeq=" + getDaySeq() +
             ", orderType='" + getOrderType() + "'" +
             ", side='" + getSide() + "'" +
@@ -310,6 +343,8 @@ public class StockOrder implements Serializable {
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
+            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
+            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";
     }
 }

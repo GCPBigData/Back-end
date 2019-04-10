@@ -28,7 +28,6 @@ import java.util.Collection;
 @SpringBootApplication
 @EnableQuickFixJClient
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-@EnableScheduling
 public class ClivServerApp {
 
     private static final Logger log = LoggerFactory.getLogger(ClivServerApp.class);
@@ -103,10 +102,11 @@ public class ClivServerApp {
             env.getActiveProfiles());
     }
 
-    @Bean
+    // we are using events instead of this; see ClientApplicationListener class for details
+    /*@Bean
     public Application clientApplication() {
         return new ClientApplicationAdapter();
-    }
+    }*/
 
     @Bean
     public Initiator clientInitiator(quickfix.Application clientApplication, MessageStoreFactory clientMessageStoreFactory,

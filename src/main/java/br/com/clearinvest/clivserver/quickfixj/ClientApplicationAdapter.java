@@ -17,12 +17,6 @@ public class ClientApplicationAdapter implements Application {
     }
 
     @Override
-    public void fromApp(Message message, SessionID sessionId)
-            throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType {
-        log.info("fromApp: Message={}, SessionId={}", message, sessionId);
-    }
-
-    @Override
     public void onCreate(SessionID sessionId) {
         log.info("onCreate: SessionId={}", sessionId);
     }
@@ -48,8 +42,17 @@ public class ClientApplicationAdapter implements Application {
         }
     }
 
+    /** Messages sent by this app to the OMS. */
     @Override
     public void toApp(Message message, SessionID sessionId) throws DoNotSend {
         log.info("toApp: Message={}, SessionId={}", message, sessionId);
     }
+
+    /** Messages received by this app from the OMS. */
+    @Override
+    public void fromApp(Message message, SessionID sessionId)
+        throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType {
+        log.info("fromApp: Message={}, SessionId={}", message, sessionId);
+    }
+
 }

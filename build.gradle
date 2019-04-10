@@ -269,8 +269,8 @@ dependencies {
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'io.allune:quickfixj-spring-boot-starter:2.2.0'
-    implementation 'io.allune:quickfixj-spring-boot-actuator:2.2.0'
+    implementation 'io.allune:quickfixj-spring-boot-starter:2.4.1'
+    implementation 'io.allune:quickfixj-spring-boot-actuator:2.4.1'
 }
 
 task cleanResources(type: Delete) {

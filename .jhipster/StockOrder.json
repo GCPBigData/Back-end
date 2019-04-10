@@ -17,11 +17,8 @@
     ],
     "fields": [
         {
-            "fieldName": "day",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "createdAt",
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldName": "daySeq",
@@ -88,6 +85,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "lastExecReportTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "lastExecReportDescr",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20190402122348",
