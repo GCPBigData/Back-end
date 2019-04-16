@@ -121,6 +121,7 @@ public class UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setCpf(userDTO.getCpf());
         newUser.setLangKey(isNullOrEmpty(userDTO.getLangKey()) ? Constants.DEFAULT_LANGUAGE : userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);

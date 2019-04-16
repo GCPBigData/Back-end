@@ -24,22 +24,20 @@ public class StockOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** Created in this application */
-    public static final String STATUS_CREATED = "CL"; // created locally
+    public static final String STATUS_LOCAL_NEW = "LN";
 
-    /** Accepted by the OMS */
-    public static final String STATUS_ACCEPTED = "ac";
-
-    /** Rejected by the OMS */
+    public static final String STATUS_FIX_NEW = "0";
+    public static final String STATUS_FIX_PARTIALLY_FILLED = "1";
+    public static final String STATUS_FIX_FILLED = "2";
+    public static final String STATUS_FIX_CANCELED = "4";
+    public static final String STATUS_FIX_REPLACED = "5";
+    public static final String STATUS_FIX_PENDING_CANCEL = "6";
     public static final String STATUS_FIX_REJECTED = "8";
-
-    /** Currently being executed */
-    public static final String STATUS_ACTIVE = "av";
-
-    /** Finished execution */
-    public static final String STATUS_FINISHED = "fn";
-
-    /** Canceled */
-    public static final String STATUS_CANCELED = "cc";
+    public static final String STATUS_FIX_SUSPENDED = "9";
+    public static final String STATUS_FIX_PENDING_NEW = "A";
+    public static final String STATUS_FIX_EXPIRED = "C";
+    public static final String STATUS_FIX_PENDING_REPLACE = "E";
+    public static final String STATUS_FIX_RECEIVED = "R";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -74,7 +72,6 @@ public class StockOrder implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @Min(value = 1L)
     @Column(name = "exec_quantity")
     private Long execQuantity;
 
@@ -82,6 +79,9 @@ public class StockOrder implements Serializable {
     @DecimalMin(value = "0.01")
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
+
+    @Column(name = "average_price", precision = 10, scale = 2)
+    private BigDecimal averagePrice;
 
     @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice;
@@ -92,9 +92,6 @@ public class StockOrder implements Serializable {
     @NotNull
     @Column(name = "status", nullable = false)
     private String status;
-
-    @Column(name = "status_descr")
-    private String statusDescr;
 
     @Column(name = "last_exec_report_time")
     private ZonedDateTime lastExecReportTime;
@@ -111,6 +108,7 @@ public class StockOrder implements Serializable {
     private BrokerageAccount brokerageAccount;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -236,6 +234,19 @@ public class StockOrder implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    public BigDecimal getAveragePrice() {
+        return averagePrice;
+    }
+
+    public StockOrder averagePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+        return this;
+    }
+
+    public void setAveragePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -273,19 +284,6 @@ public class StockOrder implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getStatusDescr() {
-        return statusDescr;
-    }
-
-    public StockOrder statusDescr(String statusDescr) {
-        this.statusDescr = statusDescr;
-        return this;
-    }
-
-    public void setStatusDescr(String statusDescr) {
-        this.statusDescr = statusDescr;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -374,10 +372,10 @@ public class StockOrder implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", statusDescr='" + getStatusDescr() + "'" +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";

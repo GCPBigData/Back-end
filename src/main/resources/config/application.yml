@@ -119,5 +119,5 @@ jhipster:
 
 quickfixj:
     client:
-        config: ${QUIICKFIXJ_CLIENT_CONFIG_FILE:classpath:quickfixj-client.cfg}
+        config: ${QUIICKFIXJ_CLIENT_CONFIG_FILE:classpath:quickfixj-client-cliv.cfg}
         jmx-enabled: true

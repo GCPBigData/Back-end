@@ -33,20 +33,19 @@ public class StockOrderDTO implements Serializable {
     @Min(value = 1L)
     private Long quantity;
 
-    @Min(value = 1L)
     private Long execQuantity;
 
     @NotNull
     @DecimalMin(value = "0.01")
     private BigDecimal unitPrice;
 
+    private BigDecimal averagePrice;
+
     private BigDecimal totalPrice;
 
     private String omsOrderId;
 
     private String status;
-
-    private String statusDescr;
 
     private ZonedDateTime lastExecReportTime;
 
@@ -58,6 +57,14 @@ public class StockOrderDTO implements Serializable {
 
     @NotNull
     private Long brokerageAccountId;
+
+    // derived fields
+
+    private String statusDescr;
+
+    private boolean canCancel;
+
+    // getters and setters
 
     public Long getId() {
         return id;
@@ -139,6 +146,14 @@ public class StockOrderDTO implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    public BigDecimal getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -161,14 +176,6 @@ public class StockOrderDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getStatusDescr() {
-        return statusDescr;
-    }
-
-    public void setStatusDescr(String statusDescr) {
-        this.statusDescr = statusDescr;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -211,6 +218,22 @@ public class StockOrderDTO implements Serializable {
         this.brokerageAccountId = brokerageAccountId;
     }
 
+    public String getStatusDescr() {
+        return statusDescr;
+    }
+
+    public void setStatusDescr(String statusDescr) {
+        this.statusDescr = statusDescr;
+    }
+
+    public boolean isCanCancel() {
+        return canCancel;
+    }
+
+    public void setCanCancel(boolean canCancel) {
+        this.canCancel = canCancel;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -245,15 +268,17 @@ public class StockOrderDTO implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", statusDescr='" + getStatusDescr() + "'" +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +
+            ", statusDescr=" + getStatusDescr() +
+            ", canCancel=" + isCanCancel() +
             "}";
     }
 }

@@ -75,6 +75,9 @@ public class StockOrderResourceIntTest {
     private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal(0.01);
     private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal(1);
 
+    private static final BigDecimal DEFAULT_AVERAGE_PRICE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_AVERAGE_PRICE = new BigDecimal(2);
+
     private static final BigDecimal DEFAULT_TOTAL_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_TOTAL_PRICE = new BigDecimal(2);
 
@@ -83,9 +86,6 @@ public class StockOrderResourceIntTest {
 
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_STATUS_DESCR = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS_DESCR = "BBBBBBBBBB";
 
     private static final ZonedDateTime DEFAULT_LAST_EXEC_REPORT_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_LAST_EXEC_REPORT_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -146,10 +146,10 @@ public class StockOrderResourceIntTest {
             .quantity(DEFAULT_QUANTITY)
             .execQuantity(DEFAULT_EXEC_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
+            .averagePrice(DEFAULT_AVERAGE_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .omsOrderId(DEFAULT_OMS_ORDER_ID)
             .status(DEFAULT_STATUS)
-            .statusDescr(DEFAULT_STATUS_DESCR)
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR);
         return stockOrder;
@@ -185,10 +185,10 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
+        assertThat(testStockOrder.getAveragePrice()).isEqualTo(DEFAULT_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(DEFAULT_OMS_ORDER_ID);
         assertThat(testStockOrder.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testStockOrder.getStatusDescr()).isEqualTo(DEFAULT_STATUS_DESCR);
         assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
     }
@@ -309,10 +309,10 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].omsOrderId").value(hasItem(DEFAULT_OMS_ORDER_ID.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].statusDescr").value(hasItem(DEFAULT_STATUS_DESCR.toString())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
     }
@@ -337,10 +337,10 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
+            .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.omsOrderId").value(DEFAULT_OMS_ORDER_ID.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.statusDescr").value(DEFAULT_STATUS_DESCR.toString()))
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
             .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()));
     }
@@ -375,10 +375,10 @@ public class StockOrderResourceIntTest {
             .quantity(UPDATED_QUANTITY)
             .execQuantity(UPDATED_EXEC_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
+            .averagePrice(UPDATED_AVERAGE_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .omsOrderId(UPDATED_OMS_ORDER_ID)
             .status(UPDATED_STATUS)
-            .statusDescr(UPDATED_STATUS_DESCR)
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR);
         StockOrderDTO stockOrderDTO = stockOrderMapper.toDto(updatedStockOrder);
@@ -401,10 +401,10 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
+        assertThat(testStockOrder.getAveragePrice()).isEqualTo(UPDATED_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(UPDATED_OMS_ORDER_ID);
         assertThat(testStockOrder.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testStockOrder.getStatusDescr()).isEqualTo(UPDATED_STATUS_DESCR);
         assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
     }
