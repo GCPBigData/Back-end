@@ -8,6 +8,8 @@ import br.com.clearinvest.clivserver.web.rest.vm.LoginVM;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class UserJWTController {
+    private final Logger log = LoggerFactory.getLogger(UserJWTController.class);
 
     private final TokenProvider tokenProvider;
 
@@ -57,10 +60,14 @@ public class UserJWTController {
     @PostMapping("/authenticate/mobile")
     @Timed
     public ResponseEntity<JWTToken> authorizeFromMobile(@Valid @RequestBody LoginVM loginVM) {
+        log.info("authorizeFromMobile; username: {}", loginVM.getUsername());
+
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        log.info("authentication; principal: {}; credentials: {}", authentication.getPrincipal(), authentication.getCredentials());
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
         String jwt = tokenProvider.createToken(authentication, rememberMe);

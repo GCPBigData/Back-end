@@ -2,12 +2,11 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.AppPreference;
 import br.com.clearinvest.clivserver.repository.AppPreferenceRepository;
+import br.com.clearinvest.clivserver.repository.MarketSectorRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
-import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.AppPreferenceDTO;
 import br.com.clearinvest.clivserver.service.mapper.AppPreferenceMapper;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +24,9 @@ import java.util.stream.Collectors;
 public class AppPreferenceService {
 
     private static final String PREF_STOCK_LIST_COLUMNS = "stockListColumns";
+    private static final String PREF_STOCK_LIST_TABS = "stockListTabs";
+
+    private static final String TAB_ID_WATCHED_STOCKS = "0";
 
     private final Logger log = LoggerFactory.getLogger(AppPreferenceService.class);
 
@@ -34,11 +36,14 @@ public class AppPreferenceService {
 
     private final UserRepository userRepository;
 
-    public AppPreferenceService(AppPreferenceRepository appPreferenceRepository,
-            AppPreferenceMapper appPreferenceMapper, UserRepository userRepository) {
+    private final MarketSectorRepository marketSectorRepository;
+
+    public AppPreferenceService(AppPreferenceRepository appPreferenceRepository, AppPreferenceMapper appPreferenceMapper,
+            UserRepository userRepository, MarketSectorRepository marketSectorRepository) {
         this.appPreferenceRepository = appPreferenceRepository;
         this.appPreferenceMapper = appPreferenceMapper;
         this.userRepository = userRepository;
+        this.marketSectorRepository = marketSectorRepository;
     }
 
     /**
@@ -113,13 +118,30 @@ public class AppPreferenceService {
         Map<String, AppPreference> prefsByKey = prefs.stream()
             .collect(Collectors.toMap(AppPreference::getKey, item -> item));
 
-        AppPreference stockListPref = prefsByKey.get(PREF_STOCK_LIST_COLUMNS);
-        if (stockListPref == null) {
+        AppPreference stockListColumnsPref = prefsByKey.get(PREF_STOCK_LIST_COLUMNS);
+        if (stockListColumnsPref == null || stockListColumnsPref.getValue() == null
+                || stockListColumnsPref.getValue().isEmpty()) {
             String columnsString = Arrays.asList("symbol", "lastPrice", "variationPercent", "initialPrice").stream()
                 .collect(Collectors.joining(","));
 
-            stockListPref = new AppPreference(PREF_STOCK_LIST_COLUMNS, columnsString);
-            prefsByKey.put(PREF_STOCK_LIST_COLUMNS, stockListPref);
+            stockListColumnsPref = new AppPreference(PREF_STOCK_LIST_COLUMNS, columnsString);
+            prefsByKey.put(PREF_STOCK_LIST_COLUMNS, stockListColumnsPref);
+        }
+
+        // TODO manter apenas abas que existem no banco de dados, com exeção da aba 0 (papéis em vista) que deve estar presente sempre
+        AppPreference stockListTabsPref = prefsByKey.get(PREF_STOCK_LIST_TABS);
+        if (stockListTabsPref == null || stockListTabsPref.getValue() == null
+                || stockListTabsPref.getValue().isEmpty()) {
+
+            List<String> tabIdList = marketSectorRepository.findAll().stream()
+                .map(x -> x.getId().toString())
+                .collect(Collectors.toList());
+            tabIdList.add(0, TAB_ID_WATCHED_STOCKS);
+
+            String tabsString = tabIdList.stream()
+                .collect(Collectors.joining(","));
+            stockListTabsPref = new AppPreference(PREF_STOCK_LIST_TABS, tabsString);
+            prefsByKey.put(PREF_STOCK_LIST_TABS, stockListTabsPref);
         }
 
         return prefsByKey.values();

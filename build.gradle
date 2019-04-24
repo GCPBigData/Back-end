@@ -51,7 +51,7 @@ dependencyManagement {
 defaultTasks 'bootRun'
 
 group = 'br.com.clearinvest.clivserver'
-version = '0.3.0'
+version = '0.3.1-1'
 
 description = ''
 
@@ -269,8 +269,14 @@ dependencies {
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'io.allune:quickfixj-spring-boot-starter:2.4.1'
-    implementation 'io.allune:quickfixj-spring-boot-actuator:2.4.1'
+
+    implementation ('io.allune:quickfixj-spring-boot-starter:2.4.1') {
+        exclude group: 'org.quickfixj', module: 'quickfixj-messages-all'
+    }
+    implementation ('io.allune:quickfixj-spring-boot-actuator:2.4.1') {
+        exclude group: 'org.quickfixj', module: 'quickfixj-messages-all'
+    }
+    implementation 'org.quickfixj:quickfixj-messages-fix44:2.1.0'
 }
 
 task cleanResources(type: Delete) {

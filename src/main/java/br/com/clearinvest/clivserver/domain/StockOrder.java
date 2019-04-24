@@ -51,18 +51,24 @@ public class StockOrder implements Serializable {
     @Column(name = "day_seq")
     private Long daySeq;
 
+    /** mercado, limite, etc */
     @Column(name = "order_type")
     private String orderType;
 
+    /** compra ou venda */
     @NotNull
     @Size(max = 1)
     @Column(name = "side", length = 1, nullable = false)
     private String side;
 
+    /** duração da ordem (Good Till Cancel, Good Till Date, etc) */
     @Size(max = 1)
     @Column(name = "time_in_force", length = 1)
     private String timeInForce;
 
+    // TODO expire time
+
+    /** day trade ou swing trade */
     @Size(max = 1)
     @Column(name = "operation_type", length = 1)
     private String operationType;
