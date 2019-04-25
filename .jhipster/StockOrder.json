@@ -25,6 +25,15 @@
             "fieldType": "Long"
         },
         {
+            "fieldName": "kind",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "orderType",
             "fieldType": "String"
         },
@@ -44,6 +53,10 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "1"
+        },
+        {
+            "fieldName": "expireTime",
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldName": "operationType",
