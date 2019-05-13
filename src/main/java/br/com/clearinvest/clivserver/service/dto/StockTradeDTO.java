@@ -7,33 +7,26 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * A DTO for the StockOrder entity.
+ * A DTO for the StockTrade entity.
  */
-public class StockOrderDTO implements Serializable {
+public class StockTradeDTO implements Serializable {
 
     private Long id;
 
     private ZonedDateTime createdAt;
 
-    private Long daySeq;
+    private ZonedDateTime lastExecReportTime;
 
-    @NotNull
-    @Size(max = 10)
-    private String kind;
+    private String lastExecReportDescr;
 
-    private String orderType;
+    @Size(max = 45)
+    private String createdByIp;
 
     @NotNull
     @Size(max = 1)
     private String side;
 
-    @Size(max = 1)
-    private String timeInForce;
-
     private ZonedDateTime expireTime;
-
-    @Size(max = 1)
-    private String operationType;
 
     @NotNull
     @Min(value = 1L)
@@ -47,17 +40,11 @@ public class StockOrderDTO implements Serializable {
 
     private BigDecimal averagePrice;
 
+    private BigDecimal stockTotalPrice;
+
     private BigDecimal totalPrice;
 
-    private String omsOrderId;
-
     private String status;
-
-    private ZonedDateTime lastExecReportTime;
-
-    private String lastExecReportDescr;
-
-    private String createdByIp;
 
     private Long stockId;
 
@@ -69,13 +56,11 @@ public class StockOrderDTO implements Serializable {
 
     private String createdByLogin;
 
-    private Long tradeId;
-
     // derived fields
 
     private String statusDescr;
-
     private boolean canCancel;
+    private boolean canEdit;
 
     // getters and setters
 
@@ -95,28 +80,28 @@ public class StockOrderDTO implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Long getDaySeq() {
-        return daySeq;
+    public ZonedDateTime getLastExecReportTime() {
+        return lastExecReportTime;
     }
 
-    public void setDaySeq(Long daySeq) {
-        this.daySeq = daySeq;
+    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
     }
 
-    public String getKind() {
-        return kind;
+    public String getLastExecReportDescr() {
+        return lastExecReportDescr;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setLastExecReportDescr(String lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
     }
 
-    public String getOrderType() {
-        return orderType;
+    public String getCreatedByIp() {
+        return createdByIp;
     }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
+    public void setCreatedByIp(String createdByIp) {
+        this.createdByIp = createdByIp;
     }
 
     public String getSide() {
@@ -127,28 +112,12 @@ public class StockOrderDTO implements Serializable {
         this.side = side;
     }
 
-    public String getTimeInForce() {
-        return timeInForce;
-    }
-
-    public void setTimeInForce(String timeInForce) {
-        this.timeInForce = timeInForce;
-    }
-
     public ZonedDateTime getExpireTime() {
         return expireTime;
     }
 
     public void setExpireTime(ZonedDateTime expireTime) {
         this.expireTime = expireTime;
-    }
-
-    public String getOperationType() {
-        return operationType;
-    }
-
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
     }
 
     public Long getQuantity() {
@@ -183,6 +152,14 @@ public class StockOrderDTO implements Serializable {
         this.averagePrice = averagePrice;
     }
 
+    public BigDecimal getStockTotalPrice() {
+        return stockTotalPrice;
+    }
+
+    public void setStockTotalPrice(BigDecimal stockTotalPrice) {
+        this.stockTotalPrice = stockTotalPrice;
+    }
+
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -191,44 +168,12 @@ public class StockOrderDTO implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public String getOmsOrderId() {
-        return omsOrderId;
-    }
-
-    public void setOmsOrderId(String omsOrderId) {
-        this.omsOrderId = omsOrderId;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public ZonedDateTime getLastExecReportTime() {
-        return lastExecReportTime;
-    }
-
-    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-    }
-
-    public String getLastExecReportDescr() {
-        return lastExecReportDescr;
-    }
-
-    public void setLastExecReportDescr(String lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
-    }
-
-    public String getCreatedByIp() {
-        return createdByIp;
-    }
-
-    public void setCreatedByIp(String createdByIp) {
-        this.createdByIp = createdByIp;
     }
 
     public Long getStockId() {
@@ -271,14 +216,6 @@ public class StockOrderDTO implements Serializable {
         this.createdByLogin = userLogin;
     }
 
-    public Long getTradeId() {
-        return tradeId;
-    }
-
-    public void setTradeId(Long stockTradeId) {
-        this.tradeId = stockTradeId;
-    }
-
     public String getStatusDescr() {
         return statusDescr;
     }
@@ -295,6 +232,14 @@ public class StockOrderDTO implements Serializable {
         this.canCancel = canCancel;
     }
 
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -304,11 +249,11 @@ public class StockOrderDTO implements Serializable {
             return false;
         }
 
-        StockOrderDTO stockOrderDTO = (StockOrderDTO) o;
-        if (stockOrderDTO.getId() == null || getId() == null) {
+        StockTradeDTO stockTradeDTO = (StockTradeDTO) o;
+        if (stockTradeDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), stockOrderDTO.getId());
+        return Objects.equals(getId(), stockTradeDTO.getId());
     }
 
     @Override
@@ -318,34 +263,26 @@ public class StockOrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "StockOrderDTO{" +
+        return "StockTradeDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", daySeq=" + getDaySeq() +
-            ", kind='" + getKind() + "'" +
-            ", orderType='" + getOrderType() + "'" +
+            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
+            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
+            ", createdByIp='" + getCreatedByIp() + "'" +
             ", side='" + getSide() + "'" +
-            ", timeInForce='" + getTimeInForce() + "'" +
             ", expireTime='" + getExpireTime() + "'" +
-            ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", averagePrice=" + getAveragePrice() +
+            ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
-            ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
-            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
-            ", createdByIp='" + getCreatedByIp() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +
             ", createdBy=" + getCreatedById() +
             ", createdBy='" + getCreatedByLogin() + "'" +
-            ", trade=" + getTradeId() +
-            ", statusDescr=" + getStatusDescr() +
-            ", canCancel=" + isCanCancel() +
             "}";
     }
 }

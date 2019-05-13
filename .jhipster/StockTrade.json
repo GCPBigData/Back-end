@@ -15,6 +15,12 @@
             "otherEntityField": "id"
         },
         {
+            "relationshipName": "orders",
+            "otherEntityName": "stockOrder",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "trade"
+        },
+        {
             "relationshipName": "createdBy",
             "otherEntityName": "user",
             "relationshipType": "many-to-one",
@@ -23,15 +29,6 @@
             ],
             "otherEntityField": "login",
             "ownerSide": true
-        },
-        {
-            "relationshipName": "trade",
-            "otherEntityName": "stockTrade",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": [
-                "required"
-            ],
-            "otherEntityField": "id"
         }
     ],
     "fields": [
@@ -40,21 +37,20 @@
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "daySeq",
-            "fieldType": "Long"
+            "fieldName": "lastExecReportTime",
+            "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "kind",
+            "fieldName": "lastExecReportDescr",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdByIp",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
                 "maxlength"
             ],
-            "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "orderType",
-            "fieldType": "String"
+            "fieldValidateRulesMaxlength": "45"
         },
         {
             "fieldName": "side",
@@ -66,24 +62,8 @@
             "fieldValidateRulesMaxlength": "1"
         },
         {
-            "fieldName": "timeInForce",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1"
-        },
-        {
             "fieldName": "expireTime",
             "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "operationType",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1"
         },
         {
             "fieldName": "quantity",
@@ -112,12 +92,12 @@
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "totalPrice",
+            "fieldName": "stockTotalPrice",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "omsOrderId",
-            "fieldType": "String"
+            "fieldName": "totalPrice",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "status",
@@ -125,29 +105,13 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "lastExecReportTime",
-            "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "lastExecReportDescr",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "createdByIp",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "45"
         }
     ],
-    "changelogDate": "20190402122348",
+    "changelogDate": "20190425101241",
     "dto": "mapstruct",
     "searchEngine": false,
     "service": "serviceClass",
-    "entityTableName": "stock_order",
+    "entityTableName": "stock_trade",
     "jpaMetamodelFiltering": false,
     "pagination": "no"
 }

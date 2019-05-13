@@ -48,7 +48,16 @@ public class ClientApplicationListener {
 
         Message message = fromApp.getMessage();
         if (message instanceof ExecutionReport) {
-            stockOrderService.proccessExecutionReport((ExecutionReport) message);
+            ExecutionReport executionReport = (ExecutionReport) message;
+            String clOrdID = "", execId = "";
+            try {
+                clOrdID = executionReport.getClOrdID().getValue();
+                execId = executionReport.getExecID().getValue();
+            } catch (Exception e) {
+                log.debug("unexpected error", e);
+            }
+            log.debug("calling StockOrderService#proccessExecutionReport with message:: ClOrdID: {}; ExecID: {}", clOrdID, execId);
+            stockOrderService.proccessExecutionReport(executionReport);
         }
     }
 

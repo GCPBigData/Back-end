@@ -1,36 +1,35 @@
 package br.com.clearinvest.clivserver.service.mapper;
 
 import br.com.clearinvest.clivserver.domain.*;
-import br.com.clearinvest.clivserver.service.dto.StockOrderDTO;
+import br.com.clearinvest.clivserver.service.dto.StockTradeDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity StockOrder and its DTO StockOrderDTO.
+ * Mapper for the entity StockTrade and its DTO StockTradeDTO.
  */
-@Mapper(componentModel = "spring", uses = {StockMapper.class, BrokerageAccountMapper.class, UserMapper.class, StockTradeMapper.class})
-public interface StockOrderMapper extends EntityMapper<StockOrderDTO, StockOrder> {
+@Mapper(componentModel = "spring", uses = {StockMapper.class, BrokerageAccountMapper.class, UserMapper.class})
+public interface StockTradeMapper extends EntityMapper<StockTradeDTO, StockTrade> {
 
     @Mapping(source = "stock.id", target = "stockId")
     @Mapping(source = "stock.symbol", target = "stockSymbol")
     @Mapping(source = "brokerageAccount.id", target = "brokerageAccountId")
     @Mapping(source = "createdBy.id", target = "createdById")
     @Mapping(source = "createdBy.login", target = "createdByLogin")
-    @Mapping(source = "trade.id", target = "tradeId")
-    StockOrderDTO toDto(StockOrder stockOrder);
+    StockTradeDTO toDto(StockTrade stockTrade);
 
     @Mapping(source = "stockId", target = "stock")
     @Mapping(source = "brokerageAccountId", target = "brokerageAccount")
+    @Mapping(target = "orders", ignore = true)
     @Mapping(source = "createdById", target = "createdBy")
-    @Mapping(source = "tradeId", target = "trade")
-    StockOrder toEntity(StockOrderDTO stockOrderDTO);
+    StockTrade toEntity(StockTradeDTO stockTradeDTO);
 
-    default StockOrder fromId(Long id) {
+    default StockTrade fromId(Long id) {
         if (id == null) {
             return null;
         }
-        StockOrder stockOrder = new StockOrder();
-        stockOrder.setId(id);
-        return stockOrder;
+        StockTrade stockTrade = new StockTrade();
+        stockTrade.setId(id);
+        return stockTrade;
     }
 }

@@ -6,7 +6,9 @@ import br.com.clearinvest.clivserver.repository.MarketSectorRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.AppPreferenceDTO;
+import br.com.clearinvest.clivserver.service.dto.StockListTabDTO;
 import br.com.clearinvest.clivserver.service.mapper.AppPreferenceMapper;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +28,7 @@ public class AppPreferenceService {
     private static final String PREF_STOCK_LIST_COLUMNS = "stockListColumns";
     private static final String PREF_STOCK_LIST_TABS = "stockListTabs";
 
-    private static final String TAB_ID_WATCHED_STOCKS = "0";
+    private static final Long TAB_ID_WATCHED_STOCKS = 0L;
 
     private final Logger log = LoggerFactory.getLogger(AppPreferenceService.class);
 
@@ -133,14 +135,13 @@ public class AppPreferenceService {
         if (stockListTabsPref == null || stockListTabsPref.getValue() == null
                 || stockListTabsPref.getValue().isEmpty()) {
 
-            List<String> tabIdList = marketSectorRepository.findAll().stream()
-                .map(x -> x.getId().toString())
+            List<StockListTabDTO> tabList = marketSectorRepository.findAll().stream()
+                .map(x -> new StockListTabDTO(x.getId(), x.getName()))
                 .collect(Collectors.toList());
-            tabIdList.add(0, TAB_ID_WATCHED_STOCKS);
+            tabList.add(0, new StockListTabDTO(TAB_ID_WATCHED_STOCKS, "Papéis em Vista"));
 
-            String tabsString = tabIdList.stream()
-                .collect(Collectors.joining(","));
-            stockListTabsPref = new AppPreference(PREF_STOCK_LIST_TABS, tabsString);
+            String tabsJson = new Gson().toJson(tabList);
+            stockListTabsPref = new AppPreference(PREF_STOCK_LIST_TABS, tabsJson);
             prefsByKey.put(PREF_STOCK_LIST_TABS, stockListTabsPref);
         }
 

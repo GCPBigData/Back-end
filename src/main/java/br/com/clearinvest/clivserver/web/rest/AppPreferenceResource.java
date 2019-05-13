@@ -68,9 +68,6 @@ public class AppPreferenceResource {
     @Timed
     public ResponseEntity<AppPreferenceDTO> updateAppPreference(@Valid @RequestBody AppPreferenceDTO appPreferenceDTO) throws URISyntaxException {
         log.debug("REST request to update AppPreference : {}", appPreferenceDTO);
-        if (appPreferenceDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
         AppPreferenceDTO result = appPreferenceService.save(appPreferenceDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, appPreferenceDTO.getId().toString()))

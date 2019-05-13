@@ -3,6 +3,8 @@ package br.com.clearinvest.clivserver.web.rest;
 import br.com.clearinvest.clivserver.ClivServerApp;
 
 import br.com.clearinvest.clivserver.domain.StockOrder;
+import br.com.clearinvest.clivserver.domain.User;
+import br.com.clearinvest.clivserver.domain.StockTrade;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import br.com.clearinvest.clivserver.service.StockOrderService;
 import br.com.clearinvest.clivserver.service.dto.StockOrderDTO;
@@ -54,6 +56,9 @@ public class StockOrderResourceIntTest {
     private static final Long DEFAULT_DAY_SEQ = 1L;
     private static final Long UPDATED_DAY_SEQ = 2L;
 
+    private static final String DEFAULT_KIND = "AAAAAAAAAA";
+    private static final String UPDATED_KIND = "BBBBBBBBBB";
+
     private static final String DEFAULT_ORDER_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_TYPE = "BBBBBBBBBB";
 
@@ -62,6 +67,9 @@ public class StockOrderResourceIntTest {
 
     private static final String DEFAULT_TIME_IN_FORCE = "A";
     private static final String UPDATED_TIME_IN_FORCE = "B";
+
+    private static final ZonedDateTime DEFAULT_EXPIRE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_EXPIRE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     private static final String DEFAULT_OPERATION_TYPE = "A";
     private static final String UPDATED_OPERATION_TYPE = "B";
@@ -92,6 +100,9 @@ public class StockOrderResourceIntTest {
 
     private static final String DEFAULT_LAST_EXEC_REPORT_DESCR = "AAAAAAAAAA";
     private static final String UPDATED_LAST_EXEC_REPORT_DESCR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CREATED_BY_IP = "AAAAAAAAAA";
+    private static final String UPDATED_CREATED_BY_IP = "BBBBBBBBBB";
 
     @Autowired
     private StockOrderRepository stockOrderRepository;
@@ -139,9 +150,11 @@ public class StockOrderResourceIntTest {
         StockOrder stockOrder = new StockOrder()
             .createdAt(DEFAULT_CREATED_AT)
             .daySeq(DEFAULT_DAY_SEQ)
+            .kind(DEFAULT_KIND)
             .orderType(DEFAULT_ORDER_TYPE)
             .side(DEFAULT_SIDE)
             .timeInForce(DEFAULT_TIME_IN_FORCE)
+            .expireTime(DEFAULT_EXPIRE_TIME)
             .operationType(DEFAULT_OPERATION_TYPE)
             .quantity(DEFAULT_QUANTITY)
             .execQuantity(DEFAULT_EXEC_QUANTITY)
@@ -151,7 +164,18 @@ public class StockOrderResourceIntTest {
             .omsOrderId(DEFAULT_OMS_ORDER_ID)
             .status(DEFAULT_STATUS)
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
-            .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR);
+            .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR)
+            .createdByIp(DEFAULT_CREATED_BY_IP);
+        // Add required entity
+        User user = UserResourceIntTest.createEntity(em);
+        em.persist(user);
+        em.flush();
+        stockOrder.setCreatedBy(user);
+        // Add required entity
+        StockTrade stockTrade = StockTradeResourceIntTest.createEntity(em);
+        em.persist(stockTrade);
+        em.flush();
+        stockOrder.setTrade(stockTrade);
         return stockOrder;
     }
 
@@ -178,9 +202,11 @@ public class StockOrderResourceIntTest {
         StockOrder testStockOrder = stockOrderList.get(stockOrderList.size() - 1);
         assertThat(testStockOrder.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testStockOrder.getDaySeq()).isEqualTo(DEFAULT_DAY_SEQ);
+        assertThat(testStockOrder.getKind()).isEqualTo(DEFAULT_KIND);
         assertThat(testStockOrder.getOrderType()).isEqualTo(DEFAULT_ORDER_TYPE);
         assertThat(testStockOrder.getSide()).isEqualTo(DEFAULT_SIDE);
         assertThat(testStockOrder.getTimeInForce()).isEqualTo(DEFAULT_TIME_IN_FORCE);
+        assertThat(testStockOrder.getExpireTime()).isEqualTo(DEFAULT_EXPIRE_TIME);
         assertThat(testStockOrder.getOperationType()).isEqualTo(DEFAULT_OPERATION_TYPE);
         assertThat(testStockOrder.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
@@ -191,6 +217,7 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
+        assertThat(testStockOrder.getCreatedByIp()).isEqualTo(DEFAULT_CREATED_BY_IP);
     }
 
     @Test
@@ -211,6 +238,25 @@ public class StockOrderResourceIntTest {
         // Validate the StockOrder in the database
         List<StockOrder> stockOrderList = stockOrderRepository.findAll();
         assertThat(stockOrderList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkKindIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockOrderRepository.findAll().size();
+        // set the field null
+        stockOrder.setKind(null);
+
+        // Create the StockOrder, which fails.
+        StockOrderDTO stockOrderDTO = stockOrderMapper.toDto(stockOrder);
+
+        restStockOrderMockMvc.perform(post("/api/stock-orders")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(stockOrderDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<StockOrder> stockOrderList = stockOrderRepository.findAll();
+        assertThat(stockOrderList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -302,9 +348,11 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(stockOrder.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].daySeq").value(hasItem(DEFAULT_DAY_SEQ.intValue())))
+            .andExpect(jsonPath("$.[*].kind").value(hasItem(DEFAULT_KIND.toString())))
             .andExpect(jsonPath("$.[*].orderType").value(hasItem(DEFAULT_ORDER_TYPE.toString())))
             .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].timeInForce").value(hasItem(DEFAULT_TIME_IN_FORCE.toString())))
+            .andExpect(jsonPath("$.[*].expireTime").value(hasItem(sameInstant(DEFAULT_EXPIRE_TIME))))
             .andExpect(jsonPath("$.[*].operationType").value(hasItem(DEFAULT_OPERATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
@@ -314,7 +362,8 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.[*].omsOrderId").value(hasItem(DEFAULT_OMS_ORDER_ID.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
-            .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
+            .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())))
+            .andExpect(jsonPath("$.[*].createdByIp").value(hasItem(DEFAULT_CREATED_BY_IP.toString())));
     }
     
     @Test
@@ -330,9 +379,11 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.id").value(stockOrder.getId().intValue()))
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.daySeq").value(DEFAULT_DAY_SEQ.intValue()))
+            .andExpect(jsonPath("$.kind").value(DEFAULT_KIND.toString()))
             .andExpect(jsonPath("$.orderType").value(DEFAULT_ORDER_TYPE.toString()))
             .andExpect(jsonPath("$.side").value(DEFAULT_SIDE.toString()))
             .andExpect(jsonPath("$.timeInForce").value(DEFAULT_TIME_IN_FORCE.toString()))
+            .andExpect(jsonPath("$.expireTime").value(sameInstant(DEFAULT_EXPIRE_TIME)))
             .andExpect(jsonPath("$.operationType").value(DEFAULT_OPERATION_TYPE.toString()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
@@ -342,7 +393,8 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.omsOrderId").value(DEFAULT_OMS_ORDER_ID.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
-            .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()));
+            .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()))
+            .andExpect(jsonPath("$.createdByIp").value(DEFAULT_CREATED_BY_IP.toString()));
     }
 
     @Test
@@ -368,9 +420,11 @@ public class StockOrderResourceIntTest {
         updatedStockOrder
             .createdAt(UPDATED_CREATED_AT)
             .daySeq(UPDATED_DAY_SEQ)
+            .kind(UPDATED_KIND)
             .orderType(UPDATED_ORDER_TYPE)
             .side(UPDATED_SIDE)
             .timeInForce(UPDATED_TIME_IN_FORCE)
+            .expireTime(UPDATED_EXPIRE_TIME)
             .operationType(UPDATED_OPERATION_TYPE)
             .quantity(UPDATED_QUANTITY)
             .execQuantity(UPDATED_EXEC_QUANTITY)
@@ -380,7 +434,8 @@ public class StockOrderResourceIntTest {
             .omsOrderId(UPDATED_OMS_ORDER_ID)
             .status(UPDATED_STATUS)
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
-            .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR);
+            .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR)
+            .createdByIp(UPDATED_CREATED_BY_IP);
         StockOrderDTO stockOrderDTO = stockOrderMapper.toDto(updatedStockOrder);
 
         restStockOrderMockMvc.perform(put("/api/stock-orders")
@@ -394,9 +449,11 @@ public class StockOrderResourceIntTest {
         StockOrder testStockOrder = stockOrderList.get(stockOrderList.size() - 1);
         assertThat(testStockOrder.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testStockOrder.getDaySeq()).isEqualTo(UPDATED_DAY_SEQ);
+        assertThat(testStockOrder.getKind()).isEqualTo(UPDATED_KIND);
         assertThat(testStockOrder.getOrderType()).isEqualTo(UPDATED_ORDER_TYPE);
         assertThat(testStockOrder.getSide()).isEqualTo(UPDATED_SIDE);
         assertThat(testStockOrder.getTimeInForce()).isEqualTo(UPDATED_TIME_IN_FORCE);
+        assertThat(testStockOrder.getExpireTime()).isEqualTo(UPDATED_EXPIRE_TIME);
         assertThat(testStockOrder.getOperationType()).isEqualTo(UPDATED_OPERATION_TYPE);
         assertThat(testStockOrder.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
@@ -407,6 +464,7 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
+        assertThat(testStockOrder.getCreatedByIp()).isEqualTo(UPDATED_CREATED_BY_IP);
     }
 
     @Test

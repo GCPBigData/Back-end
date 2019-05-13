@@ -1,9 +1,9 @@
 package br.com.clearinvest.clivserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -11,15 +11,17 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
- * A StockOrder.
+ * A StockTrade.
  */
 @Entity
-@Table(name = "stock_order")
+@Table(name = "stock_trade")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class StockOrder implements Serializable {
+public class StockTrade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,49 +41,35 @@ public class StockOrder implements Serializable {
     public static final String STATUS_FIX_PENDING_REPLACE = "E";
     public static final String STATUS_FIX_RECEIVED = "R";
 
-    public static final char FIX_ORD_TYPE_MARKET = '1';
-    public static final char FIX_ORD_TYPE_STOP_LIMIT = '4';
-
-    // TODO adicionar campo originalOrder ou targetOrder, para armazenar ordem q está sendo alterada ou cancelada
+    public static final String TYPE_NORMAL = "N";
+    public static final String TYPE_STOP_LOSS = "SL";
+    public static final String TYPE_STOP_GAIN = "SG";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @CreationTimestamp
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 
-    @Column(name = "day_seq")
-    private Long daySeq;
+    @Column(name = "last_exec_report_time")
+    private ZonedDateTime lastExecReportTime;
 
-    /** compra/venda, cancelamento, alteração, etc */
-    @NotNull
-    @Size(max = 10)
-    @Column(name = "kind", length = 10, nullable = false)
-    private String kind;
+    @Column(name = "last_exec_report_descr")
+    private String lastExecReportDescr;
 
-    /** mercado, limite, etc */
-    @Column(name = "order_type")
-    private String orderType;
+    @Size(max = 45)
+    @Column(name = "created_by_ip", length = 45)
+    private String createdByIp;
 
     @NotNull
     @Size(max = 1)
     @Column(name = "side", length = 1, nullable = false)
     private String side;
 
-    @Size(max = 1)
-    @Column(name = "time_in_force", length = 1)
-    private String timeInForce;
-
     @Column(name = "expire_time")
     private ZonedDateTime expireTime;
-
-    /** day trade ou swing trade */
-    @Size(max = 1)
-    @Column(name = "operation_type", length = 1)
-    private String operationType;
 
     @NotNull
     @Min(value = 1L)
@@ -96,32 +84,18 @@ public class StockOrder implements Serializable {
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
-    // TODO remover
     @Column(name = "average_price", precision = 10, scale = 2)
     private BigDecimal averagePrice;
 
-    // TODO remover
+    @Column(name = "stock_total_price", precision = 10, scale = 2)
+    private BigDecimal stockTotalPrice;
+
     @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice;
-
-    @Column(name = "oms_order_id")
-    private String omsOrderId;
 
     @NotNull
     @Column(name = "status", nullable = false)
     private String status;
-
-    // TODO remover, foi movido para StockTrade
-    @Column(name = "last_exec_report_time")
-    private ZonedDateTime lastExecReportTime;
-
-    // TODO remover, foi movido para StockTrade
-    @Column(name = "last_exec_report_descr")
-    private String lastExecReportDescr;
-
-    @Size(max = 45)
-    @Column(name = "created_by_ip", length = 45)
-    private String createdByIp;
 
     @ManyToOne
     @JsonIgnoreProperties("")
@@ -131,15 +105,14 @@ public class StockOrder implements Serializable {
     @JsonIgnoreProperties("")
     private BrokerageAccount brokerageAccount;
 
+    @OneToMany(mappedBy = "trade")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<StockOrder> orders = new HashSet<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
     private User createdBy;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("orders")
-    private StockTrade trade;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -154,7 +127,7 @@ public class StockOrder implements Serializable {
         return createdAt;
     }
 
-    public StockOrder createdAt(ZonedDateTime createdAt) {
+    public StockTrade createdAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
     }
@@ -163,193 +136,11 @@ public class StockOrder implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Long getDaySeq() {
-        return daySeq;
-    }
-
-    public StockOrder daySeq(Long daySeq) {
-        this.daySeq = daySeq;
-        return this;
-    }
-
-    public void setDaySeq(Long daySeq) {
-        this.daySeq = daySeq;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public StockOrder kind(String kind) {
-        this.kind = kind;
-        return this;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getOrderType() {
-        return orderType;
-    }
-
-    public StockOrder orderType(String orderType) {
-        this.orderType = orderType;
-        return this;
-    }
-
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-
-    public String getSide() {
-        return side;
-    }
-
-    public StockOrder side(String side) {
-        this.side = side;
-        return this;
-    }
-
-    public void setSide(String side) {
-        this.side = side;
-    }
-
-    public String getTimeInForce() {
-        return timeInForce;
-    }
-
-    public StockOrder timeInForce(String timeInForce) {
-        this.timeInForce = timeInForce;
-        return this;
-    }
-
-    public void setTimeInForce(String timeInForce) {
-        this.timeInForce = timeInForce;
-    }
-
-    public ZonedDateTime getExpireTime() {
-        return expireTime;
-    }
-
-    public StockOrder expireTime(ZonedDateTime expireTime) {
-        this.expireTime = expireTime;
-        return this;
-    }
-
-    public void setExpireTime(ZonedDateTime expireTime) {
-        this.expireTime = expireTime;
-    }
-
-    public String getOperationType() {
-        return operationType;
-    }
-
-    public StockOrder operationType(String operationType) {
-        this.operationType = operationType;
-        return this;
-    }
-
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public StockOrder quantity(Long quantity) {
-        this.quantity = quantity;
-        return this;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
-
-    public Long getExecQuantity() {
-        return execQuantity;
-    }
-
-    public StockOrder execQuantity(Long execQuantity) {
-        this.execQuantity = execQuantity;
-        return this;
-    }
-
-    public void setExecQuantity(Long execQuantity) {
-        this.execQuantity = execQuantity;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public StockOrder unitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-        return this;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public BigDecimal getAveragePrice() {
-        return averagePrice;
-    }
-
-    public StockOrder averagePrice(BigDecimal averagePrice) {
-        this.averagePrice = averagePrice;
-        return this;
-    }
-
-    public void setAveragePrice(BigDecimal averagePrice) {
-        this.averagePrice = averagePrice;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public StockOrder totalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-        return this;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getOmsOrderId() {
-        return omsOrderId;
-    }
-
-    public StockOrder omsOrderId(String omsOrderId) {
-        this.omsOrderId = omsOrderId;
-        return this;
-    }
-
-    public void setOmsOrderId(String omsOrderId) {
-        this.omsOrderId = omsOrderId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public StockOrder status(String status) {
-        this.status = status;
-        return this;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public ZonedDateTime getLastExecReportTime() {
         return lastExecReportTime;
     }
 
-    public StockOrder lastExecReportTime(ZonedDateTime lastExecReportTime) {
+    public StockTrade lastExecReportTime(ZonedDateTime lastExecReportTime) {
         this.lastExecReportTime = lastExecReportTime;
         return this;
     }
@@ -362,7 +153,7 @@ public class StockOrder implements Serializable {
         return lastExecReportDescr;
     }
 
-    public StockOrder lastExecReportDescr(String lastExecReportDescr) {
+    public StockTrade lastExecReportDescr(String lastExecReportDescr) {
         this.lastExecReportDescr = lastExecReportDescr;
         return this;
     }
@@ -375,7 +166,7 @@ public class StockOrder implements Serializable {
         return createdByIp;
     }
 
-    public StockOrder createdByIp(String createdByIp) {
+    public StockTrade createdByIp(String createdByIp) {
         this.createdByIp = createdByIp;
         return this;
     }
@@ -384,11 +175,128 @@ public class StockOrder implements Serializable {
         this.createdByIp = createdByIp;
     }
 
+    public String getSide() {
+        return side;
+    }
+
+    public StockTrade side(String side) {
+        this.side = side;
+        return this;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
+    public ZonedDateTime getExpireTime() {
+        return expireTime;
+    }
+
+    public StockTrade expireTime(ZonedDateTime expireTime) {
+        this.expireTime = expireTime;
+        return this;
+    }
+
+    public void setExpireTime(ZonedDateTime expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public StockTrade quantity(Long quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public Long getExecQuantity() {
+        return execQuantity;
+    }
+
+    public StockTrade execQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+        return this;
+    }
+
+    public void setExecQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public StockTrade unitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+        return this;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getAveragePrice() {
+        return averagePrice;
+    }
+
+    public StockTrade averagePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+        return this;
+    }
+
+    public void setAveragePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
+    public BigDecimal getStockTotalPrice() {
+        return stockTotalPrice;
+    }
+
+    public StockTrade stockTotalPrice(BigDecimal stockTotalPrice) {
+        this.stockTotalPrice = stockTotalPrice;
+        return this;
+    }
+
+    public void setStockTotalPrice(BigDecimal stockTotalPrice) {
+        this.stockTotalPrice = stockTotalPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public StockTrade totalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+        return this;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public StockTrade status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Stock getStock() {
         return stock;
     }
 
-    public StockOrder stock(Stock stock) {
+    public StockTrade stock(Stock stock) {
         this.stock = stock;
         return this;
     }
@@ -401,7 +309,7 @@ public class StockOrder implements Serializable {
         return brokerageAccount;
     }
 
-    public StockOrder brokerageAccount(BrokerageAccount brokerageAccount) {
+    public StockTrade brokerageAccount(BrokerageAccount brokerageAccount) {
         this.brokerageAccount = brokerageAccount;
         return this;
     }
@@ -410,30 +318,42 @@ public class StockOrder implements Serializable {
         this.brokerageAccount = brokerageAccount;
     }
 
+    public Set<StockOrder> getOrders() {
+        return orders;
+    }
+
+    public StockTrade orders(Set<StockOrder> stockOrders) {
+        this.orders = stockOrders;
+        return this;
+    }
+
+    public StockTrade addOrders(StockOrder stockOrder) {
+        this.orders.add(stockOrder);
+        stockOrder.setTrade(this);
+        return this;
+    }
+
+    public StockTrade removeOrders(StockOrder stockOrder) {
+        this.orders.remove(stockOrder);
+        stockOrder.setTrade(null);
+        return this;
+    }
+
+    public void setOrders(Set<StockOrder> stockOrders) {
+        this.orders = stockOrders;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
 
-    public StockOrder createdBy(User user) {
+    public StockTrade createdBy(User user) {
         this.createdBy = user;
         return this;
     }
 
     public void setCreatedBy(User user) {
         this.createdBy = user;
-    }
-
-    public StockTrade getTrade() {
-        return trade;
-    }
-
-    public StockOrder trade(StockTrade stockTrade) {
-        this.trade = stockTrade;
-        return this;
-    }
-
-    public void setTrade(StockTrade stockTrade) {
-        this.trade = stockTrade;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -445,11 +365,11 @@ public class StockOrder implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        StockOrder stockOrder = (StockOrder) o;
-        if (stockOrder.getId() == null || getId() == null) {
+        StockTrade stockTrade = (StockTrade) o;
+        if (stockTrade.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), stockOrder.getId());
+        return Objects.equals(getId(), stockTrade.getId());
     }
 
     @Override
@@ -459,26 +379,21 @@ public class StockOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "StockOrder{" +
+        return "StockTrade{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", daySeq=" + getDaySeq() +
-            ", kind='" + getKind() + "'" +
-            ", orderType='" + getOrderType() + "'" +
+            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
+            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
+            ", createdByIp='" + getCreatedByIp() + "'" +
             ", side='" + getSide() + "'" +
-            ", timeInForce='" + getTimeInForce() + "'" +
             ", expireTime='" + getExpireTime() + "'" +
-            ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", averagePrice=" + getAveragePrice() +
+            ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
-            ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
-            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
-            ", createdByIp='" + getCreatedByIp() + "'" +
             "}";
     }
 }
