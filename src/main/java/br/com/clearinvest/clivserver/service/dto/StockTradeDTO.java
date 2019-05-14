@@ -46,6 +46,11 @@ public class StockTradeDTO implements Serializable {
 
     private String status;
 
+    @NotNull
+    @Size(max = 2)
+    @Pattern(regexp = "N|SL|SG")
+    private String type;
+
     private Long stockId;
 
     private String stockSymbol;
@@ -176,6 +181,14 @@ public class StockTradeDTO implements Serializable {
         this.status = status;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Long getStockId() {
         return stockId;
     }
@@ -278,6 +291,7 @@ public class StockTradeDTO implements Serializable {
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", status='" + getStatus() + "'" +
+            ", type='" + getType() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +

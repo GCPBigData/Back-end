@@ -88,6 +88,9 @@ public class StockTradeResourceIntTest {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TYPE = "AA";
+    private static final String UPDATED_TYPE = "BB";
+
     @Autowired
     private StockTradeRepository stockTradeRepository;
 
@@ -144,7 +147,8 @@ public class StockTradeResourceIntTest {
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .stockTotalPrice(DEFAULT_STOCK_TOTAL_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .type(DEFAULT_TYPE);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
         em.persist(user);
@@ -187,6 +191,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(DEFAULT_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockTrade.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testStockTrade.getType()).isEqualTo(DEFAULT_TYPE);
     }
 
     @Test
@@ -287,6 +292,25 @@ public class StockTradeResourceIntTest {
 
     @Test
     @Transactional
+    public void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockTradeRepository.findAll().size();
+        // set the field null
+        stockTrade.setType(null);
+
+        // Create the StockTrade, which fails.
+        StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(stockTrade);
+
+        restStockTradeMockMvc.perform(post("/api/stock-trades")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(stockTradeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<StockTrade> stockTradeList = stockTradeRepository.findAll();
+        assertThat(stockTradeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllStockTrades() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
@@ -308,7 +332,8 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].stockTotalPrice").value(hasItem(DEFAULT_STOCK_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
     }
     
     @Test
@@ -334,7 +359,8 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.stockTotalPrice").value(DEFAULT_STOCK_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
     }
 
     @Test
@@ -370,7 +396,8 @@ public class StockTradeResourceIntTest {
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .stockTotalPrice(UPDATED_STOCK_TOTAL_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .type(UPDATED_TYPE);
         StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(updatedStockTrade);
 
         restStockTradeMockMvc.perform(put("/api/stock-trades")
@@ -395,6 +422,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(UPDATED_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockTrade.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testStockTrade.getType()).isEqualTo(UPDATED_TYPE);
     }
 
     @Test

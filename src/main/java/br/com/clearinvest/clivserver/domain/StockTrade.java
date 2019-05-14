@@ -97,6 +97,12 @@ public class StockTrade implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
+    @NotNull
+    @Size(max = 2)
+    @Pattern(regexp = "N|SL|SG")
+    @Column(name = "jhi_type", length = 2, nullable = false)
+    private String type;
+
     @ManyToOne
     @JsonIgnoreProperties("")
     private Stock stock;
@@ -115,6 +121,7 @@ public class StockTrade implements Serializable {
     private User createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -292,6 +299,19 @@ public class StockTrade implements Serializable {
         this.status = status;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public StockTrade type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Stock getStock() {
         return stock;
     }
@@ -394,6 +414,7 @@ public class StockTrade implements Serializable {
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", status='" + getStatus() + "'" +
+            ", type='" + getType() + "'" +
             "}";
     }
 }
