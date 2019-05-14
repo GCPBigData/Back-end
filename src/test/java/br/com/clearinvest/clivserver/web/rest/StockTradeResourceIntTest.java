@@ -76,6 +76,9 @@ public class StockTradeResourceIntTest {
     private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal(0.01);
     private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal(1);
 
+    private static final BigDecimal DEFAULT_STOP_PRICE = new BigDecimal(0.01);
+    private static final BigDecimal UPDATED_STOP_PRICE = new BigDecimal(1);
+
     private static final BigDecimal DEFAULT_AVERAGE_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_AVERAGE_PRICE = new BigDecimal(2);
 
@@ -144,6 +147,7 @@ public class StockTradeResourceIntTest {
             .quantity(DEFAULT_QUANTITY)
             .execQuantity(DEFAULT_EXEC_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
+            .stopPrice(DEFAULT_STOP_PRICE)
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .stockTotalPrice(DEFAULT_STOCK_TOTAL_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
@@ -187,6 +191,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStockTrade.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
         assertThat(testStockTrade.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
+        assertThat(testStockTrade.getStopPrice()).isEqualTo(DEFAULT_STOP_PRICE);
         assertThat(testStockTrade.getAveragePrice()).isEqualTo(DEFAULT_AVERAGE_PRICE);
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(DEFAULT_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
@@ -329,6 +334,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].stopPrice").value(hasItem(DEFAULT_STOP_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].stockTotalPrice").value(hasItem(DEFAULT_STOCK_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
@@ -356,6 +362,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
+            .andExpect(jsonPath("$.stopPrice").value(DEFAULT_STOP_PRICE.intValue()))
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.stockTotalPrice").value(DEFAULT_STOCK_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
@@ -393,6 +400,7 @@ public class StockTradeResourceIntTest {
             .quantity(UPDATED_QUANTITY)
             .execQuantity(UPDATED_EXEC_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
+            .stopPrice(UPDATED_STOP_PRICE)
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .stockTotalPrice(UPDATED_STOCK_TOTAL_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
@@ -418,6 +426,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStockTrade.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
         assertThat(testStockTrade.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
+        assertThat(testStockTrade.getStopPrice()).isEqualTo(UPDATED_STOP_PRICE);
         assertThat(testStockTrade.getAveragePrice()).isEqualTo(UPDATED_AVERAGE_PRICE);
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(UPDATED_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);

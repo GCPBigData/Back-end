@@ -240,5 +240,4 @@ public class StockTradeService {
             StockTrade.STATUS_FIX_RECEIVED);
     }
 
-
 }

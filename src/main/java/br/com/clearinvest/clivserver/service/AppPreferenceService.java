@@ -11,7 +11,6 @@ import br.com.clearinvest.clivserver.service.mapper.AppPreferenceMapper;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +26,7 @@ public class AppPreferenceService {
 
     private static final String PREF_STOCK_LIST_COLUMNS = "stockListColumns";
     private static final String PREF_STOCK_LIST_TABS = "stockListTabs";
+    private static final String PREF_HOME_SECTIONS = "homeSections";
 
     private static final Long TAB_ID_WATCHED_STOCKS = 0L;
 
@@ -123,8 +123,8 @@ public class AppPreferenceService {
         AppPreference stockListColumnsPref = prefsByKey.get(PREF_STOCK_LIST_COLUMNS);
         if (stockListColumnsPref == null || stockListColumnsPref.getValue() == null
                 || stockListColumnsPref.getValue().isEmpty()) {
-            String columnsString = Arrays.asList("symbol", "lastPrice", "variationPercent", "initialPrice").stream()
-                .collect(Collectors.joining(","));
+            String columnsString =
+                String.join(",", "symbol", "lastPrice", "variationPercent", "initialPrice");
 
             stockListColumnsPref = new AppPreference(PREF_STOCK_LIST_COLUMNS, columnsString);
             prefsByKey.put(PREF_STOCK_LIST_COLUMNS, stockListColumnsPref);
@@ -143,6 +143,16 @@ public class AppPreferenceService {
             String tabsJson = new Gson().toJson(tabList);
             stockListTabsPref = new AppPreference(PREF_STOCK_LIST_TABS, tabsJson);
             prefsByKey.put(PREF_STOCK_LIST_TABS, stockListTabsPref);
+        }
+
+        AppPreference homeSectionsPref = prefsByKey.get(PREF_HOME_SECTIONS);
+        if (homeSectionsPref == null || homeSectionsPref.getValue() == null
+                || homeSectionsPref.getValue().isEmpty()) {
+            String valuesString =
+                String.join(",", "balance", "portfolio", "stockList", "balanceChart");
+
+            homeSectionsPref = new AppPreference(PREF_HOME_SECTIONS, valuesString);
+            prefsByKey.put(PREF_HOME_SECTIONS, homeSectionsPref);
         }
 
         return prefsByKey.values();

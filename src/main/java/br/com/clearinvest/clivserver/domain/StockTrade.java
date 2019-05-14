@@ -84,6 +84,10 @@ public class StockTrade implements Serializable {
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
+    @DecimalMin(value = "0.01")
+    @Column(name = "stop_price", precision = 10, scale = 2)
+    private BigDecimal stopPrice;
+
     @Column(name = "average_price", precision = 10, scale = 2)
     private BigDecimal averagePrice;
 
@@ -245,6 +249,19 @@ public class StockTrade implements Serializable {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getStopPrice() {
+        return stopPrice;
+    }
+
+    public StockTrade stopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
+        return this;
+    }
+
+    public void setStopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
     }
 
     public BigDecimal getAveragePrice() {
@@ -410,6 +427,7 @@ public class StockTrade implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", stopPrice=" + getStopPrice() +
             ", averagePrice=" + getAveragePrice() +
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +

@@ -50,6 +50,9 @@ public class StockOrderService {
     public static final String FIX_SIDE_BUY = "1";
     public static final String FIX_SIDE_SELL = "2";
 
+    public static final String FIX_ORD_TYPE_MARKET = "1";
+    public static final String FIX_ORD_TYPE_STOP_LIMIT = "4";
+
     public static final String FIX_TIME_IN_FORCE_GOOD_TILL_DATE = "6";
 
     private static final String omsAccount = "160119";
@@ -97,7 +100,14 @@ public class StockOrderService {
         order.setStatus(StockOrder.STATUS_LOCAL_NEW);
         order.setStock(trade.getStock());
         order.setKind(trade.getSide().equals(FIX_SIDE_BUY) ? KIND_BUY : KIND_SELL);
-        order.setOrderType(new String(new char[]{StockOrder.FIX_ORD_TYPE_MARKET}));
+
+        if (trade.getType().equals(StockTrade.TYPE_NORMAL)) {
+            order.setOrderType(StockOrder.FIX_ORD_TYPE_MARKET);
+        } else if (trade.getType().equals(StockTrade.TYPE_STOP_LOSS)) {
+            order.setOrderType(StockOrder.FIX_ORD_TYPE_STOP_LIMIT);
+            // TODO
+        }
+
         order.setSide(trade.getSide());
         order.setTimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE);
         order.setExpireTime(trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime());
@@ -116,7 +126,7 @@ public class StockOrderService {
             new ClOrdID(order.getId().toString()),
             new Side(order.getSide().charAt(0)),
             new TransactTime(LocalDateTime.now()),
-            new OrdType(StockOrder.FIX_ORD_TYPE_MARKET));
+            new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
 
         orderSingle.set(new OrderQty(order.getQuantity()));
 

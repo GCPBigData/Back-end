@@ -38,6 +38,9 @@ public class StockTradeDTO implements Serializable {
     @DecimalMin(value = "0.01")
     private BigDecimal unitPrice;
 
+    @DecimalMin(value = "0.01")
+    private BigDecimal stopPrice;
+
     private BigDecimal averagePrice;
 
     private BigDecimal stockTotalPrice;
@@ -147,6 +150,14 @@ public class StockTradeDTO implements Serializable {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getStopPrice() {
+        return stopPrice;
+    }
+
+    public void setStopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
     }
 
     public BigDecimal getAveragePrice() {
@@ -287,6 +298,7 @@ public class StockTradeDTO implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", stopPrice=" + getStopPrice() +
             ", averagePrice=" + getAveragePrice() +
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
