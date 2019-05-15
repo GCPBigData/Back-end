@@ -104,7 +104,7 @@ public class StockTrade implements Serializable {
     @NotNull
     @Size(max = 2)
     @Pattern(regexp = "N|SL|SG")
-    @Column(name = "jhi_type", length = 2, nullable = false)
+    @Column(name = "trade_type", length = 2, nullable = false)
     private String type;
 
     @ManyToOne

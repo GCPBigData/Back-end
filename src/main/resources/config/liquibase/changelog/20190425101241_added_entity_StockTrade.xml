@@ -77,7 +77,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="jhi_type" type="varchar(2)">
+            <column name="trade_type" type="varchar(2)">
                 <constraints nullable="false" />
             </column>
 
