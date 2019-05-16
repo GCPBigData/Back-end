@@ -53,6 +53,15 @@
             "fieldValidateRulesMaxlength": "45"
         },
         {
+            "fieldName": "kind",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "side",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -113,15 +122,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "2"
         }
     ],
     "changelogDate": "20190425101241",

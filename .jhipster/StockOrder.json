@@ -108,6 +108,14 @@
             "fieldValidateRulesMin": "0.01"
         },
         {
+            "fieldName": "stopPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": "0.01"
+        },
+        {
             "fieldName": "averagePrice",
             "fieldType": "BigDecimal"
         },

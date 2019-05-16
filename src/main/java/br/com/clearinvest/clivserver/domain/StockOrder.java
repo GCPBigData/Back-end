@@ -23,6 +23,20 @@ public class StockOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String KIND_TRADE = "T";
+    public static final String KIND_STOP_LOSS = "SL";
+    public static final String KIND_STOP_GAIN = "SG";
+    public static final String KIND_CANCEL = "C";
+    public static final String KIND_REPLACE = "R";
+
+    public static final String FIX_SIDE_BUY = "1";
+    public static final String FIX_SIDE_SELL = "2";
+
+    public static final String FIX_ORD_TYPE_MARKET = "1";
+    public static final String FIX_ORD_TYPE_STOP_LIMIT = "4";
+
+    public static final String FIX_TIME_IN_FORCE_GOOD_TILL_DATE = "6";
+
     /** Created in this application */
     public static final String STATUS_LOCAL_NEW = "LN";
 
@@ -38,9 +52,6 @@ public class StockOrder implements Serializable {
     public static final String STATUS_FIX_EXPIRED = "C";
     public static final String STATUS_FIX_PENDING_REPLACE = "E";
     public static final String STATUS_FIX_RECEIVED = "R";
-
-    public static final String FIX_ORD_TYPE_MARKET = "1";
-    public static final String FIX_ORD_TYPE_STOP_LIMIT = "4";
 
     // TODO adicionar campo originalOrder ou targetOrder, para armazenar ordem q está sendo alterada ou cancelada
 
@@ -59,6 +70,7 @@ public class StockOrder implements Serializable {
     /** compra/venda, cancelamento, alteração, etc */
     @NotNull
     @Size(max = 10)
+    @Pattern(regexp = "T|SL|SG|C|R")
     @Column(name = "kind", length = 10, nullable = false)
     private String kind;
 
@@ -96,7 +108,10 @@ public class StockOrder implements Serializable {
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
-    // TODO remover
+    @DecimalMin(value = "0.01")
+    @Column(name = "stop_price", precision = 10, scale = 2)
+    private BigDecimal stopPrice;
+
     @Column(name = "average_price", precision = 10, scale = 2)
     private BigDecimal averagePrice;
 
@@ -293,6 +308,19 @@ public class StockOrder implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    public BigDecimal getStopPrice() {
+        return stopPrice;
+    }
+
+    public StockOrder stopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
+        return this;
+    }
+
+    public void setStopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
+    }
+
     public BigDecimal getAveragePrice() {
         return averagePrice;
     }
@@ -472,6 +500,7 @@ public class StockOrder implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", stopPrice=" + getStopPrice() +
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +

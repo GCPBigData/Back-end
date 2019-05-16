@@ -3,7 +3,6 @@ package br.com.clearinvest.clivserver.service;
 import br.com.clearinvest.clivserver.domain.Stock;
 import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.StockTrade;
-import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.service.dto.StockOrderDTO;
@@ -33,6 +32,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static br.com.clearinvest.clivserver.domain.StockOrder.FIX_TIME_IN_FORCE_GOOD_TILL_DATE;
+
 /**
  * Service Implementation for managing StockOrder.
  */
@@ -41,19 +42,6 @@ import java.util.stream.Collectors;
 public class StockOrderService {
 
     private final Logger log = LoggerFactory.getLogger(StockOrderService.class);
-
-    public static final String KIND_BUY = "B";
-    public static final String KIND_SELL = "S";
-    public static final String KIND_CANCEL = "C";
-    public static final String KIND_REPLACE = "R";
-
-    public static final String FIX_SIDE_BUY = "1";
-    public static final String FIX_SIDE_SELL = "2";
-
-    public static final String FIX_ORD_TYPE_MARKET = "1";
-    public static final String FIX_ORD_TYPE_STOP_LIMIT = "4";
-
-    public static final String FIX_TIME_IN_FORCE_GOOD_TILL_DATE = "6";
 
     private static final String omsAccount = "160119";
 
@@ -99,13 +87,18 @@ public class StockOrderService {
         order.setTrade(trade);
         order.setStatus(StockOrder.STATUS_LOCAL_NEW);
         order.setStock(trade.getStock());
-        order.setKind(trade.getSide().equals(FIX_SIDE_BUY) ? KIND_BUY : KIND_SELL);
+        order.setKind(trade.getKind());
 
-        if (trade.getType().equals(StockTrade.TYPE_NORMAL)) {
+        if (order.getKind().equals(StockOrder.KIND_TRADE)) {
             order.setOrderType(StockOrder.FIX_ORD_TYPE_MARKET);
-        } else if (trade.getType().equals(StockTrade.TYPE_STOP_LOSS)) {
+
+        } else if (order.getKind().equals(StockOrder.KIND_STOP_LOSS)
+                || order.getKind().equals(StockOrder.KIND_STOP_GAIN)) {
             order.setOrderType(StockOrder.FIX_ORD_TYPE_STOP_LIMIT);
-            // TODO
+            order.setStopPrice(trade.getStopPrice());
+
+        } else {
+            throw new BusinessException("Ordem inválida");
         }
 
         order.setSide(trade.getSide());
@@ -120,6 +113,13 @@ public class StockOrderService {
         //order.setOperationType("DAYTRADE");
         order = stockOrderRepository.save(order);
 
+        NewOrderSingle orderSingle = createNewOrderSingle(trade, order);
+        sendMessegeToOms(orderSingle);
+
+        return toDtoFillingDerived(order);
+    }
+
+    private NewOrderSingle createNewOrderSingle(StockTrade trade, StockOrder order) {
         DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
         NewOrderSingle orderSingle = new NewOrderSingle(
@@ -138,7 +138,17 @@ public class StockOrderService {
         orderSingle.set(new SecurityExchange("XBSP"));
         orderSingle.set(new MaturityDate(localMktDateFormatter.format(LocalDate.now())));
 
-        orderSingle.set(new Price(order.getUnitPrice().doubleValue()));
+        if (trade.getKind().equals(StockTrade.KIND_TRADE)) {
+            orderSingle.set(new Price(order.getUnitPrice().doubleValue()));
+
+        } else if (order.getKind().equals(StockOrder.KIND_STOP_LOSS)) {
+            orderSingle.set(new Price(order.getUnitPrice().doubleValue()));
+            orderSingle.set(new StopPx(order.getStopPrice().doubleValue()));
+
+        } else if (order.getKind().equals(StockOrder.KIND_STOP_GAIN)) {
+            orderSingle.set(new Price2(order.getUnitPrice().doubleValue()));
+            orderSingle.setDouble(10306, order.getStopPrice().doubleValue());
+        }
 
         orderSingle.set(new NoAllocs(1));
         NewOrderSingle.NoAllocs allocs = new NewOrderSingle.NoAllocs();
@@ -156,9 +166,7 @@ public class StockOrderService {
 
         //orderSingle.setString(10122, "DAYTRADE");
 
-        sendMessegeToOms(orderSingle);
-
-        return toDtoFillingDerived(order);
+        return orderSingle;
     }
 
     private void sendMessegeToOms(Message message) {
@@ -401,7 +409,7 @@ public class StockOrderService {
         order.setTrade(trade);
         order.setStatus(StockOrder.STATUS_LOCAL_NEW);
         order.setStock(trade.getStock());
-        order.setKind(trade.getSide().equals(FIX_SIDE_BUY) ? KIND_BUY : KIND_SELL);
+        order.setKind(trade.getKind());
         //order.setOrderType(new String(new char[]{StockTrade.FIX_ORD_TYPE_MARKET}));
         order.setSide(trade.getSide());
         //order.setTimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE);

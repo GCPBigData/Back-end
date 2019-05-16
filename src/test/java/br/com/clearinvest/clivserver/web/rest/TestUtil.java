@@ -47,6 +47,25 @@ public class TestUtil {
     }
 
     /**
+     * Convert an object to JSON string.
+     *
+     * @param object
+     *            the object to convert
+     * @return the JSON string
+     * @throws IOException
+     */
+    public static String convertObjectToString(Object object)
+        throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+        JavaTimeModule module = new JavaTimeModule();
+        mapper.registerModule(module);
+
+        return mapper.writeValueAsString(object);
+    }
+
+    /**
      * Create a byte array with a specific size filled with specified data.
      *
      * @param size the size of the byte array

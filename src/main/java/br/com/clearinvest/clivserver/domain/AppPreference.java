@@ -29,6 +29,7 @@ public class AppPreference implements Serializable {
     @Column(name = "key", nullable = false)
     private String key;
 
+    @Lob
     @Column(name = "value")
     private String value;
 

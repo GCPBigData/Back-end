@@ -3,6 +3,7 @@ package br.com.clearinvest.clivserver.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the AppPreference entity.
@@ -14,6 +15,7 @@ public class AppPreferenceDTO implements Serializable {
     @NotNull
     private String key;
 
+    @Lob
     private String value;
 
     private Long userId;

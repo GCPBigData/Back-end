@@ -65,6 +65,10 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="stop_price" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="average_price" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>

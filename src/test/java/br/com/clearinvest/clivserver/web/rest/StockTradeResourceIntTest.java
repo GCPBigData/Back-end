@@ -61,6 +61,9 @@ public class StockTradeResourceIntTest {
     private static final String DEFAULT_CREATED_BY_IP = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY_IP = "BBBBBBBBBB";
 
+    private static final String DEFAULT_KIND = "AAAAAAAAAA";
+    private static final String UPDATED_KIND = "BBBBBBBBBB";
+
     private static final String DEFAULT_SIDE = "A";
     private static final String UPDATED_SIDE = "B";
 
@@ -90,9 +93,6 @@ public class StockTradeResourceIntTest {
 
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TYPE = "AA";
-    private static final String UPDATED_TYPE = "BB";
 
     @Autowired
     private StockTradeRepository stockTradeRepository;
@@ -142,6 +142,7 @@ public class StockTradeResourceIntTest {
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR)
             .createdByIp(DEFAULT_CREATED_BY_IP)
+            .kind(DEFAULT_KIND)
             .side(DEFAULT_SIDE)
             .expireTime(DEFAULT_EXPIRE_TIME)
             .quantity(DEFAULT_QUANTITY)
@@ -151,8 +152,7 @@ public class StockTradeResourceIntTest {
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .stockTotalPrice(DEFAULT_STOCK_TOTAL_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
-            .status(DEFAULT_STATUS)
-            .type(DEFAULT_TYPE);
+            .status(DEFAULT_STATUS);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
         em.persist(user);
@@ -163,7 +163,7 @@ public class StockTradeResourceIntTest {
 
     @Before
     public void initTest() {
-        stockTrade = createEntity(em);
+        /*stockTrade = createEntity(em);*/
     }
 
     @Test
@@ -186,6 +186,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
         assertThat(testStockTrade.getCreatedByIp()).isEqualTo(DEFAULT_CREATED_BY_IP);
+        assertThat(testStockTrade.getKind()).isEqualTo(DEFAULT_KIND);
         assertThat(testStockTrade.getSide()).isEqualTo(DEFAULT_SIDE);
         assertThat(testStockTrade.getExpireTime()).isEqualTo(DEFAULT_EXPIRE_TIME);
         assertThat(testStockTrade.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
@@ -196,7 +197,6 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(DEFAULT_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockTrade.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testStockTrade.getType()).isEqualTo(DEFAULT_TYPE);
     }
 
     @Test
@@ -217,6 +217,25 @@ public class StockTradeResourceIntTest {
         // Validate the StockTrade in the database
         List<StockTrade> stockTradeList = stockTradeRepository.findAll();
         assertThat(stockTradeList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkKindIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockTradeRepository.findAll().size();
+        // set the field null
+        stockTrade.setKind(null);
+
+        // Create the StockTrade, which fails.
+        StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(stockTrade);
+
+        restStockTradeMockMvc.perform(post("/api/stock-trades")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(stockTradeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<StockTrade> stockTradeList = stockTradeRepository.findAll();
+        assertThat(stockTradeList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -297,25 +316,6 @@ public class StockTradeResourceIntTest {
 
     @Test
     @Transactional
-    public void checkTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = stockTradeRepository.findAll().size();
-        // set the field null
-        stockTrade.setType(null);
-
-        // Create the StockTrade, which fails.
-        StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(stockTrade);
-
-        restStockTradeMockMvc.perform(post("/api/stock-trades")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(stockTradeDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<StockTrade> stockTradeList = stockTradeRepository.findAll();
-        assertThat(stockTradeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllStockTrades() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
@@ -329,6 +329,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())))
             .andExpect(jsonPath("$.[*].createdByIp").value(hasItem(DEFAULT_CREATED_BY_IP.toString())))
+            .andExpect(jsonPath("$.[*].kind").value(hasItem(DEFAULT_KIND.toString())))
             .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].expireTime").value(hasItem(sameInstant(DEFAULT_EXPIRE_TIME))))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
@@ -338,8 +339,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].stockTotalPrice").value(hasItem(DEFAULT_STOCK_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
     @Test
@@ -357,6 +357,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
             .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()))
             .andExpect(jsonPath("$.createdByIp").value(DEFAULT_CREATED_BY_IP.toString()))
+            .andExpect(jsonPath("$.kind").value(DEFAULT_KIND.toString()))
             .andExpect(jsonPath("$.side").value(DEFAULT_SIDE.toString()))
             .andExpect(jsonPath("$.expireTime").value(sameInstant(DEFAULT_EXPIRE_TIME)))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
@@ -366,8 +367,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.stockTotalPrice").value(DEFAULT_STOCK_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -395,6 +395,7 @@ public class StockTradeResourceIntTest {
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR)
             .createdByIp(UPDATED_CREATED_BY_IP)
+            .kind(UPDATED_KIND)
             .side(UPDATED_SIDE)
             .expireTime(UPDATED_EXPIRE_TIME)
             .quantity(UPDATED_QUANTITY)
@@ -404,8 +405,7 @@ public class StockTradeResourceIntTest {
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .stockTotalPrice(UPDATED_STOCK_TOTAL_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
-            .status(UPDATED_STATUS)
-            .type(UPDATED_TYPE);
+            .status(UPDATED_STATUS);
         StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(updatedStockTrade);
 
         restStockTradeMockMvc.perform(put("/api/stock-trades")
@@ -421,6 +421,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
         assertThat(testStockTrade.getCreatedByIp()).isEqualTo(UPDATED_CREATED_BY_IP);
+        assertThat(testStockTrade.getKind()).isEqualTo(UPDATED_KIND);
         assertThat(testStockTrade.getSide()).isEqualTo(UPDATED_SIDE);
         assertThat(testStockTrade.getExpireTime()).isEqualTo(UPDATED_EXPIRE_TIME);
         assertThat(testStockTrade.getQuantity()).isEqualTo(UPDATED_QUANTITY);
@@ -431,7 +432,6 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getStockTotalPrice()).isEqualTo(UPDATED_STOCK_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockTrade.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testStockTrade.getType()).isEqualTo(UPDATED_TYPE);
     }
 
     @Test
@@ -507,5 +507,28 @@ public class StockTradeResourceIntTest {
     public void testEntityFromId() {
         assertThat(stockTradeMapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(stockTradeMapper.fromId(null)).isNull();
+    }
+
+    @Test
+    public void testExpireTimeFormat() throws Exception {
+        StockTrade stockTrade = new StockTrade()
+            .createdAt(DEFAULT_CREATED_AT)
+            .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
+            .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR)
+            .createdByIp(DEFAULT_CREATED_BY_IP)
+            .kind(DEFAULT_KIND)
+            .side(DEFAULT_SIDE)
+            .expireTime(ZonedDateTime.now())
+            .quantity(DEFAULT_QUANTITY)
+            .execQuantity(DEFAULT_EXEC_QUANTITY)
+            .unitPrice(DEFAULT_UNIT_PRICE)
+            .stopPrice(DEFAULT_STOP_PRICE)
+            .averagePrice(DEFAULT_AVERAGE_PRICE)
+            .stockTotalPrice(DEFAULT_STOCK_TOTAL_PRICE)
+            .totalPrice(DEFAULT_TOTAL_PRICE)
+            .status(DEFAULT_STATUS);
+
+        String json = TestUtil.convertObjectToString(stockTrade);
+        System.out.println(json);
     }
 }

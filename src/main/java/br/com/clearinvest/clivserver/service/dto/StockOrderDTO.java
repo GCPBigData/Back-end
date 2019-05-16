@@ -19,6 +19,7 @@ public class StockOrderDTO implements Serializable {
 
     @NotNull
     @Size(max = 10)
+    @Pattern(regexp = "T|SL|SG|C|R")
     private String kind;
 
     private String orderType;
@@ -45,6 +46,9 @@ public class StockOrderDTO implements Serializable {
     @DecimalMin(value = "0.01")
     private BigDecimal unitPrice;
 
+    @DecimalMin(value = "0.01")
+    private BigDecimal stopPrice;
+
     private BigDecimal averagePrice;
 
     private BigDecimal totalPrice;
@@ -57,6 +61,7 @@ public class StockOrderDTO implements Serializable {
 
     private String lastExecReportDescr;
 
+    @Size(max = 45)
     private String createdByIp;
 
     private Long stockId;
@@ -173,6 +178,14 @@ public class StockOrderDTO implements Serializable {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getStopPrice() {
+        return stopPrice;
+    }
+
+    public void setStopPrice(BigDecimal stopPrice) {
+        this.stopPrice = stopPrice;
     }
 
     public BigDecimal getAveragePrice() {
@@ -331,6 +344,7 @@ public class StockOrderDTO implements Serializable {
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
+            ", stopPrice=" + getStopPrice() +
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +

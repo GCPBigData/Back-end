@@ -83,6 +83,9 @@ public class StockOrderResourceIntTest {
     private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal(0.01);
     private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal(1);
 
+    private static final BigDecimal DEFAULT_STOP_PRICE = new BigDecimal(0.01);
+    private static final BigDecimal UPDATED_STOP_PRICE = new BigDecimal(1);
+
     private static final BigDecimal DEFAULT_AVERAGE_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_AVERAGE_PRICE = new BigDecimal(2);
 
@@ -159,6 +162,7 @@ public class StockOrderResourceIntTest {
             .quantity(DEFAULT_QUANTITY)
             .execQuantity(DEFAULT_EXEC_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
+            .stopPrice(DEFAULT_STOP_PRICE)
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .omsOrderId(DEFAULT_OMS_ORDER_ID)
@@ -211,6 +215,7 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
+        assertThat(testStockOrder.getStopPrice()).isEqualTo(DEFAULT_STOP_PRICE);
         assertThat(testStockOrder.getAveragePrice()).isEqualTo(DEFAULT_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(DEFAULT_OMS_ORDER_ID);
@@ -357,6 +362,7 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].stopPrice").value(hasItem(DEFAULT_STOP_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].omsOrderId").value(hasItem(DEFAULT_OMS_ORDER_ID.toString())))
@@ -388,6 +394,7 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
+            .andExpect(jsonPath("$.stopPrice").value(DEFAULT_STOP_PRICE.intValue()))
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.omsOrderId").value(DEFAULT_OMS_ORDER_ID.toString()))
@@ -429,6 +436,7 @@ public class StockOrderResourceIntTest {
             .quantity(UPDATED_QUANTITY)
             .execQuantity(UPDATED_EXEC_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
+            .stopPrice(UPDATED_STOP_PRICE)
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .omsOrderId(UPDATED_OMS_ORDER_ID)
@@ -458,6 +466,7 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStockOrder.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
+        assertThat(testStockOrder.getStopPrice()).isEqualTo(UPDATED_STOP_PRICE);
         assertThat(testStockOrder.getAveragePrice()).isEqualTo(UPDATED_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(UPDATED_OMS_ORDER_ID);

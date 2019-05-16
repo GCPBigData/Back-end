@@ -23,6 +23,11 @@ public class StockTradeDTO implements Serializable {
     private String createdByIp;
 
     @NotNull
+    @Size(max = 10)
+    @Pattern(regexp = "T|SL|SG")
+    private String kind;
+
+    @NotNull
     @Size(max = 1)
     private String side;
 
@@ -48,11 +53,6 @@ public class StockTradeDTO implements Serializable {
     private BigDecimal totalPrice;
 
     private String status;
-
-    @NotNull
-    @Size(max = 2)
-    @Pattern(regexp = "N|SL|SG")
-    private String type;
 
     private Long stockId;
 
@@ -110,6 +110,14 @@ public class StockTradeDTO implements Serializable {
 
     public void setCreatedByIp(String createdByIp) {
         this.createdByIp = createdByIp;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getSide() {
@@ -190,14 +198,6 @@ public class StockTradeDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Long getStockId() {
@@ -293,6 +293,7 @@ public class StockTradeDTO implements Serializable {
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", createdByIp='" + getCreatedByIp() + "'" +
+            ", kind='" + getKind() + "'" +
             ", side='" + getSide() + "'" +
             ", expireTime='" + getExpireTime() + "'" +
             ", quantity=" + getQuantity() +
@@ -303,7 +304,6 @@ public class StockTradeDTO implements Serializable {
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", status='" + getStatus() + "'" +
-            ", type='" + getType() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +

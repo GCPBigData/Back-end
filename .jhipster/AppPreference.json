@@ -24,7 +24,8 @@
         },
         {
             "fieldName": "value",
-            "fieldType": "String"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "changelogDate": "20190125172628",

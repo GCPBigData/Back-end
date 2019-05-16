@@ -23,6 +23,10 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class StockTrade implements Serializable {
 
+    public static final String KIND_TRADE = "T";
+    public static final String KIND_STOP_LOSS = "SL";
+    public static final String KIND_STOP_GAIN = "SG";
+
     private static final long serialVersionUID = 1L;
 
     /** Created in this application */
@@ -41,10 +45,6 @@ public class StockTrade implements Serializable {
     public static final String STATUS_FIX_PENDING_REPLACE = "E";
     public static final String STATUS_FIX_RECEIVED = "R";
 
-    public static final String TYPE_NORMAL = "N";
-    public static final String TYPE_STOP_LOSS = "SL";
-    public static final String TYPE_STOP_GAIN = "SG";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -62,6 +62,12 @@ public class StockTrade implements Serializable {
     @Size(max = 45)
     @Column(name = "created_by_ip", length = 45)
     private String createdByIp;
+
+    @NotNull
+    @Size(max = 10)
+    @Pattern(regexp = "T|SL|SG")
+    @Column(name = "kind", length = 10, nullable = false)
+    private String kind;
 
     @NotNull
     @Size(max = 1)
@@ -101,12 +107,6 @@ public class StockTrade implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @NotNull
-    @Size(max = 2)
-    @Pattern(regexp = "N|SL|SG")
-    @Column(name = "trade_type", length = 2, nullable = false)
-    private String type;
-
     @ManyToOne
     @JsonIgnoreProperties("")
     private Stock stock;
@@ -118,14 +118,12 @@ public class StockTrade implements Serializable {
     @OneToMany(mappedBy = "trade")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<StockOrder> orders = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
     private User createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-
     public Long getId() {
         return id;
     }
@@ -184,6 +182,19 @@ public class StockTrade implements Serializable {
 
     public void setCreatedByIp(String createdByIp) {
         this.createdByIp = createdByIp;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public StockTrade kind(String kind) {
+        this.kind = kind;
+        return this;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getSide() {
@@ -316,19 +327,6 @@ public class StockTrade implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public StockTrade type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Stock getStock() {
         return stock;
     }
@@ -422,6 +420,7 @@ public class StockTrade implements Serializable {
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", createdByIp='" + getCreatedByIp() + "'" +
+            ", kind='" + getKind() + "'" +
             ", side='" + getSide() + "'" +
             ", expireTime='" + getExpireTime() + "'" +
             ", quantity=" + getQuantity() +
@@ -432,7 +431,6 @@ public class StockTrade implements Serializable {
             ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
             ", status='" + getStatus() + "'" +
-            ", type='" + getType() + "'" +
             "}";
     }
 }

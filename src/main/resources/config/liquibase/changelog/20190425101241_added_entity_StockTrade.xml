@@ -37,6 +37,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="kind" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="side" type="varchar(1)">
                 <constraints nullable="false" />
             </column>
@@ -74,10 +78,6 @@
             </column>
 
             <column name="status" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="trade_type" type="varchar(2)">
                 <constraints nullable="false" />
             </column>
 

@@ -80,7 +80,7 @@ public class StockTradeService {
                 throw new BusinessException("Saldo na corretora insuficiente.");
             }
 
-            trade.setStockTotalPrice(stockTotalPrice);
+            //trade.setStockTotalPrice(stockTotalPrice);
             trade = stockTradeRepository.save(trade);
 
             // TODO add a "mainOrder" field to StockOrder in order to have a reference to the main current order of the trade?
