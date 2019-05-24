@@ -38,6 +38,7 @@ public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer
         executor.setCorePoolSize(jHipsterProperties.getAsync().getCorePoolSize());
         executor.setMaxPoolSize(jHipsterProperties.getAsync().getMaxPoolSize());
         executor.setQueueCapacity(jHipsterProperties.getAsync().getQueueCapacity());
+        executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setThreadNamePrefix("cliv-server-Executor-");
         return new ExceptionHandlingAsyncTaskExecutor(executor);
     }

@@ -163,7 +163,7 @@ public class StockTradeResourceIntTest {
 
     @Before
     public void initTest() {
-        /*stockTrade = createEntity(em);*/
+        stockTrade = createEntity(em);
     }
 
     @Test
@@ -507,28 +507,5 @@ public class StockTradeResourceIntTest {
     public void testEntityFromId() {
         assertThat(stockTradeMapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(stockTradeMapper.fromId(null)).isNull();
-    }
-
-    @Test
-    public void testExpireTimeFormat() throws Exception {
-        StockTrade stockTrade = new StockTrade()
-            .createdAt(DEFAULT_CREATED_AT)
-            .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
-            .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR)
-            .createdByIp(DEFAULT_CREATED_BY_IP)
-            .kind(DEFAULT_KIND)
-            .side(DEFAULT_SIDE)
-            .expireTime(ZonedDateTime.now())
-            .quantity(DEFAULT_QUANTITY)
-            .execQuantity(DEFAULT_EXEC_QUANTITY)
-            .unitPrice(DEFAULT_UNIT_PRICE)
-            .stopPrice(DEFAULT_STOP_PRICE)
-            .averagePrice(DEFAULT_AVERAGE_PRICE)
-            .stockTotalPrice(DEFAULT_STOCK_TOTAL_PRICE)
-            .totalPrice(DEFAULT_TOTAL_PRICE)
-            .status(DEFAULT_STATUS);
-
-        String json = TestUtil.convertObjectToString(stockTrade);
-        System.out.println(json);
     }
 }

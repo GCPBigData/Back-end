@@ -13,11 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quickfix.FieldNotFound;
-import quickfix.Session;
-import quickfix.SessionNotFound;
 import quickfix.field.*;
 import quickfix.fix44.ExecutionReport;
-import quickfix.fix44.Message;
 import quickfix.fix44.NewOrderSingle;
 import quickfix.fix44.OrderCancelRequest;
 
@@ -33,6 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static br.com.clearinvest.clivserver.domain.StockOrder.FIX_TIME_IN_FORCE_GOOD_TILL_DATE;
+import static br.com.clearinvest.clivserver.service.OMSService.OMS_ACCOUNT;
 
 /**
  * Service Implementation for managing StockOrder.
@@ -43,24 +41,20 @@ public class StockOrderService {
 
     private final Logger log = LoggerFactory.getLogger(StockOrderService.class);
 
-    private static final String omsAccount = "160119";
-
-    private static final boolean ORDER_SEND_TO_OMS_IN_DEV_MODE = false;
-
-    private final AppService appService;
-
     private final StockOrderRepository stockOrderRepository;
 
     private final StockTradeRepository stockTradeRepository;
 
     private final StockOrderMapper stockOrderMapper;
 
-    public StockOrderService(AppService appService, StockOrderRepository stockOrderRepository,
-            StockTradeRepository stockTradeRepository, StockOrderMapper stockOrderMapper) {
-        this.appService = appService;
+    private final OMSService omsService;
+
+    public StockOrderService(StockOrderRepository stockOrderRepository,
+            StockTradeRepository stockTradeRepository, StockOrderMapper stockOrderMapper, OMSService omsService) {
         this.stockOrderRepository = stockOrderRepository;
         this.stockTradeRepository = stockTradeRepository;
         this.stockOrderMapper = stockOrderMapper;
+        this.omsService = omsService;
     }
 
     /**
@@ -80,7 +74,7 @@ public class StockOrderService {
      * @param trade the entity to create
      * @return the persisted entity
      */
-    public StockOrderDTO create(StockTrade trade) {
+    public StockOrder create(StockTrade trade) {
         log.debug("Request to create StockOrder from StockTrade : {}", trade);
 
         StockOrder order = new StockOrder();
@@ -103,7 +97,7 @@ public class StockOrderService {
 
         order.setSide(trade.getSide());
         order.setTimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE);
-        order.setExpireTime(trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime());
+        order.setExpireTime(trade.getExpireTime());
         order.setQuantity(trade.getQuantity());
         order.setExecQuantity(0L);
         order.setUnitPrice(trade.getUnitPrice());
@@ -113,13 +107,10 @@ public class StockOrderService {
         //order.setOperationType("DAYTRADE");
         order = stockOrderRepository.save(order);
 
-        NewOrderSingle orderSingle = createNewOrderSingle(trade, order);
-        sendMessegeToOms(orderSingle);
-
-        return toDtoFillingDerived(order);
+        return order;
     }
 
-    private NewOrderSingle createNewOrderSingle(StockTrade trade, StockOrder order) {
+    public NewOrderSingle createNewOrderSingle(StockOrder order, String symbol) {
         DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
         NewOrderSingle orderSingle = new NewOrderSingle(
@@ -131,14 +122,13 @@ public class StockOrderService {
         orderSingle.set(new OrderQty(order.getQuantity()));
 
         // instrument block
-        Stock stock = order.getStock();
-        orderSingle.set(new Symbol(trade.getStock().getSymbol()));
-        orderSingle.set(new SecurityID(trade.getStock().getSymbol()));
+        orderSingle.set(new Symbol(symbol));
+        orderSingle.set(new SecurityID(symbol));
         orderSingle.set(new SecurityIDSource("8"));
         orderSingle.set(new SecurityExchange("XBSP"));
         orderSingle.set(new MaturityDate(localMktDateFormatter.format(LocalDate.now())));
 
-        if (trade.getKind().equals(StockTrade.KIND_TRADE)) {
+        if (order.getKind().equals(StockTrade.KIND_TRADE)) {
             orderSingle.set(new Price(order.getUnitPrice().doubleValue()));
 
         } else if (order.getKind().equals(StockOrder.KIND_STOP_LOSS)) {
@@ -150,35 +140,28 @@ public class StockOrderService {
             orderSingle.setDouble(10306, order.getStopPrice().doubleValue());
         }
 
+        orderSingle.set(new TimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE.charAt(0)));
+        orderSingle.set(new ExpireTime(order.getExpireTime().toLocalDateTime()));
+
         orderSingle.set(new NoAllocs(1));
         NewOrderSingle.NoAllocs allocs = new NewOrderSingle.NoAllocs();
-        allocs.set(new AllocAccount(omsAccount));
+        allocs.set(new AllocAccount(OMS_ACCOUNT));
         allocs.set(new AllocAcctIDSource(99));
         orderSingle.addGroup(allocs);
 
         // https://stackoverflow.com/questions/51520982/fix-message-creating-party-message-how-to-do-its
         orderSingle.set(new NoPartyIDs(1));
         NewOrderSingle.NoPartyIDs parties = new NewOrderSingle.NoPartyIDs();
-        parties.set(new PartyID(omsAccount));
+        parties.set(new PartyID(OMS_ACCOUNT));
         parties.set(new PartyIDSource(PartyIDSource.PROPRIETARY_CUSTOM_CODE));
         parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
         orderSingle.addGroup(parties);
 
         //orderSingle.setString(10122, "DAYTRADE");
 
-        return orderSingle;
-    }
+        log.debug("NewOrderSingle: {}", orderSingle.toString());
 
-    private void sendMessegeToOms(Message message) {
-        try {
-            if (appService.isEnvironmentDev() && ORDER_SEND_TO_OMS_IN_DEV_MODE) {
-                Session.sendToTarget(message, omsAccount, "CDRFIX");
-            } else if (appService.isEnvironmentProd()) {
-                Session.sendToTarget(message, omsAccount, "CDRFIX");
-            }
-        } catch (SessionNotFound sessionNotFound) {
-            throw new BusinessException("Sem comunicação com corretora.");
-        }
+        return orderSingle;
     }
 
     public StockOrderDTO toDtoFillingDerived(StockOrder stockOrder) {
@@ -417,12 +400,11 @@ public class StockOrderService {
         order.setQuantity(trade.getQuantity());
         //order.setExecQuantity(0L);
         order.setUnitPrice(trade.getUnitPrice());
-        order.setCreatedAt(trade.getCreatedAt());
+        order.setCreatedAt(trade.getCreatedAt() /*ZonedDateTime.now()*/);
         order.setCreatedBy(trade.getCreatedBy());
         order.setCreatedByIp(trade.getCreatedByIp());
         //order.setOperationType("DAYTRADE");
         order = stockOrderRepository.save(order);
-
 
         OrderCancelRequest orderCancel = new OrderCancelRequest(
             new OrigClOrdID(orderToCancel.getId().toString()),
@@ -439,12 +421,12 @@ public class StockOrderService {
 
         orderCancel.set(new NoPartyIDs(1));
         NewOrderSingle.NoPartyIDs parties = new NewOrderSingle.NoPartyIDs();
-        parties.set(new PartyID(omsAccount));
+        parties.set(new PartyID(OMS_ACCOUNT));
         parties.set(new PartyIDSource(PartyIDSource.PROPRIETARY_CUSTOM_CODE));
         parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
         orderCancel.addGroup(parties);
 
-        sendMessegeToOms(orderCancel);
+        omsService.sendMessegeToOms(orderCancel, order.getId());
     }
 
 }

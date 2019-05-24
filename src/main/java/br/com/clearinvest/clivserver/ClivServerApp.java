@@ -2,11 +2,8 @@ package br.com.clearinvest.clivserver;
 
 import br.com.clearinvest.clivserver.config.ApplicationProperties;
 import br.com.clearinvest.clivserver.config.DefaultProfileUtil;
-
-import br.com.clearinvest.clivserver.quickfixj.ClientApplicationAdapter;
 import io.allune.quickfixj.spring.boot.starter.EnableQuickFixJClient;
 import io.github.jhipster.config.JHipsterConstants;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +13,15 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import quickfix.*;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableQuickFixJClient
@@ -31,6 +29,8 @@ import java.util.Collection;
 public class ClivServerApp {
 
     private static final Logger log = LoggerFactory.getLogger(ClivServerApp.class);
+
+    public static final String TIMEZONE_DEFAULT = "GMT-3:00";
 
     private final Environment env;
 
@@ -56,6 +56,19 @@ public class ClivServerApp {
             log.error("You have misconfigured your application! It should not " +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
+    }
+
+    @PostConstruct
+    void started() {
+        TimeZone.setDefault(getTimeZoneDefault());
+    }
+
+    public static TimeZone getTimeZoneDefault() {
+        return TimeZone.getTimeZone(TIMEZONE_DEFAULT);
+    }
+
+    public static ZoneId getZoneIdDefault() {
+        return TimeZone.getTimeZone(TIMEZONE_DEFAULT).toZoneId();
     }
 
     /**

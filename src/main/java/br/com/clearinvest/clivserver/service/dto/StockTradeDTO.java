@@ -1,5 +1,7 @@
 package br.com.clearinvest.clivserver.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -31,6 +33,7 @@ public class StockTradeDTO implements Serializable {
     @Size(max = 1)
     private String side;
 
+    //@JsonFormat(pattern = "yyyy-MM-dd'T'mm:HH:ss.SSSZZZZZ")
     private ZonedDateTime expireTime;
 
     @NotNull

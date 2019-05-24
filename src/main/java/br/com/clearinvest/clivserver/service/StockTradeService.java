@@ -1,6 +1,8 @@
 package br.com.clearinvest.clivserver.service;
 
+import br.com.clearinvest.clivserver.ClivServerApp;
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
+import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.StockTrade;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
@@ -12,7 +14,10 @@ import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
+import quickfix.fix44.NewOrderSingle;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -39,16 +44,24 @@ public class StockTradeService {
 
     private final StockOrderService stockOrderService;
 
+    private final OMSService omsService;
+
     private final UserRepository userRepository;
+
+    private final PlatformTransactionManager platformTransactionManager;
+
 
     public StockTradeService(StockTradeRepository stockTradeRepository, StockTradeMapper stockTradeMapper,
             BrokerageAccountRepository brokerageAccountRepository, StockOrderService stockOrderService,
-            UserRepository userRepository) {
+            OMSService omsService, UserRepository userRepository,
+            PlatformTransactionManager platformTransactionManager) {
         this.stockTradeRepository = stockTradeRepository;
         this.stockTradeMapper = stockTradeMapper;
         this.brokerageAccountRepository = brokerageAccountRepository;
         this.stockOrderService = stockOrderService;
+        this.omsService = omsService;
         this.userRepository = userRepository;
+        this.platformTransactionManager = platformTransactionManager;
     }
 
     /**
@@ -60,9 +73,26 @@ public class StockTradeService {
     public StockTradeDTO save(StockTradeDTO tradeDTO) {
         log.debug("Request to save StockTrade : {}", tradeDTO);
 
+        TransactionTemplate transactionTemplate = new TransactionTemplate(platformTransactionManager);
+        final Object[] result = transactionTemplate.execute(status -> createTradeAndOrder(tradeDTO));
+        StockTrade trade = (StockTrade) result[0];
+        StockOrder order = (StockOrder) result[1];
+
+        NewOrderSingle orderSingle = stockOrderService.createNewOrderSingle(order, trade.getStock().getSymbol());
+        omsService.sendMessegeToOms(orderSingle, order.getId());
+
+        return toDtoFillingDerived(trade);
+    }
+
+    public Object[] createTradeAndOrder(StockTradeDTO tradeDTO) {
         StockTrade trade = stockTradeMapper.toEntity(tradeDTO);
         trade.setCreatedAt(ZonedDateTime.now());
         trade.setStatus(StockTrade.STATUS_LOCAL_NEW);
+
+        ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
+        expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),
+            18, 0, 0, 0, ClivServerApp.getZoneIdDefault());
+        trade.setExpireTime(expireTime);
 
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -86,8 +116,8 @@ public class StockTradeService {
             // TODO add a "mainOrder" field to StockOrder in order to have a reference to the main current order of the trade?
 
             trade.getStock().setSymbol(tradeDTO.getStockSymbol());
-            stockOrderService.create(trade);
-            return toDtoFillingDerived(trade);
+            StockOrder order = stockOrderService.create(trade);
+            return new Object[]{trade, order};
 
         } else {
             throw new BusinessException("Conta não encontrada.");
