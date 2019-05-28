@@ -68,12 +68,13 @@ public class StockTradeResource {
      */
     @PutMapping("/stock-trades")
     @Timed
-    public ResponseEntity<StockTradeDTO> updateStockTrade(@Valid @RequestBody StockTradeDTO stockTradeDTO) throws URISyntaxException {
+    public ResponseEntity<StockTradeDTO> updateStockTrade(@Valid @RequestBody StockTradeDTO stockTradeDTO, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to update StockTrade : {}", stockTradeDTO);
         if (stockTradeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        StockTradeDTO result = stockTradeService.save(stockTradeDTO);
+        stockTradeDTO.setCreatedByIp(request.getRemoteAddr());
+        StockTradeDTO result = stockTradeService.update(stockTradeDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, stockTradeDTO.getId().toString()))
             .body(result);

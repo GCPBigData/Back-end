@@ -4,6 +4,7 @@ import br.com.clearinvest.clivserver.ClivServerApp;
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.StockTrade;
+import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
@@ -18,13 +19,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import quickfix.fix44.NewOrderSingle;
+import quickfix.fix44.OrderCancelReplaceRequest;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,8 +77,33 @@ public class StockTradeService {
         StockTrade trade = (StockTrade) result[0];
         StockOrder order = (StockOrder) result[1];
 
-        NewOrderSingle orderSingle = stockOrderService.createNewOrderSingle(order, trade.getStock().getSymbol());
-        omsService.sendMessegeToOms(orderSingle, order.getId());
+        NewOrderSingle orderSingle = stockOrderService.createNewOrderSingleMessage(order, trade.getStock().getSymbol());
+        omsService.sendMessegeToOMS(orderSingle, order.getId());
+
+        return toDtoFillingDerived(trade);
+    }
+
+    /**
+     * Update a stockTrade.
+     *
+     * @param tradeDTO the entity to save
+     * @return the persisted entity
+     */
+    public StockTradeDTO update(StockTradeDTO tradeDTO) {
+        log.debug("Request to update StockTrade : {}", tradeDTO);
+
+        StockTrade trade = stockTradeRepository.findByIdAndCreatedByIsCurrentUser(tradeDTO.getId())
+            .orElseThrow(() -> new BusinessException("Ordem não encontrada."));
+
+        StockOrder localOrder = createUpdateOrder(trade, tradeDTO);
+        StockOrder orderToEdit = trade.getOrders().stream()
+            .sorted(Comparator.comparing(StockOrder::getId))
+            .collect(Collectors.toList())
+            .get(0);
+
+        OrderCancelReplaceRequest orderReplace = stockOrderService.createOrderCancelReplaceRequest(localOrder,
+            orderToEdit, trade.getStock().getSymbol());
+        omsService.sendMessegeToOMS(orderReplace, localOrder.getId());
 
         return toDtoFillingDerived(trade);
     }
@@ -116,8 +140,43 @@ public class StockTradeService {
             // TODO add a "mainOrder" field to StockOrder in order to have a reference to the main current order of the trade?
 
             trade.getStock().setSymbol(tradeDTO.getStockSymbol());
-            StockOrder order = stockOrderService.create(trade);
+            StockOrder order = stockOrderService.createOrder(trade);
             return new Object[]{trade, order};
+
+        } else {
+            throw new BusinessException("Conta não encontrada.");
+        }
+    }
+
+    public StockOrder createUpdateOrder(StockTrade trade, StockTradeDTO tradeDTO) {
+        Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
+            .findByIdAndCurrentUser(trade.getBrokerageAccount().getId());
+
+        if (accountOptional.isPresent()) {
+            ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
+            expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),
+                18, 0, 0, 0, ClivServerApp.getZoneIdDefault());
+            tradeDTO.setExpireTime(expireTime);
+
+            BigDecimal stockTotalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
+
+            BrokerageAccount account = accountOptional.get();
+            BigDecimal accountBalance = account.getBalance() == null ? new BigDecimal(0) : account.getBalance();
+            if (stockTotalPrice.compareTo(accountBalance) > 0) {
+                throw new BusinessException("Saldo na corretora insuficiente.");
+            }
+
+            //trade.setStockTotalPrice(stockTotalPrice);
+            trade = stockTradeRepository.save(trade);
+
+            // TODO add a "mainOrder" field to StockOrder in order to have a reference to the main current order of the trade?
+
+            User user = SecurityUtils.getCurrentUserLogin()
+                .flatMap(userRepository::findOneByLogin)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+            StockOrder order = stockOrderService.createOrderReplace(trade, tradeDTO, user);
+            return order;
 
         } else {
             throw new BusinessException("Conta não encontrada.");
@@ -176,20 +235,21 @@ public class StockTradeService {
             dto.setStatusDescr(statusDescr);
 
             boolean canCancel = status.equals(StockTrade.STATUS_LOCAL_NEW)
+                || status.equals(StockTrade.STATUS_FIX_RECEIVED)
+                || status.equals(StockTrade.STATUS_FIX_PENDING_NEW)
                 || status.equals(StockTrade.STATUS_FIX_NEW)
                 || status.equals(StockTrade.STATUS_FIX_PARTIALLY_FILLED)
-                || status.equals(StockTrade.STATUS_FIX_REPLACED)
-                || status.equals(StockTrade.STATUS_FIX_PENDING_NEW)
                 || status.equals(StockTrade.STATUS_FIX_PENDING_REPLACE)
-                || status.equals(StockTrade.STATUS_FIX_RECEIVED);
+                || status.equals(StockTrade.STATUS_FIX_REPLACED);
 
             dto.setCanCancel(canCancel);
 
             boolean canEdit = status.equals(StockTrade.STATUS_LOCAL_NEW)
+                || status.equals(StockTrade.STATUS_FIX_RECEIVED)
+                || status.equals(StockTrade.STATUS_FIX_PENDING_NEW)
                 || status.equals(StockTrade.STATUS_FIX_NEW)
                 || status.equals(StockTrade.STATUS_FIX_PARTIALLY_FILLED)
-                || status.equals(StockTrade.STATUS_FIX_REPLACED)
-                || status.equals(StockTrade.STATUS_FIX_RECEIVED);
+                || status.equals(StockTrade.STATUS_FIX_REPLACED);
 
             dto.setCanEdit(canEdit);
         }

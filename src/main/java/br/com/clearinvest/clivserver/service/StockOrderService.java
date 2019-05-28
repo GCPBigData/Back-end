@@ -1,11 +1,13 @@
 package br.com.clearinvest.clivserver.service;
 
-import br.com.clearinvest.clivserver.domain.Stock;
+import br.com.clearinvest.clivserver.ClivServerApp;
 import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.StockTrade;
+import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.service.dto.StockOrderDTO;
+import br.com.clearinvest.clivserver.service.dto.StockTradeDTO;
 import br.com.clearinvest.clivserver.service.mapper.StockOrderMapper;
 import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import quickfix.FieldNotFound;
 import quickfix.field.*;
 import quickfix.fix44.ExecutionReport;
 import quickfix.fix44.NewOrderSingle;
+import quickfix.fix44.OrderCancelReplaceRequest;
 import quickfix.fix44.OrderCancelRequest;
 
 import java.math.BigDecimal;
@@ -74,7 +77,7 @@ public class StockOrderService {
      * @param trade the entity to create
      * @return the persisted entity
      */
-    public StockOrder create(StockTrade trade) {
+    public StockOrder createOrder(StockTrade trade) {
         log.debug("Request to create StockOrder from StockTrade : {}", trade);
 
         StockOrder order = new StockOrder();
@@ -110,7 +113,47 @@ public class StockOrderService {
         return order;
     }
 
-    public NewOrderSingle createNewOrderSingle(StockOrder order, String symbol) {
+    /**
+     * Create a stockOrder.
+     *
+     * @param trade the entity to create
+     * @return the persisted entity
+     */
+    public StockOrder createOrderReplace(StockTrade trade, StockTradeDTO tradeDTO, User authenticatedUser) {
+        log.debug("Request to create StockOrder replace from StockTrade : {}", trade);
+
+        StockOrder order = new StockOrder();
+        order.setTrade(trade);
+        order.setStatus(StockOrder.STATUS_LOCAL_NEW);
+        order.setStock(trade.getStock());
+        order.setKind(StockOrder.KIND_REPLACE);
+
+        if (trade.getKind().equals(StockTrade.KIND_TRADE)) {
+            order.setOrderType(StockOrder.FIX_ORD_TYPE_MARKET);
+
+        } else if (trade.getKind().equals(StockTrade.KIND_STOP_LOSS)
+            || trade.getKind().equals(StockTrade.KIND_STOP_GAIN)) {
+            order.setOrderType(StockOrder.FIX_ORD_TYPE_STOP_LIMIT);
+            order.setStopPrice(trade.getStopPrice());
+
+        } else {
+            throw new BusinessException("Ordem inválida");
+        }
+
+        order.setSide(trade.getSide());
+        order.setTimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE);
+        order.setExpireTime(tradeDTO.getExpireTime());
+        order.setQuantity(tradeDTO.getQuantity());
+        order.setUnitPrice(tradeDTO.getUnitPrice());
+        order.setCreatedAt(ZonedDateTime.now());
+        order.setCreatedBy(authenticatedUser);
+        order.setCreatedByIp(trade.getCreatedByIp());
+        order = stockOrderRepository.save(order);
+
+        return order;
+    }
+
+    public NewOrderSingle createNewOrderSingleMessage(StockOrder order, String symbol) {
         DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
         NewOrderSingle orderSingle = new NewOrderSingle(
@@ -162,6 +205,63 @@ public class StockOrderService {
         log.debug("NewOrderSingle: {}", orderSingle.toString());
 
         return orderSingle;
+    }
+
+    public OrderCancelReplaceRequest createOrderCancelReplaceRequest(StockOrder localOrder, StockOrder orderToEdit,
+            String symbol) {
+        DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
+
+        OrderCancelReplaceRequest orderReplace = new OrderCancelReplaceRequest(
+            new OrigClOrdID(orderToEdit.getId().toString()),
+            new ClOrdID(localOrder.getId().toString()),
+            new Side(localOrder.getSide().charAt(0)),
+            new TransactTime(LocalDateTime.now()),
+            new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
+
+        if (orderToEdit.getOmsOrderId() != null) {
+            orderReplace.set(new OrderID(orderToEdit.getOmsOrderId()));
+        }
+
+        // instrument block
+        orderReplace.set(new Symbol(symbol));
+        orderReplace.set(new SecurityID(symbol));
+        orderReplace.set(new SecurityIDSource("8"));
+        orderReplace.set(new SecurityExchange("XBSP"));
+        orderReplace.set(new MaturityDate(localMktDateFormatter.format(LocalDate.now())));
+
+        // other fields
+        orderReplace.set(new OrderQty(localOrder.getQuantity()));
+
+        if (localOrder.getKind().equals(StockTrade.KIND_TRADE)) {
+            orderReplace.set(new Price(localOrder.getUnitPrice().doubleValue()));
+
+        } else if (localOrder.getKind().equals(StockOrder.KIND_STOP_LOSS)) {
+            orderReplace.set(new Price(localOrder.getUnitPrice().doubleValue()));
+            orderReplace.set(new StopPx(localOrder.getStopPrice().doubleValue()));
+
+        } else if (localOrder.getKind().equals(StockOrder.KIND_STOP_GAIN)) {
+            orderReplace.set(new Price2(localOrder.getUnitPrice().doubleValue()));
+            orderReplace.setDouble(10306, localOrder.getStopPrice().doubleValue());
+        }
+
+        orderReplace.set(new TimeInForce(FIX_TIME_IN_FORCE_GOOD_TILL_DATE.charAt(0)));
+        orderReplace.set(new ExpireTime(localOrder.getExpireTime().toLocalDateTime()));
+
+        orderReplace.set(new NoAllocs(1));
+        NewOrderSingle.NoAllocs allocs = new NewOrderSingle.NoAllocs();
+        allocs.set(new AllocAccount(OMS_ACCOUNT));
+        allocs.set(new AllocAcctIDSource(99));
+        orderReplace.addGroup(allocs);
+
+        // https://stackoverflow.com/questions/51520982/fix-message-creating-party-message-how-to-do-its
+        orderReplace.set(new NoPartyIDs(1));
+        NewOrderSingle.NoPartyIDs parties = new NewOrderSingle.NoPartyIDs();
+        parties.set(new PartyID(OMS_ACCOUNT));
+        parties.set(new PartyIDSource(PartyIDSource.PROPRIETARY_CUSTOM_CODE));
+        parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
+        orderReplace.addGroup(parties);
+
+        return orderReplace;
     }
 
     public StockOrderDTO toDtoFillingDerived(StockOrder stockOrder) {
@@ -289,96 +389,144 @@ public class StockOrderService {
         }
         log.debug("StockOrderService: proccessExecutionReport called with message:: ClOrdID: {}; ExecID: {}", clOrdID, execId);
 
+        String origClOrdID = null;
         try {
-            Optional<StockOrder> orderOptional = stockOrderRepository.findById(Long.parseLong(clOrdID));
-            if (!orderOptional.isPresent()) {
-                ExecID execID = executionReport.getExecID();
-                log.info("ignoring execution report with ExecID {}: no stock order found with clOrdID {}",
-                    execID.getValue(), clOrdID);
-                return;
-            }
+            origClOrdID = executionReport.getOrigClOrdID().getValue();
+        } catch (Exception e) { }
 
-            ZonedDateTime now = ZonedDateTime.now();
-
-            StockOrder order = orderOptional.get();
-            order.setLastExecReportTime(now);
-            order.setExecQuantity((long) executionReport.getCumQty().getValue());
-            order.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
-
-            String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
-            order.setStatus(ordStatusStr);
-
-            StockTrade trade = order.getTrade();
-            trade.setLastExecReportTime(now);
-            trade.setExecQuantity((long) executionReport.getCumQty().getValue());
-            trade.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
-            trade.setStatus(ordStatusStr);
-
-            try {
-                if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
-                    int ordRejReasonValue = executionReport.getOrdRejReason().getValue();
-
-                    String message = "";
-
-                    switch (ordRejReasonValue) {
-                        case 0:
-                            message = "Opção do servidor (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 1:
-                            message = "Símbolo Desconhecido (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 2:
-                            message = "Pregão fechado (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 3:
-                            message = "Ordem excedeu limite (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 4:
-                            message = "Tarde demais para entrar (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 5:
-                            message = "Ordem desconhecida (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 6:
-                            message = "Ordem duplicada (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 7:
-                            message = "Duplicata de uma ordem verbalmente comunicada (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 8:
-                            message = "Ordem obsoleta (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 11:
-                            message = "Característica da ordem não suportada (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 13:
-                            message = "Quantidade incorreta (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 15:
-                            message = "Conta desconhecida (Código " + ordRejReasonValue + ")";
-                            break;
-                        case 99:
-                            String text = executionReport.getText().getValue();
-                            message = text + " (Código " + ordRejReasonValue + ")";
-                            break;
-                    }
-                    order.setLastExecReportDescr(message);
-                    trade.setLastExecReportDescr(message);
-                } else {
-                    order.setLastExecReportDescr(null);
-                    trade.setLastExecReportDescr(null);
+        try {
+            if (origClOrdID != null && !origClOrdID.isEmpty()) {
+                Optional<StockOrder> orderOptional = stockOrderRepository.findById(Long.parseLong(origClOrdID));
+                if (!orderOptional.isPresent()) {
+                    ExecID execID = executionReport.getExecID();
+                    log.info("ignoring execution report with ExecID {} and OrigClOrdID {}: no stock order found with clOrdID {}",
+                        execID.getValue(), origClOrdID, clOrdID);
+                    return;
                 }
-            } catch (FieldNotFound fne) {
-                order.setLastExecReportDescr(null);
-            }
 
-            log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
-            stockOrderRepository.save(order);
-            stockTradeRepository.save(trade);
+                StockOrder order = orderOptional.get();
+
+                StockTrade trade = order.getTrade();
+                trade.setLastExecReportTime(ZonedDateTime.now());
+
+                String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
+                trade.setStatus(ordStatusStr);
+
+                if (executionReport.isSet(new ExpireTime())) {
+                    LocalDateTime expireTimeRaw = executionReport.getExpireTime().getValue();
+                    ZonedDateTime expireTimeZoned = ZonedDateTime.of(expireTimeRaw, ClivServerApp.getZoneIdDefault());
+                    trade.setExpireTime(expireTimeZoned);
+                }
+
+                if (executionReport.isSet(new OrderQty())) {
+                    trade.setQuantity((long) executionReport.getOrderQty().getValue());
+                }
+
+                if (executionReport.isSet(new Price())) {
+                    trade.setUnitPrice(BigDecimal.valueOf(executionReport.getPrice().getValue()));
+                }
+
+                log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
+                stockOrderRepository.save(order);
+                stockTradeRepository.save(trade);
+
+
+            } else {
+                Optional<StockOrder> orderOptional = stockOrderRepository.findById(Long.parseLong(clOrdID));
+                if (!orderOptional.isPresent()) {
+                    ExecID execID = executionReport.getExecID();
+                    log.info("ignoring execution report with ExecID {}: no stock order found with clOrdID {}",
+                        execID.getValue(), clOrdID);
+                    return;
+                }
+
+                ZonedDateTime now = ZonedDateTime.now();
+
+                StockOrder order = orderOptional.get();
+                order.setLastExecReportTime(now);
+                order.setExecQuantity((long) executionReport.getCumQty().getValue());
+                order.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
+
+                String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
+                order.setStatus(ordStatusStr);
+
+                StockTrade trade = order.getTrade();
+                trade.setLastExecReportTime(now);
+                trade.setExecQuantity((long) executionReport.getCumQty().getValue());
+                trade.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
+                trade.setStatus(ordStatusStr);
+
+                try {
+                    if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
+                        String message = getFixOrdRejReasonDescription(executionReport);
+                        order.setLastExecReportDescr(message);
+                        trade.setLastExecReportDescr(message);
+                    } else {
+                        order.setLastExecReportDescr(null);
+                        trade.setLastExecReportDescr(null);
+                    }
+                } catch (FieldNotFound fne) {
+                    order.setLastExecReportDescr(null);
+                }
+
+                log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
+                stockOrderRepository.save(order);
+                stockTradeRepository.save(trade);
+            }
 
         } catch (Exception e) {
             log.error("unexpected error", e);
         }
+    }
+
+    private String getFixOrdRejReasonDescription(ExecutionReport executionReport) throws FieldNotFound {
+        int ordRejReasonValue = executionReport.getOrdRejReason().getValue();
+        String descr = "";
+
+        switch (ordRejReasonValue) {
+            case 0:
+                descr = "Opção do servidor (Código " + ordRejReasonValue + ")";
+                break;
+            case 1:
+                descr = "Símbolo Desconhecido (Código " + ordRejReasonValue + ")";
+                break;
+            case 2:
+                descr = "Pregão fechado (Código " + ordRejReasonValue + ")";
+                break;
+            case 3:
+                descr = "Ordem excedeu limite (Código " + ordRejReasonValue + ")";
+                break;
+            case 4:
+                descr = "Tarde demais para entrar (Código " + ordRejReasonValue + ")";
+                break;
+            case 5:
+                descr = "Ordem desconhecida (Código " + ordRejReasonValue + ")";
+                break;
+            case 6:
+                descr = "Ordem duplicada (Código " + ordRejReasonValue + ")";
+                break;
+            case 7:
+                descr = "Duplicata de uma ordem verbalmente comunicada (Código " + ordRejReasonValue + ")";
+                break;
+            case 8:
+                descr = "Ordem obsoleta (Código " + ordRejReasonValue + ")";
+                break;
+            case 11:
+                descr = "Característica da ordem não suportada (Código " + ordRejReasonValue + ")";
+                break;
+            case 13:
+                descr = "Quantidade incorreta (Código " + ordRejReasonValue + ")";
+                break;
+            case 15:
+                descr = "Conta desconhecida (Código " + ordRejReasonValue + ")";
+                break;
+            case 99:
+                String text = executionReport.getText().getValue();
+                descr = text + " (Código " + ordRejReasonValue + ")";
+                break;
+        }
+
+        return descr;
     }
 
     void cancel(StockTrade trade) {
@@ -387,7 +535,6 @@ public class StockOrderService {
             .collect(Collectors.toList())
             .get(0);
 
-        // TODO
         StockOrder order = new StockOrder();
         order.setTrade(trade);
         order.setStatus(StockOrder.STATUS_LOCAL_NEW);
@@ -426,7 +573,7 @@ public class StockOrderService {
         parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
         orderCancel.addGroup(parties);
 
-        omsService.sendMessegeToOms(orderCancel, order.getId());
+        omsService.sendMessegeToOMS(orderCancel, order.getId());
     }
 
 }

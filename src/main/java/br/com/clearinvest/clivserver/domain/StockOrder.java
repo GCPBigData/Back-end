@@ -74,7 +74,7 @@ public class StockOrder implements Serializable {
     @Column(name = "kind", length = 10, nullable = false)
     private String kind;
 
-    /** mercado, limite, etc */
+    /** Fix OrdType (40) */
     @Column(name = "order_type")
     private String orderType;
 

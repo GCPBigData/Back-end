@@ -37,7 +37,7 @@ public class OMSService {
     }
 
     @Async
-    public void sendMessegeToOms(Message message, Long orderId) throws RuntimeException {
+    public void sendMessegeToOMS(Message message, Long orderId) throws RuntimeException {
         Optional<StockOrder> orderOptional = Optional.empty();
         for (int i = 0; i < 50; i++) {
             orderOptional = stockOrderRepository.findById(orderId);

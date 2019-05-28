@@ -1,0 +1,70 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "order",
+            "otherEntityName": "stockOrder",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "createdAt",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "execId",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "execType",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "max"
+            ],
+            "fieldValidateRulesMax": "1"
+        },
+        {
+            "fieldName": "ordStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "max"
+            ],
+            "fieldValidateRulesMax": "1"
+        },
+        {
+            "fieldName": "ordRejReason",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lastQty",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "lastPx",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "changelogDate": "20190526120000",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceClass",
+    "entityTableName": "execution_report",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}
