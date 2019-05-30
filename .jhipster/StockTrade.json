@@ -129,6 +129,6 @@
     "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "stock_trade",
-    "jpaMetamodelFiltering": false,
-    "pagination": "no"
+    "jpaMetamodelFiltering": true,
+    "pagination": "yes"
 }

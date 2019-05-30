@@ -80,7 +80,7 @@ public class StockTradeService {
         NewOrderSingle orderSingle = stockOrderService.createNewOrderSingleMessage(order, trade.getStock().getSymbol());
         omsService.sendMessegeToOMS(orderSingle, order.getId());
 
-        return toDtoFillingDerived(trade);
+        return toDtoFillingDerived(trade, stockTradeMapper);
     }
 
     /**
@@ -105,7 +105,7 @@ public class StockTradeService {
             orderToEdit, trade.getStock().getSymbol());
         omsService.sendMessegeToOMS(orderReplace, localOrder.getId());
 
-        return toDtoFillingDerived(trade);
+        return toDtoFillingDerived(trade, stockTradeMapper);
     }
 
     public Object[] createTradeAndOrder(StockTradeDTO tradeDTO) {
@@ -183,7 +183,7 @@ public class StockTradeService {
         }
     }
 
-    public StockTradeDTO toDtoFillingDerived(StockTrade stockTrade) {
+    public static StockTradeDTO toDtoFillingDerived(StockTrade stockTrade, StockTradeMapper stockTradeMapper) {
         StockTradeDTO dto = stockTradeMapper.toDto(stockTrade);
 
         if (stockTrade.getStatus() != null) {
@@ -266,7 +266,7 @@ public class StockTradeService {
     public List<StockTradeDTO> findAll() {
         log.debug("Request to get all StockTrades");
         return stockTradeRepository.findByCreatedByIsCurrentUser().stream()
-            .map(this::toDtoFillingDerived)
+            .map((t) -> toDtoFillingDerived(t, stockTradeMapper))
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -281,7 +281,7 @@ public class StockTradeService {
     public Optional<StockTradeDTO> findOne(Long id) {
         log.debug("Request to get StockTrade : {}", id);
         return stockTradeRepository.findById(id)
-            .map(this::toDtoFillingDerived);
+            .map((t) -> toDtoFillingDerived(t, stockTradeMapper));
     }
 
     /**

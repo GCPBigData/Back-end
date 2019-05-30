@@ -405,7 +405,6 @@ public class StockOrderService {
                 }
 
                 StockOrder order = orderOptional.get();
-
                 StockTrade trade = order.getTrade();
                 trade.setLastExecReportTime(ZonedDateTime.now());
 
@@ -427,7 +426,7 @@ public class StockOrderService {
                 }
 
                 log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
-                stockOrderRepository.save(order);
+                //stockOrderRepository.save(order);
                 stockTradeRepository.save(trade);
 
 

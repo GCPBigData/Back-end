@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface StockTradeRepository extends JpaRepository<StockTrade, Long> {
+public interface StockTradeRepository extends JpaRepository<StockTrade, Long>, JpaSpecificationExecutor<StockTrade> {
 
     @Query("select stock_trade from StockTrade stock_trade where stock_trade.createdBy.login = ?#{principal.username}")
     List<StockTrade> findByCreatedByIsCurrentUser();
