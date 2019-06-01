@@ -173,6 +173,10 @@ public class StockTradeQueryService extends QueryService<StockTrade> {
                 specification = specification.and(buildSpecification(criteria.getBrokerageAccountId(),
                     root -> root.join(StockTrade_.brokerageAccount, JoinType.LEFT).get(BrokerageAccount_.id)));
             }
+            if (criteria.getMainOrderId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMainOrderId(),
+                    root -> root.join(StockTrade_.mainOrder, JoinType.LEFT).get(StockOrder_.id)));
+            }
             if (criteria.getOrdersId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrdersId(),
                     root -> root.join(StockTrade_.orders, JoinType.LEFT).get(StockOrder_.id)));

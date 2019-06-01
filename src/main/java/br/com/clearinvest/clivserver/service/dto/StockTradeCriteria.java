@@ -60,6 +60,8 @@ public class StockTradeCriteria implements Serializable {
 
     private LongFilter brokerageAccountId;
 
+    private LongFilter mainOrderId;
+
     private LongFilter ordersId;
 
     private LongFilter createdById;
@@ -211,6 +213,14 @@ public class StockTradeCriteria implements Serializable {
         this.brokerageAccountId = brokerageAccountId;
     }
 
+    public LongFilter getMainOrderId() {
+        return mainOrderId;
+    }
+
+    public void setMainOrderId(LongFilter mainOrderId) {
+        this.mainOrderId = mainOrderId;
+    }
+
     public LongFilter getOrdersId() {
         return ordersId;
     }
@@ -256,6 +266,7 @@ public class StockTradeCriteria implements Serializable {
             Objects.equals(status, that.status) &&
             Objects.equals(stockId, that.stockId) &&
             Objects.equals(brokerageAccountId, that.brokerageAccountId) &&
+            Objects.equals(mainOrderId, that.mainOrderId) &&
             Objects.equals(ordersId, that.ordersId) &&
             Objects.equals(createdById, that.createdById);
     }
@@ -281,6 +292,7 @@ public class StockTradeCriteria implements Serializable {
         status,
         stockId,
         brokerageAccountId,
+        mainOrderId,
         ordersId,
         createdById
         );
@@ -307,6 +319,7 @@ public class StockTradeCriteria implements Serializable {
                 (status != null ? "status=" + status + ", " : "") +
                 (stockId != null ? "stockId=" + stockId + ", " : "") +
                 (brokerageAccountId != null ? "brokerageAccountId=" + brokerageAccountId + ", " : "") +
+                (mainOrderId != null ? "mainOrderId=" + mainOrderId + ", " : "") +
                 (ordersId != null ? "ordersId=" + ordersId + ", " : "") +
                 (createdById != null ? "createdById=" + createdById + ", " : "") +
             "}";

@@ -15,6 +15,12 @@
             "otherEntityField": "id"
         },
         {
+            "relationshipName": "mainOrder",
+            "otherEntityName": "stockOrder",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
             "relationshipName": "orders",
             "otherEntityName": "stockOrder",
             "relationshipType": "one-to-many",

@@ -14,6 +14,9 @@ import br.com.clearinvest.clivserver.service.mapper.StockTradeMapper;
 import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +75,7 @@ public class StockTradeService {
     public StockTradeDTO save(StockTradeDTO tradeDTO) {
         log.debug("Request to save StockTrade : {}", tradeDTO);
 
-        TransactionTemplate transactionTemplate = new TransactionTemplate(platformTransactionManager);
-        final Object[] result = transactionTemplate.execute(status -> createTradeAndOrder(tradeDTO));
+        final Object[] result = createTradeAndOrder(tradeDTO);
         StockTrade trade = (StockTrade) result[0];
         StockOrder order = (StockOrder) result[1];
 
@@ -96,10 +98,7 @@ public class StockTradeService {
             .orElseThrow(() -> new BusinessException("Ordem não encontrada."));
 
         StockOrder localOrder = createUpdateOrder(trade, tradeDTO);
-        StockOrder orderToEdit = trade.getOrders().stream()
-            .sorted(Comparator.comparing(StockOrder::getId))
-            .collect(Collectors.toList())
-            .get(0);
+        StockOrder orderToEdit = trade.getMainOrder();
 
         OrderCancelReplaceRequest orderReplace = stockOrderService.createOrderCancelReplaceRequest(localOrder,
             orderToEdit, trade.getStock().getSymbol());
@@ -134,13 +133,14 @@ public class StockTradeService {
                 throw new BusinessException("Saldo na corretora insuficiente.");
             }
 
-            //trade.setStockTotalPrice(stockTotalPrice);
             trade = stockTradeRepository.save(trade);
-
-            // TODO add a "mainOrder" field to StockOrder in order to have a reference to the main current order of the trade?
 
             trade.getStock().setSymbol(tradeDTO.getStockSymbol());
             StockOrder order = stockOrderService.createOrder(trade);
+
+            trade.setMainOrder(order);
+            trade = stockTradeRepository.save(trade);
+
             return new Object[]{trade, order};
 
         } else {
@@ -260,6 +260,19 @@ public class StockTradeService {
     /**
      * Get all the stockTrades.
      *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public Page<StockTradeDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all StockTrades");
+        return stockTradeRepository.findAll(pageable)
+            .map(stockTradeMapper::toDto);
+    }
+
+    /**
+     * Get all the stockTrades.
+     *
      * @return the list of entities
      */
     @Transactional(readOnly = true)
@@ -269,7 +282,6 @@ public class StockTradeService {
             .map((t) -> toDtoFillingDerived(t, stockTradeMapper))
             .collect(Collectors.toCollection(LinkedList::new));
     }
-
 
     /**
      * Get one stockTrade by id.

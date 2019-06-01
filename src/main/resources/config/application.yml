@@ -117,6 +117,9 @@ jhipster:
 
 # application:
 
+cliv:
+    serverIpAndName: ''
+
 quickfixj:
     client:
         config: ${QUIICKFIXJ_CLIENT_CONFIG_FILE:classpath:quickfixj-client-cliv.cfg}

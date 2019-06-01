@@ -20,6 +20,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="brokerage_account"/>
 
+        <addForeignKeyConstraint baseColumnNames="main_order_id"
+                                 baseTableName="stock_trade"
+                                 constraintName="fk_stock_trade_main_order_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stock_order"/>
+
         <addForeignKeyConstraint baseColumnNames="created_by_id"
                                  baseTableName="stock_trade"
                                  constraintName="fk_stock_trade_created_by_id"

@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * A StockOrder.
+ * A StockOrder. Represents a single order and contains only the relevant data of it.
  */
 @Entity
 @Table(name = "stock_order")

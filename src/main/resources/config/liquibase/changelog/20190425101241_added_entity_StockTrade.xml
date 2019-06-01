@@ -89,6 +89,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="main_order_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="created_by_id" type="bigint">
                 <constraints nullable="false" />
             </column>

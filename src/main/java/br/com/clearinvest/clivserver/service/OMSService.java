@@ -25,6 +25,7 @@ public class OMSService {
 
     public static final String OMS_ACCOUNT = "160119";
 
+    // TODO move to application.yml
     public static final boolean ORDER_SEND_TO_OMS_IN_DEV_MODE = false;
 
     private final AppService appService;

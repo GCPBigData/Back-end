@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.Objects;
 
 /**
- * A StockTrade.
+ * A StockTrade. Represents the current data of the negotiation.
  */
 @Entity
 @Table(name = "stock_trade")
@@ -114,6 +114,10 @@ public class StockTrade implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("")
     private BrokerageAccount brokerageAccount;
+
+    @ManyToOne
+    @JsonIgnoreProperties("")
+    private StockOrder mainOrder;
 
     @OneToMany(mappedBy = "trade")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -351,6 +355,19 @@ public class StockTrade implements Serializable {
 
     public void setBrokerageAccount(BrokerageAccount brokerageAccount) {
         this.brokerageAccount = brokerageAccount;
+    }
+
+    public StockOrder getMainOrder() {
+        return mainOrder;
+    }
+
+    public StockTrade mainOrder(StockOrder stockOrder) {
+        this.mainOrder = stockOrder;
+        return this;
+    }
+
+    public void setMainOrder(StockOrder stockOrder) {
+        this.mainOrder = stockOrder;
     }
 
     public Set<StockOrder> getOrders() {

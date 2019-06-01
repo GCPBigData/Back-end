@@ -6,6 +6,7 @@ import br.com.clearinvest.clivserver.domain.StockTrade;
 import br.com.clearinvest.clivserver.domain.Stock;
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.domain.StockOrder;
+import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.service.StockTradeService;
@@ -1133,6 +1134,25 @@ public class StockTradeResourceIntTest {
 
         // Get all the stockTradeList where brokerageAccount equals to brokerageAccountId + 1
         defaultStockTradeShouldNotBeFound("brokerageAccountId.equals=" + (brokerageAccountId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllStockTradesByMainOrderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        StockOrder mainOrder = StockOrderResourceIntTest.createEntity(em);
+        em.persist(mainOrder);
+        em.flush();
+        stockTrade.setMainOrder(mainOrder);
+        stockTradeRepository.saveAndFlush(stockTrade);
+        Long mainOrderId = mainOrder.getId();
+
+        // Get all the stockTradeList where mainOrder equals to mainOrderId
+        defaultStockTradeShouldBeFound("mainOrderId.equals=" + mainOrderId);
+
+        // Get all the stockTradeList where mainOrder equals to mainOrderId + 1
+        defaultStockTradeShouldNotBeFound("mainOrderId.equals=" + (mainOrderId + 1));
     }
 
 

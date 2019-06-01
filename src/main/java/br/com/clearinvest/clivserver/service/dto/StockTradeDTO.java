@@ -63,6 +63,8 @@ public class StockTradeDTO implements Serializable {
 
     private Long brokerageAccountId;
 
+    private Long mainOrderId;
+
     private Long createdById;
 
     private String createdByLogin;
@@ -227,6 +229,14 @@ public class StockTradeDTO implements Serializable {
         this.brokerageAccountId = brokerageAccountId;
     }
 
+    public Long getMainOrderId() {
+        return mainOrderId;
+    }
+
+    public void setMainOrderId(Long stockOrderId) {
+        this.mainOrderId = stockOrderId;
+    }
+
     public Long getCreatedById() {
         return createdById;
     }
@@ -310,6 +320,7 @@ public class StockTradeDTO implements Serializable {
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +
+            ", mainOrder=" + getMainOrderId() +
             ", createdBy=" + getCreatedById() +
             ", createdBy='" + getCreatedByLogin() + "'" +
             "}";
