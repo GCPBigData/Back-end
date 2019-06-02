@@ -28,7 +28,7 @@
         },
         {
             "relationshipName": "execReport",
-            "otherEntityName": "executionReport",
+            "otherEntityName": "execReport",
             "relationshipType": "many-to-one",
             "otherEntityField": "execId",
             "ownerSide": true

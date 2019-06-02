@@ -6,7 +6,7 @@ import br.com.clearinvest.clivserver.domain.StockFlow;
 import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.domain.StockTrade;
-import br.com.clearinvest.clivserver.domain.ExecutionReport;
+import br.com.clearinvest.clivserver.domain.ExecReport;
 import br.com.clearinvest.clivserver.domain.Stock;
 import br.com.clearinvest.clivserver.repository.StockFlowRepository;
 import br.com.clearinvest.clivserver.service.StockFlowService;
@@ -822,7 +822,7 @@ public class StockFlowResourceIntTest {
     @Transactional
     public void getAllStockFlowsByExecReportIsEqualToSomething() throws Exception {
         // Initialize the database
-        ExecutionReport execReport = ExecutionReportResourceIntTest.createEntity(em);
+        ExecReport execReport = ExecReportResourceIntTest.createEntity(em);
         em.persist(execReport);
         em.flush();
         stockFlow.setExecReport(execReport);

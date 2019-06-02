@@ -1,10 +1,12 @@
 package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.ClivServerApp;
+import br.com.clearinvest.clivserver.domain.ExecReport;
 import br.com.clearinvest.clivserver.domain.StockOrder;
 import br.com.clearinvest.clivserver.domain.StockTrade;
 import br.com.clearinvest.clivserver.domain.User;
 import br.com.clearinvest.clivserver.factory.FixMessageFactory;
+import br.com.clearinvest.clivserver.repository.ExecReportRepository;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.service.dto.StockOrderDTO;
@@ -48,6 +50,8 @@ public class StockOrderService {
 
     private final StockTradeRepository stockTradeRepository;
 
+    private final ExecReportRepository execReportRepository;
+
     private final StockOrderMapper stockOrderMapper;
 
     private final OMSService omsService;
@@ -57,10 +61,11 @@ public class StockOrderService {
     private final StockFlowService stockFlowService;
 
     public StockOrderService(StockOrderRepository stockOrderRepository, StockTradeRepository stockTradeRepository,
-        StockOrderMapper stockOrderMapper, OMSService omsService, FixMessageFactory fixMessageFactory,
-        StockFlowService stockFlowService) {
+            ExecReportRepository execReportRepository, StockOrderMapper stockOrderMapper, OMSService omsService,
+            FixMessageFactory fixMessageFactory, StockFlowService stockFlowService) {
         this.stockOrderRepository = stockOrderRepository;
         this.stockTradeRepository = stockTradeRepository;
+        this.execReportRepository = execReportRepository;
         this.stockOrderMapper = stockOrderMapper;
         this.omsService = omsService;
         this.fixMessageFactory = fixMessageFactory;
@@ -139,7 +144,7 @@ public class StockOrderService {
             order.setOrderType(StockOrder.FIX_ORD_TYPE_MARKET);
 
         } else if (trade.getKind().equals(StockTrade.KIND_STOP_LOSS)
-            || trade.getKind().equals(StockTrade.KIND_STOP_GAIN)) {
+                || trade.getKind().equals(StockTrade.KIND_STOP_GAIN)) {
             order.setOrderType(StockOrder.FIX_ORD_TYPE_STOP_LIMIT);
             order.setStopPrice(trade.getStopPrice());
 
@@ -164,10 +169,10 @@ public class StockOrderService {
         DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
         NewOrderSingle orderSingle = new NewOrderSingle(
-            new ClOrdID(order.getId().toString()),
-            new Side(order.getSide().charAt(0)),
-            new TransactTime(LocalDateTime.now()),
-            new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
+                new ClOrdID(order.getId().toString()),
+                new Side(order.getSide().charAt(0)),
+                new TransactTime(LocalDateTime.now()),
+                new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
 
         orderSingle.set(new OrderQty(order.getQuantity()));
 
@@ -219,11 +224,11 @@ public class StockOrderService {
         DateTimeFormatter localMktDateFormatter = DateTimeFormatter.ofPattern("yyyyddMM");
 
         OrderCancelReplaceRequest orderReplace = new OrderCancelReplaceRequest(
-            new OrigClOrdID(orderToEdit.getId().toString()),
-            new ClOrdID(localOrder.getId().toString()),
-            new Side(localOrder.getSide().charAt(0)),
-            new TransactTime(LocalDateTime.now()),
-            new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
+                new OrigClOrdID(orderToEdit.getId().toString()),
+                new ClOrdID(localOrder.getId().toString()),
+                new Side(localOrder.getSide().charAt(0)),
+                new TransactTime(LocalDateTime.now()),
+                new OrdType(StockOrder.FIX_ORD_TYPE_MARKET.charAt(0)));
         fixMessageFactory.setAuditFields(orderReplace);
 
         if (orderToEdit.getOmsOrderId() != null) {
@@ -324,12 +329,12 @@ public class StockOrderService {
             dto.setStatusDescr(statusDescr);
 
             boolean canCancel = status.equals(StockOrder.STATUS_LOCAL_NEW)
-                || status.equals(StockOrder.STATUS_FIX_NEW)
-                || status.equals(StockOrder.STATUS_FIX_PARTIALLY_FILLED)
-                || status.equals(StockOrder.STATUS_FIX_REPLACED)
-                || status.equals(StockOrder.STATUS_FIX_PENDING_NEW)
-                || status.equals(StockOrder.STATUS_FIX_PENDING_REPLACE)
-                || status.equals(StockOrder.STATUS_FIX_RECEIVED);
+                    || status.equals(StockOrder.STATUS_FIX_NEW)
+                    || status.equals(StockOrder.STATUS_FIX_PARTIALLY_FILLED)
+                    || status.equals(StockOrder.STATUS_FIX_REPLACED)
+                    || status.equals(StockOrder.STATUS_FIX_PENDING_NEW)
+                    || status.equals(StockOrder.STATUS_FIX_PENDING_REPLACE)
+                    || status.equals(StockOrder.STATUS_FIX_RECEIVED);
 
             dto.setCanCancel(canCancel);
         }
@@ -360,8 +365,8 @@ public class StockOrderService {
     public List<StockOrderDTO> findAll() {
         log.debug("Request to get all StockOrders");
         return stockOrderRepository.findByCreatedByIsCurrentUser().stream()
-            .map(this::toDtoFillingDerived)
-            .collect(Collectors.toCollection(LinkedList::new));
+                .map(this::toDtoFillingDerived)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -374,7 +379,7 @@ public class StockOrderService {
     public Optional<StockOrderDTO> findOne(Long id) {
         log.debug("Request to get StockOrder : {}", id);
         return stockOrderRepository.findById(id)
-            .map(this::toDtoFillingDerived);
+                .map(this::toDtoFillingDerived);
     }
 
     /**
@@ -390,13 +395,13 @@ public class StockOrderService {
     public void proccessExecutionReport(ExecutionReport executionReport) {
         try {
             String clOrdID = executionReport.getClOrdID().getValue();
-            String  execID = executionReport.getExecID().getValue();
+            String execID = executionReport.getExecID().getValue();
             log.debug("StockOrderService: proccessExecutionReport called with message:: ClOrdID: {}; ExecID: {}", clOrdID, execID);
 
             Optional<StockOrder> orderOptional = stockOrderRepository.findById(Long.parseLong(clOrdID));
             if (!orderOptional.isPresent()) {
                 log.info("ignoring execution report with ExecID {}: no stock order found with clOrdID {}",
-                    execID, clOrdID);
+                        execID, clOrdID);
                 return;
             }
             StockOrder order = orderOptional.get();
@@ -406,7 +411,7 @@ public class StockOrderService {
                 Optional<StockOrder> originalOrderOptional = stockOrderRepository.findById(Long.parseLong(origClOrdID));
                 if (!originalOrderOptional.isPresent()) {
                     log.info("ignoring execution report with ExecID {} and OrigClOrdID {}: no stock order found with clOrdID {}",
-                        execID, origClOrdID, clOrdID);
+                            execID, origClOrdID, clOrdID);
                     return;
                 }
                 proccessExecutionReportEdit(executionReport, order, originalOrderOptional.get());
@@ -450,44 +455,74 @@ public class StockOrderService {
         stockTradeRepository.save(trade);
     }
 
-    private void proccessExecutionReportTrade(ExecutionReport executionReport, StockOrder order) throws FieldNotFound {
-        ZonedDateTime now = ZonedDateTime.now();
-
-        order.setLastExecReportTime(now);
-        order.setExecQuantity((long) executionReport.getCumQty().getValue());
-        order.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
-
-        String ordStatusStr = String.valueOf(executionReport.getOrdStatus().getValue());
-        order.setStatus(ordStatusStr);
-
+    private void proccessExecutionReportTrade(ExecutionReport execReportMessage, StockOrder order) throws FieldNotFound {
         StockTrade trade = order.getTrade();
-        trade.setLastExecReportTime(now);
-        trade.setExecQuantity((long) executionReport.getCumQty().getValue());
-        trade.setAveragePrice(new BigDecimal(executionReport.getAvgPx().getValue()));
-        trade.setStatus(ordStatusStr);
 
-        try {
-            if (ordStatusStr.equals(StockOrder.STATUS_FIX_REJECTED)) {
-                String message = getFixOrdRejReasonDescription(executionReport);
-                order.setLastExecReportDescr(message);
-                trade.setLastExecReportDescr(message);
+        ExecReport execReport = new ExecReport();
+        execReport.setOrder(order);
+        execReport.setCreatedAt(ZonedDateTime.now());
+        execReport.setTransactTime(execReportMessage.getTransactTime().getValue().atZone(ClivServerApp.getZoneIdDefault()));
+        execReport.setExecId(execReportMessage.getExecID().getValue());
+        execReport.setExecType(String.valueOf(execReportMessage.getExecType().getValue()));
+        execReport.setOrdStatus(String.valueOf(execReportMessage.getOrdStatus().getValue()));
 
-            } else {
-                order.setLastExecReportDescr(null);
-                trade.setLastExecReportDescr(null);
-
-                if (executionReport.isSet(new LastQty())) {
-                    //stockFlowService.add()
-                }
-            }
-        } catch (FieldNotFound fne) {
-            order.setLastExecReportDescr(null);
+        if (execReportMessage.isSet(new LastQty())) {
+            execReport.setLastQty((long) execReportMessage.getLastQty().getValue());
+        }
+        if (execReportMessage.isSet(new LeavesQty())) {
+            execReport.setLeavesQty((long) execReportMessage.getLeavesQty().getValue());
+        }
+        if (execReportMessage.isSet(new CumQty())) {
+            execReport.setCumQty((long) execReportMessage.getCumQty().getValue());
+            trade.setExecQuantity(execReport.getCumQty());
+        }
+        if (execReportMessage.isSet(new LastPx())) {
+            execReport.setLastPx(BigDecimal.valueOf(execReportMessage.getLastPx().getValue()));
+        }
+        if (execReportMessage.isSet(new AvgPx())) {
+            execReport.setAvgPx(BigDecimal.valueOf(execReportMessage.getAvgPx().getValue()));
+            trade.setAveragePrice(execReport.getAvgPx());
         }
 
+        execReport.setFixMessage(execReportMessage.toRawString());
+
+        if (execReport.getOrdStatus().equals(StockOrder.STATUS_FIX_REJECTED)) {
+            if (execReportMessage.isSet(new OrdRejReason())) {
+                execReport.setOrdRejReason(execReportMessage.getOrdRejReason().getValue());
+
+                if (execReportMessage.isSet(new Text())) {
+                    execReport.setExecText(execReportMessage.getText().getValue());
+                }
+
+                String message = getFixOrdRejReasonDescription(execReportMessage);
+                trade.setLastExecReportDescr(message);
+            }
+
+        } else {
+            trade.setLastExecReportDescr(null);
+
+            // TODO handle each exec report ordStatus and/or execType
+        }
+
+        // TODO remove fields execQuantity and AveragePrice from StockOrder
+        //order.setExecQuantity((long) execReportMessage.getCumQty().getValue());
+        //order.setAveragePrice(new BigDecimal(execReportMessage.getAvgPx().getValue()));
+
+        order.setStatus(execReport.getOrdStatus());
+        trade.setLastExecReportTime(execReport.getCreatedAt());
+        trade.setStatus(execReport.getOrdStatus());
+
+        log.debug("StockOrderService: proccessExecutionReport finished; resulting exec report: {}", execReport);
         log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
         log.debug("StockOrderService: proccessExecutionReport finished; resulting stock trade: {}", trade);
+
+        execReportRepository.save(execReport);
         stockOrderRepository.save(order);
         stockTradeRepository.save(trade);
+
+        if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
+            stockFlowService.add(trade, execReport);
+        }
     }
 
     private String getFixOrdRejReasonDescription(ExecutionReport executionReport) throws FieldNotFound {
@@ -562,10 +597,10 @@ public class StockOrderService {
         order = stockOrderRepository.save(order);
 
         OrderCancelRequest orderCancel = new OrderCancelRequest(
-            new OrigClOrdID(orderToCancel.getId().toString()),
-            new ClOrdID(order.getId().toString()),
-            new Side(orderToCancel.getSide().charAt(0)),
-            new TransactTime(LocalDateTime.now()));
+                new OrigClOrdID(orderToCancel.getId().toString()),
+                new ClOrdID(order.getId().toString()),
+                new Side(orderToCancel.getSide().charAt(0)),
+                new TransactTime(LocalDateTime.now()));
         fixMessageFactory.setAuditFields(orderCancel);
 
         if (orderToCancel.getOmsOrderId() != null) {

@@ -75,7 +75,7 @@ public class StockFlow implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("")
-    private ExecutionReport execReport;
+    private ExecReport execReport;
 
     @ManyToOne
     @JsonIgnoreProperties("")
@@ -233,17 +233,17 @@ public class StockFlow implements Serializable {
         this.trade = stockTrade;
     }
 
-    public ExecutionReport getExecReport() {
+    public ExecReport getExecReport() {
         return execReport;
     }
 
-    public StockFlow execReport(ExecutionReport executionReport) {
-        this.execReport = executionReport;
+    public StockFlow execReport(ExecReport execReport) {
+        this.execReport = execReport;
         return this;
     }
 
-    public void setExecReport(ExecutionReport executionReport) {
-        this.execReport = executionReport;
+    public void setExecReport(ExecReport execReport) {
+        this.execReport = execReport;
     }
 
     public Stock getStock() {

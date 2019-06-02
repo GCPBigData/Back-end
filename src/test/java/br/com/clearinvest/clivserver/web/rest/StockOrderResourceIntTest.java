@@ -77,14 +77,14 @@ public class StockOrderResourceIntTest {
     private static final Long DEFAULT_QUANTITY = 1L;
     private static final Long UPDATED_QUANTITY = 2L;
 
-    private static final Long DEFAULT_EXEC_QUANTITY = 1L;
-    private static final Long UPDATED_EXEC_QUANTITY = 2L;
-
     private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal(0.01);
     private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal(1);
 
     private static final BigDecimal DEFAULT_STOP_PRICE = new BigDecimal(0.01);
     private static final BigDecimal UPDATED_STOP_PRICE = new BigDecimal(1);
+
+    private static final Long DEFAULT_EXEC_QUANTITY = 1L;
+    private static final Long UPDATED_EXEC_QUANTITY = 2L;
 
     private static final BigDecimal DEFAULT_AVERAGE_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_AVERAGE_PRICE = new BigDecimal(2);
@@ -97,12 +97,6 @@ public class StockOrderResourceIntTest {
 
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
-
-    private static final ZonedDateTime DEFAULT_LAST_EXEC_REPORT_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_LAST_EXEC_REPORT_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-
-    private static final String DEFAULT_LAST_EXEC_REPORT_DESCR = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_EXEC_REPORT_DESCR = "BBBBBBBBBB";
 
     private static final String DEFAULT_CREATED_BY_IP = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY_IP = "BBBBBBBBBB";
@@ -160,15 +154,13 @@ public class StockOrderResourceIntTest {
             .expireTime(DEFAULT_EXPIRE_TIME)
             .operationType(DEFAULT_OPERATION_TYPE)
             .quantity(DEFAULT_QUANTITY)
-            .execQuantity(DEFAULT_EXEC_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .stopPrice(DEFAULT_STOP_PRICE)
+            .execQuantity(DEFAULT_EXEC_QUANTITY)
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .omsOrderId(DEFAULT_OMS_ORDER_ID)
             .status(DEFAULT_STATUS)
-            .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
-            .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR)
             .createdByIp(DEFAULT_CREATED_BY_IP);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
@@ -213,15 +205,13 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getExpireTime()).isEqualTo(DEFAULT_EXPIRE_TIME);
         assertThat(testStockOrder.getOperationType()).isEqualTo(DEFAULT_OPERATION_TYPE);
         assertThat(testStockOrder.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testStockOrder.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testStockOrder.getStopPrice()).isEqualTo(DEFAULT_STOP_PRICE);
+        assertThat(testStockOrder.getExecQuantity()).isEqualTo(DEFAULT_EXEC_QUANTITY);
         assertThat(testStockOrder.getAveragePrice()).isEqualTo(DEFAULT_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(DEFAULT_OMS_ORDER_ID);
         assertThat(testStockOrder.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
-        assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
         assertThat(testStockOrder.getCreatedByIp()).isEqualTo(DEFAULT_CREATED_BY_IP);
     }
 
@@ -360,15 +350,13 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.[*].expireTime").value(hasItem(sameInstant(DEFAULT_EXPIRE_TIME))))
             .andExpect(jsonPath("$.[*].operationType").value(hasItem(DEFAULT_OPERATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
-            .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].stopPrice").value(hasItem(DEFAULT_STOP_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].execQuantity").value(hasItem(DEFAULT_EXEC_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].omsOrderId").value(hasItem(DEFAULT_OMS_ORDER_ID.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
-            .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())))
             .andExpect(jsonPath("$.[*].createdByIp").value(hasItem(DEFAULT_CREATED_BY_IP.toString())));
     }
     
@@ -392,15 +380,13 @@ public class StockOrderResourceIntTest {
             .andExpect(jsonPath("$.expireTime").value(sameInstant(DEFAULT_EXPIRE_TIME)))
             .andExpect(jsonPath("$.operationType").value(DEFAULT_OPERATION_TYPE.toString()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
-            .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
             .andExpect(jsonPath("$.stopPrice").value(DEFAULT_STOP_PRICE.intValue()))
+            .andExpect(jsonPath("$.execQuantity").value(DEFAULT_EXEC_QUANTITY.intValue()))
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.omsOrderId").value(DEFAULT_OMS_ORDER_ID.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
-            .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()))
             .andExpect(jsonPath("$.createdByIp").value(DEFAULT_CREATED_BY_IP.toString()));
     }
 
@@ -434,15 +420,13 @@ public class StockOrderResourceIntTest {
             .expireTime(UPDATED_EXPIRE_TIME)
             .operationType(UPDATED_OPERATION_TYPE)
             .quantity(UPDATED_QUANTITY)
-            .execQuantity(UPDATED_EXEC_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
             .stopPrice(UPDATED_STOP_PRICE)
+            .execQuantity(UPDATED_EXEC_QUANTITY)
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .omsOrderId(UPDATED_OMS_ORDER_ID)
             .status(UPDATED_STATUS)
-            .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
-            .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR)
             .createdByIp(UPDATED_CREATED_BY_IP);
         StockOrderDTO stockOrderDTO = stockOrderMapper.toDto(updatedStockOrder);
 
@@ -464,15 +448,13 @@ public class StockOrderResourceIntTest {
         assertThat(testStockOrder.getExpireTime()).isEqualTo(UPDATED_EXPIRE_TIME);
         assertThat(testStockOrder.getOperationType()).isEqualTo(UPDATED_OPERATION_TYPE);
         assertThat(testStockOrder.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStockOrder.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
         assertThat(testStockOrder.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testStockOrder.getStopPrice()).isEqualTo(UPDATED_STOP_PRICE);
+        assertThat(testStockOrder.getExecQuantity()).isEqualTo(UPDATED_EXEC_QUANTITY);
         assertThat(testStockOrder.getAveragePrice()).isEqualTo(UPDATED_AVERAGE_PRICE);
         assertThat(testStockOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockOrder.getOmsOrderId()).isEqualTo(UPDATED_OMS_ORDER_ID);
         assertThat(testStockOrder.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testStockOrder.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
-        assertThat(testStockOrder.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
         assertThat(testStockOrder.getCreatedByIp()).isEqualTo(UPDATED_CREATED_BY_IP);
     }
 

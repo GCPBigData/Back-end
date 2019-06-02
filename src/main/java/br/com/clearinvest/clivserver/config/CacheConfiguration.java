@@ -48,10 +48,10 @@ public class CacheConfiguration {
             cm.createCache(br.com.clearinvest.clivserver.domain.StockOrder.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.StockTrade.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.StockTrade.class.getName() + ".orders", jcacheConfiguration);
-            cm.createCache(br.com.clearinvest.clivserver.domain.ExecutionReport.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.StockBalance.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.StockFlow.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageFlow.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.ExecReport.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

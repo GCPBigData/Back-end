@@ -127,7 +127,7 @@ public class StockFlowQueryService extends QueryService<StockFlow> {
             }
             if (criteria.getExecReportId() != null) {
                 specification = specification.and(buildSpecification(criteria.getExecReportId(),
-                    root -> root.join(StockFlow_.execReport, JoinType.LEFT).get(ExecutionReport_.id)));
+                    root -> root.join(StockFlow_.execReport, JoinType.LEFT).get(ExecReport_.id)));
             }
             if (criteria.getStockId() != null) {
                 specification = specification.and(buildSpecification(criteria.getStockId(),

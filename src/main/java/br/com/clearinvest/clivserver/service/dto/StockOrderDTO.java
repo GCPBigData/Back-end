@@ -40,8 +40,6 @@ public class StockOrderDTO implements Serializable {
     @Min(value = 1L)
     private Long quantity;
 
-    private Long execQuantity;
-
     @NotNull
     @DecimalMin(value = "0.01")
     private BigDecimal unitPrice;
@@ -49,17 +47,16 @@ public class StockOrderDTO implements Serializable {
     @DecimalMin(value = "0.01")
     private BigDecimal stopPrice;
 
+    private Long execQuantity;
+
     private BigDecimal averagePrice;
 
     private BigDecimal totalPrice;
 
     private String omsOrderId;
 
+    @NotNull
     private String status;
-
-    private ZonedDateTime lastExecReportTime;
-
-    private String lastExecReportDescr;
 
     @Size(max = 45)
     private String createdByIp;
@@ -164,14 +161,6 @@ public class StockOrderDTO implements Serializable {
         this.quantity = quantity;
     }
 
-    public Long getExecQuantity() {
-        return execQuantity;
-    }
-
-    public void setExecQuantity(Long execQuantity) {
-        this.execQuantity = execQuantity;
-    }
-
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -186,6 +175,14 @@ public class StockOrderDTO implements Serializable {
 
     public void setStopPrice(BigDecimal stopPrice) {
         this.stopPrice = stopPrice;
+    }
+
+    public Long getExecQuantity() {
+        return execQuantity;
+    }
+
+    public void setExecQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
     }
 
     public BigDecimal getAveragePrice() {
@@ -218,22 +215,6 @@ public class StockOrderDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public ZonedDateTime getLastExecReportTime() {
-        return lastExecReportTime;
-    }
-
-    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-    }
-
-    public String getLastExecReportDescr() {
-        return lastExecReportDescr;
-    }
-
-    public void setLastExecReportDescr(String lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
     }
 
     public String getCreatedByIp() {
@@ -342,15 +323,13 @@ public class StockOrderDTO implements Serializable {
             ", expireTime='" + getExpireTime() + "'" +
             ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
-            ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", stopPrice=" + getStopPrice() +
+            ", execQuantity=" + getExecQuantity() +
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
-            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", createdByIp='" + getCreatedByIp() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +

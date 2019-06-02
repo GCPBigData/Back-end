@@ -111,10 +111,11 @@ public class StockTradeService {
             BigDecimal totalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
             trade.setTotalPrice(totalPrice);
             trade.setTotalPriceActual(totalPrice);
+            trade.setBrokerageAccount(accountOptional.get());
             trade = stockTradeRepository.save(trade);
 
             trade.getStock().setSymbol(tradeDTO.getStockSymbol());
-            stockFlowService.addManualEntry(trade, trade.getCreatedBy(), accountOptional.get());
+            stockFlowService.addManualEntry(trade);
 
             return toDtoFillingDerived(trade, stockTradeMapper);
 

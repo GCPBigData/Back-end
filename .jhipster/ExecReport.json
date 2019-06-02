@@ -22,6 +22,13 @@
             ]
         },
         {
+            "fieldName": "transactTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "execId",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
@@ -36,7 +43,7 @@
                 "required",
                 "max"
             ],
-            "fieldValidateRulesMax": "1"
+            "fieldValidateRulesMax": "2"
         },
         {
             "fieldName": "ordStatus",
@@ -45,26 +52,48 @@
                 "required",
                 "max"
             ],
-            "fieldValidateRulesMax": "1"
+            "fieldValidateRulesMax": "2"
         },
         {
             "fieldName": "ordRejReason",
             "fieldType": "Integer"
         },
         {
+            "fieldName": "execText",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
             "fieldName": "lastQty",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "leavesQty",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "cumQty",
             "fieldType": "Long"
         },
         {
             "fieldName": "lastPx",
             "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "avgPx",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "fixMessage",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "changelogDate": "20190526120000",
     "dto": "mapstruct",
     "searchEngine": false,
     "service": "serviceClass",
-    "entityTableName": "execution_report",
+    "entityTableName": "exec_report",
     "jpaMetamodelFiltering": false,
     "pagination": "no"
 }

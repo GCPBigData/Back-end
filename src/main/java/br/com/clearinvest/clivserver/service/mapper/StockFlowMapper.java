@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity StockFlow and its DTO StockFlowDTO.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class, BrokerageAccountMapper.class, StockTradeMapper.class, ExecutionReportMapper.class, StockMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, BrokerageAccountMapper.class, StockTradeMapper.class, ExecReportMapper.class, StockMapper.class})
 public interface StockFlowMapper extends EntityMapper<StockFlowDTO, StockFlow> {
 
     @Mapping(source = "user.id", target = "userId")

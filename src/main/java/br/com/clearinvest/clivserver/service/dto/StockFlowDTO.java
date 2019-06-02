@@ -162,16 +162,16 @@ public class StockFlowDTO implements Serializable {
         return execReportId;
     }
 
-    public void setExecReportId(Long executionReportId) {
-        this.execReportId = executionReportId;
+    public void setExecReportId(Long execReportId) {
+        this.execReportId = execReportId;
     }
 
     public String getExecReportExecId() {
         return execReportExecId;
     }
 
-    public void setExecReportExecId(String executionReportExecId) {
-        this.execReportExecId = executionReportExecId;
+    public void setExecReportExecId(String execReportExecId) {
+        this.execReportExecId = execReportExecId;
     }
 
     public Long getStockId() {

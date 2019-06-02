@@ -104,9 +104,6 @@ public class StockOrder implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @Column(name = "exec_quantity")
-    private Long execQuantity;
-
     @NotNull
     @DecimalMin(value = "0.01")
     @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
@@ -115,6 +112,9 @@ public class StockOrder implements Serializable {
     @DecimalMin(value = "0.01")
     @Column(name = "stop_price", precision = 10, scale = 2)
     private BigDecimal stopPrice;
+
+    @Column(name = "exec_quantity")
+    private Long execQuantity;
 
     @Column(name = "average_price", precision = 10, scale = 2)
     private BigDecimal averagePrice;
@@ -129,14 +129,6 @@ public class StockOrder implements Serializable {
     @NotNull
     @Column(name = "status", nullable = false)
     private String status;
-
-    // TODO remover, foi movido para StockTrade
-    @Column(name = "last_exec_report_time")
-    private ZonedDateTime lastExecReportTime;
-
-    // TODO remover, foi movido para StockTrade
-    @Column(name = "last_exec_report_descr")
-    private String lastExecReportDescr;
 
     @Size(max = 45)
     @Column(name = "created_by_ip", length = 45)
@@ -286,19 +278,6 @@ public class StockOrder implements Serializable {
         this.quantity = quantity;
     }
 
-    public Long getExecQuantity() {
-        return execQuantity;
-    }
-
-    public StockOrder execQuantity(Long execQuantity) {
-        this.execQuantity = execQuantity;
-        return this;
-    }
-
-    public void setExecQuantity(Long execQuantity) {
-        this.execQuantity = execQuantity;
-    }
-
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -323,6 +302,19 @@ public class StockOrder implements Serializable {
 
     public void setStopPrice(BigDecimal stopPrice) {
         this.stopPrice = stopPrice;
+    }
+
+    public Long getExecQuantity() {
+        return execQuantity;
+    }
+
+    public StockOrder execQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
+        return this;
+    }
+
+    public void setExecQuantity(Long execQuantity) {
+        this.execQuantity = execQuantity;
     }
 
     public BigDecimal getAveragePrice() {
@@ -375,32 +367,6 @@ public class StockOrder implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public ZonedDateTime getLastExecReportTime() {
-        return lastExecReportTime;
-    }
-
-    public StockOrder lastExecReportTime(ZonedDateTime lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-        return this;
-    }
-
-    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-    }
-
-    public String getLastExecReportDescr() {
-        return lastExecReportDescr;
-    }
-
-    public StockOrder lastExecReportDescr(String lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
-        return this;
-    }
-
-    public void setLastExecReportDescr(String lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
     }
 
     public String getCreatedByIp() {
@@ -502,15 +468,13 @@ public class StockOrder implements Serializable {
             ", expireTime='" + getExpireTime() + "'" +
             ", operationType='" + getOperationType() + "'" +
             ", quantity=" + getQuantity() +
-            ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", stopPrice=" + getStopPrice() +
+            ", execQuantity=" + getExecQuantity() +
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", omsOrderId='" + getOmsOrderId() + "'" +
             ", status='" + getStatus() + "'" +
-            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
-            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", createdByIp='" + getCreatedByIp() + "'" +
             "}";
     }

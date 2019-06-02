@@ -95,10 +95,6 @@
             "fieldValidateRulesMin": "1"
         },
         {
-            "fieldName": "execQuantity",
-            "fieldType": "Long"
-        },
-        {
             "fieldName": "unitPrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -114,6 +110,10 @@
                 "min"
             ],
             "fieldValidateRulesMin": "0.01"
+        },
+        {
+            "fieldName": "execQuantity",
+            "fieldType": "Long"
         },
         {
             "fieldName": "averagePrice",
@@ -133,14 +133,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "lastExecReportTime",
-            "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "lastExecReportDescr",
-            "fieldType": "String"
         },
         {
             "fieldName": "createdByIp",

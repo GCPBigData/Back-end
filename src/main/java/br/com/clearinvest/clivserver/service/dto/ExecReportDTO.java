@@ -8,14 +8,17 @@ import java.util.Objects;
 import javax.persistence.Lob;
 
 /**
- * A DTO for the ExecutionReport entity.
+ * A DTO for the ExecReport entity.
  */
-public class ExecutionReportDTO implements Serializable {
+public class ExecReportDTO implements Serializable {
 
     private Long id;
 
     @NotNull
     private ZonedDateTime createdAt;
+
+    @NotNull
+    private ZonedDateTime transactTime;
 
     
     @Lob
@@ -31,9 +34,21 @@ public class ExecutionReportDTO implements Serializable {
 
     private Integer ordRejReason;
 
+    @Lob
+    private String execText;
+
     private Long lastQty;
 
+    private Long leavesQty;
+
+    private Long cumQty;
+
     private BigDecimal lastPx;
+
+    private BigDecimal avgPx;
+
+    @Lob
+    private String fixMessage;
 
     private Long orderId;
 
@@ -51,6 +66,14 @@ public class ExecutionReportDTO implements Serializable {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getTransactTime() {
+        return transactTime;
+    }
+
+    public void setTransactTime(ZonedDateTime transactTime) {
+        this.transactTime = transactTime;
     }
 
     public String getExecId() {
@@ -85,6 +108,14 @@ public class ExecutionReportDTO implements Serializable {
         this.ordRejReason = ordRejReason;
     }
 
+    public String getExecText() {
+        return execText;
+    }
+
+    public void setExecText(String execText) {
+        this.execText = execText;
+    }
+
     public Long getLastQty() {
         return lastQty;
     }
@@ -93,12 +124,44 @@ public class ExecutionReportDTO implements Serializable {
         this.lastQty = lastQty;
     }
 
+    public Long getLeavesQty() {
+        return leavesQty;
+    }
+
+    public void setLeavesQty(Long leavesQty) {
+        this.leavesQty = leavesQty;
+    }
+
+    public Long getCumQty() {
+        return cumQty;
+    }
+
+    public void setCumQty(Long cumQty) {
+        this.cumQty = cumQty;
+    }
+
     public BigDecimal getLastPx() {
         return lastPx;
     }
 
     public void setLastPx(BigDecimal lastPx) {
         this.lastPx = lastPx;
+    }
+
+    public BigDecimal getAvgPx() {
+        return avgPx;
+    }
+
+    public void setAvgPx(BigDecimal avgPx) {
+        this.avgPx = avgPx;
+    }
+
+    public String getFixMessage() {
+        return fixMessage;
+    }
+
+    public void setFixMessage(String fixMessage) {
+        this.fixMessage = fixMessage;
     }
 
     public Long getOrderId() {
@@ -118,11 +181,11 @@ public class ExecutionReportDTO implements Serializable {
             return false;
         }
 
-        ExecutionReportDTO executionReportDTO = (ExecutionReportDTO) o;
-        if (executionReportDTO.getId() == null || getId() == null) {
+        ExecReportDTO execReportDTO = (ExecReportDTO) o;
+        if (execReportDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), executionReportDTO.getId());
+        return Objects.equals(getId(), execReportDTO.getId());
     }
 
     @Override
@@ -132,15 +195,21 @@ public class ExecutionReportDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ExecutionReportDTO{" +
+        return "ExecReportDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", transactTime='" + getTransactTime() + "'" +
             ", execId='" + getExecId() + "'" +
             ", execType='" + getExecType() + "'" +
             ", ordStatus='" + getOrdStatus() + "'" +
             ", ordRejReason=" + getOrdRejReason() +
+            ", execText='" + getExecText() + "'" +
             ", lastQty=" + getLastQty() +
+            ", leavesQty=" + getLeavesQty() +
+            ", cumQty=" + getCumQty() +
             ", lastPx=" + getLastPx() +
+            ", avgPx=" + getAvgPx() +
+            ", fixMessage='" + getFixMessage() + "'" +
             ", order=" + getOrderId() +
             "}";
     }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import quickfix.field.*;
 import quickfix.fix44.ExecutionReport;
 
+import java.time.ZonedDateTime;
+
 /**
  * Service for fake trades.
  */
@@ -82,6 +84,7 @@ public class FakeTradeService {
         );
         executionReport.set(new ClOrdID(order.getId().toString()));
         executionReport.set(new LastQty(lastQty));
+        executionReport.set(new TransactTime(ZonedDateTime.now().toLocalDateTime()));
 
         return executionReport;
     }

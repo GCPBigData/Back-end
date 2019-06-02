@@ -48,28 +48,29 @@ public class StockFlowService {
         return stockFlowMapper.toDto(stockFlow);
     }
 
-    public StockFlow addManualEntry(StockTrade trade, User user, BrokerageAccount brokerageAccount) {
+    public StockFlow addManualEntry(StockTrade trade) {
         BigDecimal totalPrice = trade.getUnitPrice().multiply(BigDecimal.valueOf(trade.getQuantity()));
         if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
             totalPrice = totalPrice.negate();
         }
 
-        StockFlow stockFlow = createStockFlow(trade, user, brokerageAccount, trade.getQuantity(), trade.getUnitPrice(),
-                totalPrice)
+        StockFlow stockFlow = createStockFlow(trade, trade.getCreatedBy(), trade.getBrokerageAccount(),
+                trade.getQuantity(), trade.getUnitPrice(), totalPrice)
                 .tradeDate(trade.getTradeDate());
 
         stockFlow = stockFlowRepository.save(stockFlow);
         return stockFlow;
     }
 
-    public StockFlow add(StockTrade trade, User user, BrokerageAccount brokerageAccount, long quantity, BigDecimal
-            unitPrice) {
-        BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+    public StockFlow add(StockTrade trade, ExecReport execReport) {
+        BigDecimal totalPrice = execReport.getLastPx().multiply(BigDecimal.valueOf(execReport.getLastQty()));
         if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
             totalPrice = totalPrice.negate();
         }
 
-        StockFlow stockFlow = createStockFlow(trade, user, brokerageAccount, quantity, unitPrice, totalPrice);
+        StockFlow stockFlow = createStockFlow(trade, trade.getCreatedBy(), trade.getBrokerageAccount(),
+                execReport.getLastQty(), execReport.getLastPx(), totalPrice)
+                .execReport(execReport);
 
         stockFlow = stockFlowRepository.save(stockFlow);
         return stockFlow;

@@ -57,15 +57,15 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="exec_quantity" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="unit_price" type="decimal(10,2)">
                 <constraints nullable="false" />
             </column>
 
             <column name="stop_price" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="exec_quantity" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -83,14 +83,6 @@
 
             <column name="status" type="varchar(255)">
                 <constraints nullable="false" />
-            </column>
-
-            <column name="last_exec_report_time" type="datetime">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="last_exec_report_descr" type="varchar(255)">
-                <constraints nullable="true" />
             </column>
 
             <column name="created_by_ip" type="varchar(45)">
@@ -117,7 +109,6 @@
         </createTable>
         <dropDefaultValue tableName="stock_order" columnName="created_at" columnDataType="datetime"/>
         <dropDefaultValue tableName="stock_order" columnName="expire_time" columnDataType="datetime"/>
-        <dropDefaultValue tableName="stock_order" columnName="last_exec_report_time" columnDataType="datetime"/>
         
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

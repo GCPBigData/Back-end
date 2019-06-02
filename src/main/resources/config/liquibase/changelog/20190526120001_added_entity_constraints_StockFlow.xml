@@ -30,7 +30,7 @@
                                  baseTableName="stock_flow"
                                  constraintName="fk_stock_flow_exec_report_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="execution_report"/>
+                                 referencedTableName="exec_report"/>
 
         <addForeignKeyConstraint baseColumnNames="stock_id"
                                  baseTableName="stock_flow"

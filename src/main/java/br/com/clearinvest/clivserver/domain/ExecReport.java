@@ -13,12 +13,12 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * A ExecutionReport.
+ * A ExecReport.
  */
 @Entity
-@Table(name = "execution_report")
+@Table(name = "exec_report")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ExecutionReport implements Serializable {
+public class ExecReport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,10 @@ public class ExecutionReport implements Serializable {
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt;
 
-    
+    @NotNull
+    @Column(name = "transact_time", nullable = false)
+    private ZonedDateTime transactTime;
+
     @Lob
     @Column(name = "exec_id", nullable = false)
     private String execId;
@@ -49,11 +52,28 @@ public class ExecutionReport implements Serializable {
     @Column(name = "ord_rej_reason")
     private Integer ordRejReason;
 
+    @Lob
+    @Column(name = "exec_text")
+    private String execText;
+
     @Column(name = "last_qty")
     private Long lastQty;
 
+    @Column(name = "leaves_qty")
+    private Long leavesQty;
+
+    @Column(name = "cum_qty")
+    private Long cumQty;
+
     @Column(name = "last_px", precision = 10, scale = 2)
     private BigDecimal lastPx;
+
+    @Column(name = "avg_px", precision = 10, scale = 2)
+    private BigDecimal avgPx;
+
+    @Lob
+    @Column(name = "fix_message")
+    private String fixMessage;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -73,7 +93,7 @@ public class ExecutionReport implements Serializable {
         return createdAt;
     }
 
-    public ExecutionReport createdAt(ZonedDateTime createdAt) {
+    public ExecReport createdAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
     }
@@ -82,11 +102,24 @@ public class ExecutionReport implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public ZonedDateTime getTransactTime() {
+        return transactTime;
+    }
+
+    public ExecReport transactTime(ZonedDateTime transactTime) {
+        this.transactTime = transactTime;
+        return this;
+    }
+
+    public void setTransactTime(ZonedDateTime transactTime) {
+        this.transactTime = transactTime;
+    }
+
     public String getExecId() {
         return execId;
     }
 
-    public ExecutionReport execId(String execId) {
+    public ExecReport execId(String execId) {
         this.execId = execId;
         return this;
     }
@@ -99,7 +132,7 @@ public class ExecutionReport implements Serializable {
         return execType;
     }
 
-    public ExecutionReport execType(String execType) {
+    public ExecReport execType(String execType) {
         this.execType = execType;
         return this;
     }
@@ -112,7 +145,7 @@ public class ExecutionReport implements Serializable {
         return ordStatus;
     }
 
-    public ExecutionReport ordStatus(String ordStatus) {
+    public ExecReport ordStatus(String ordStatus) {
         this.ordStatus = ordStatus;
         return this;
     }
@@ -125,7 +158,7 @@ public class ExecutionReport implements Serializable {
         return ordRejReason;
     }
 
-    public ExecutionReport ordRejReason(Integer ordRejReason) {
+    public ExecReport ordRejReason(Integer ordRejReason) {
         this.ordRejReason = ordRejReason;
         return this;
     }
@@ -134,11 +167,24 @@ public class ExecutionReport implements Serializable {
         this.ordRejReason = ordRejReason;
     }
 
+    public String getExecText() {
+        return execText;
+    }
+
+    public ExecReport execText(String execText) {
+        this.execText = execText;
+        return this;
+    }
+
+    public void setExecText(String execText) {
+        this.execText = execText;
+    }
+
     public Long getLastQty() {
         return lastQty;
     }
 
-    public ExecutionReport lastQty(Long lastQty) {
+    public ExecReport lastQty(Long lastQty) {
         this.lastQty = lastQty;
         return this;
     }
@@ -147,11 +193,37 @@ public class ExecutionReport implements Serializable {
         this.lastQty = lastQty;
     }
 
+    public Long getLeavesQty() {
+        return leavesQty;
+    }
+
+    public ExecReport leavesQty(Long leavesQty) {
+        this.leavesQty = leavesQty;
+        return this;
+    }
+
+    public void setLeavesQty(Long leavesQty) {
+        this.leavesQty = leavesQty;
+    }
+
+    public Long getCumQty() {
+        return cumQty;
+    }
+
+    public ExecReport cumQty(Long cumQty) {
+        this.cumQty = cumQty;
+        return this;
+    }
+
+    public void setCumQty(Long cumQty) {
+        this.cumQty = cumQty;
+    }
+
     public BigDecimal getLastPx() {
         return lastPx;
     }
 
-    public ExecutionReport lastPx(BigDecimal lastPx) {
+    public ExecReport lastPx(BigDecimal lastPx) {
         this.lastPx = lastPx;
         return this;
     }
@@ -160,11 +232,37 @@ public class ExecutionReport implements Serializable {
         this.lastPx = lastPx;
     }
 
+    public BigDecimal getAvgPx() {
+        return avgPx;
+    }
+
+    public ExecReport avgPx(BigDecimal avgPx) {
+        this.avgPx = avgPx;
+        return this;
+    }
+
+    public void setAvgPx(BigDecimal avgPx) {
+        this.avgPx = avgPx;
+    }
+
+    public String getFixMessage() {
+        return fixMessage;
+    }
+
+    public ExecReport fixMessage(String fixMessage) {
+        this.fixMessage = fixMessage;
+        return this;
+    }
+
+    public void setFixMessage(String fixMessage) {
+        this.fixMessage = fixMessage;
+    }
+
     public StockOrder getOrder() {
         return order;
     }
 
-    public ExecutionReport order(StockOrder stockOrder) {
+    public ExecReport order(StockOrder stockOrder) {
         this.order = stockOrder;
         return this;
     }
@@ -182,11 +280,11 @@ public class ExecutionReport implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ExecutionReport executionReport = (ExecutionReport) o;
-        if (executionReport.getId() == null || getId() == null) {
+        ExecReport execReport = (ExecReport) o;
+        if (execReport.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), executionReport.getId());
+        return Objects.equals(getId(), execReport.getId());
     }
 
     @Override
@@ -196,15 +294,21 @@ public class ExecutionReport implements Serializable {
 
     @Override
     public String toString() {
-        return "ExecutionReport{" +
+        return "ExecReport{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", transactTime='" + getTransactTime() + "'" +
             ", execId='" + getExecId() + "'" +
             ", execType='" + getExecType() + "'" +
             ", ordStatus='" + getOrdStatus() + "'" +
             ", ordRejReason=" + getOrdRejReason() +
+            ", execText='" + getExecText() + "'" +
             ", lastQty=" + getLastQty() +
+            ", leavesQty=" + getLeavesQty() +
+            ", cumQty=" + getCumQty() +
             ", lastPx=" + getLastPx() +
+            ", avgPx=" + getAvgPx() +
+            ", fixMessage='" + getFixMessage() + "'" +
             "}";
     }
 }
