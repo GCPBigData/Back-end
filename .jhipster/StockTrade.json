@@ -43,20 +43,26 @@
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "lastExecReportTime",
-            "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "lastExecReportDescr",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "createdByIp",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "tradeDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "kind",
@@ -68,6 +74,15 @@
             "fieldValidateRulesMaxlength": "10"
         },
         {
+            "fieldName": "market",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
+        },
+        {
             "fieldName": "side",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -75,6 +90,13 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "1"
+        },
+        {
+            "fieldName": "manualEntry",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "expireTime",
@@ -115,19 +137,40 @@
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "stockTotalPrice",
-            "fieldType": "BigDecimal"
-        },
-        {
             "fieldName": "totalPrice",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "status",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "totalPriceActual",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "brokerageFee",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "brokerageFeeIss",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "negotiationPerc",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "liquidationPerc",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "registryPerc",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "lastExecReportTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "lastExecReportDescr",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20190425101241",

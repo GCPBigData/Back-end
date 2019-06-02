@@ -123,20 +123,26 @@ public class StockTradeQueryService extends QueryService<StockTrade> {
             if (criteria.getCreatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), StockTrade_.createdAt));
             }
-            if (criteria.getLastExecReportTime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getLastExecReportTime(), StockTrade_.lastExecReportTime));
-            }
-            if (criteria.getLastExecReportDescr() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLastExecReportDescr(), StockTrade_.lastExecReportDescr));
-            }
             if (criteria.getCreatedByIp() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCreatedByIp(), StockTrade_.createdByIp));
+            }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatus(), StockTrade_.status));
+            }
+            if (criteria.getTradeDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTradeDate(), StockTrade_.tradeDate));
             }
             if (criteria.getKind() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getKind(), StockTrade_.kind));
             }
+            if (criteria.getMarket() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMarket(), StockTrade_.market));
+            }
             if (criteria.getSide() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSide(), StockTrade_.side));
+            }
+            if (criteria.getManualEntry() != null) {
+                specification = specification.and(buildSpecification(criteria.getManualEntry(), StockTrade_.manualEntry));
             }
             if (criteria.getExpireTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getExpireTime(), StockTrade_.expireTime));
@@ -156,14 +162,32 @@ public class StockTradeQueryService extends QueryService<StockTrade> {
             if (criteria.getAveragePrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAveragePrice(), StockTrade_.averagePrice));
             }
-            if (criteria.getStockTotalPrice() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getStockTotalPrice(), StockTrade_.stockTotalPrice));
-            }
             if (criteria.getTotalPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTotalPrice(), StockTrade_.totalPrice));
             }
-            if (criteria.getStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStatus(), StockTrade_.status));
+            if (criteria.getTotalPriceActual() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTotalPriceActual(), StockTrade_.totalPriceActual));
+            }
+            if (criteria.getBrokerageFee() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBrokerageFee(), StockTrade_.brokerageFee));
+            }
+            if (criteria.getBrokerageFeeIss() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBrokerageFeeIss(), StockTrade_.brokerageFeeIss));
+            }
+            if (criteria.getNegotiationPerc() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNegotiationPerc(), StockTrade_.negotiationPerc));
+            }
+            if (criteria.getLiquidationPerc() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLiquidationPerc(), StockTrade_.liquidationPerc));
+            }
+            if (criteria.getRegistryPerc() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRegistryPerc(), StockTrade_.registryPerc));
+            }
+            if (criteria.getLastExecReportTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLastExecReportTime(), StockTrade_.lastExecReportTime));
+            }
+            if (criteria.getLastExecReportDescr() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLastExecReportDescr(), StockTrade_.lastExecReportDescr));
             }
             if (criteria.getStockId() != null) {
                 specification = specification.and(buildSpecification(criteria.getStockId(),

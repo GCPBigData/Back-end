@@ -11,7 +11,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface StockFlowRepository extends JpaRepository<StockFlow, Long> {
+public interface StockFlowRepository extends JpaRepository<StockFlow, Long>, JpaSpecificationExecutor<StockFlow> {
 
     @Query("select stock_flow from StockFlow stock_flow where stock_flow.user.login = ?#{principal.username}")
     List<StockFlow> findByUserIsCurrentUser();

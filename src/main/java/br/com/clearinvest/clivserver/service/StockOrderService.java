@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -55,13 +54,17 @@ public class StockOrderService {
 
     private final FixMessageFactory fixMessageFactory;
 
+    private final StockFlowService stockFlowService;
+
     public StockOrderService(StockOrderRepository stockOrderRepository, StockTradeRepository stockTradeRepository,
-        StockOrderMapper stockOrderMapper, OMSService omsService, FixMessageFactory fixMessageFactory) {
+        StockOrderMapper stockOrderMapper, OMSService omsService, FixMessageFactory fixMessageFactory,
+        StockFlowService stockFlowService) {
         this.stockOrderRepository = stockOrderRepository;
         this.stockTradeRepository = stockTradeRepository;
         this.stockOrderMapper = stockOrderMapper;
         this.omsService = omsService;
         this.fixMessageFactory = fixMessageFactory;
+        this.stockFlowService = stockFlowService;
     }
 
     /**
@@ -468,9 +471,14 @@ public class StockOrderService {
                 String message = getFixOrdRejReasonDescription(executionReport);
                 order.setLastExecReportDescr(message);
                 trade.setLastExecReportDescr(message);
+
             } else {
                 order.setLastExecReportDescr(null);
                 trade.setLastExecReportDescr(null);
+
+                if (executionReport.isSet(new LastQty())) {
+                    //stockFlowService.add()
+                }
             }
         } catch (FieldNotFound fne) {
             order.setLastExecReportDescr(null);
@@ -574,7 +582,7 @@ public class StockOrderService {
         parties.set(new PartyRole(PartyRole.ENTERING_TRADER));
         orderCancel.addGroup(parties);
 
-        omsService.sendMessegeToOMS(orderCancel, order.getId());
+        omsService.sendOrderToOMS(orderCancel, order.getId());
     }
 
 }

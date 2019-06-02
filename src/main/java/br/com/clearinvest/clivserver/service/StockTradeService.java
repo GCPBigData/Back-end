@@ -1,10 +1,7 @@
 package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.ClivServerApp;
-import br.com.clearinvest.clivserver.domain.BrokerageAccount;
-import br.com.clearinvest.clivserver.domain.StockOrder;
-import br.com.clearinvest.clivserver.domain.StockTrade;
-import br.com.clearinvest.clivserver.domain.User;
+import br.com.clearinvest.clivserver.domain.*;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
 import br.com.clearinvest.clivserver.repository.StockTradeRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
@@ -15,12 +12,11 @@ import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 import quickfix.fix44.NewOrderSingle;
 import quickfix.fix44.OrderCancelReplaceRequest;
 
@@ -50,20 +46,28 @@ public class StockTradeService {
 
     private final UserRepository userRepository;
 
-    private final PlatformTransactionManager platformTransactionManager;
+    private final StockFlowService stockFlowService;
 
+    private final FakeTradeService fakeTradeService;
+
+    @Value("${cliv.sendOrderToOmsInDevMode}")
+    boolean sendOrderToOmsInDevMode = false;
+
+    @Value("${cliv.createFakeOrderInDevMode}")
+    boolean createFakeOrderInDevMode = false;
 
     public StockTradeService(StockTradeRepository stockTradeRepository, StockTradeMapper stockTradeMapper,
             BrokerageAccountRepository brokerageAccountRepository, StockOrderService stockOrderService,
             OMSService omsService, UserRepository userRepository,
-            PlatformTransactionManager platformTransactionManager) {
+            StockFlowService stockFlowService, FakeTradeService fakeTradeService) {
         this.stockTradeRepository = stockTradeRepository;
         this.stockTradeMapper = stockTradeMapper;
         this.brokerageAccountRepository = brokerageAccountRepository;
         this.stockOrderService = stockOrderService;
         this.omsService = omsService;
         this.userRepository = userRepository;
-        this.platformTransactionManager = platformTransactionManager;
+        this.stockFlowService = stockFlowService;
+        this.fakeTradeService = fakeTradeService;
     }
 
     /**
@@ -75,14 +79,48 @@ public class StockTradeService {
     public StockTradeDTO save(StockTradeDTO tradeDTO) {
         log.debug("Request to save StockTrade : {}", tradeDTO);
 
-        final Object[] result = createTradeAndOrder(tradeDTO);
-        StockTrade trade = (StockTrade) result[0];
-        StockOrder order = (StockOrder) result[1];
+        if (tradeDTO.isManualEntry()) {
+            return saveManualEntry(tradeDTO);
 
-        NewOrderSingle orderSingle = stockOrderService.createNewOrderSingleMessage(order, trade.getStock().getSymbol());
-        omsService.sendMessegeToOMS(orderSingle, order.getId());
+        } else {
+            final Object[] result = createTradeAndOrder(tradeDTO);
+            StockTrade trade = (StockTrade) result[0];
+            StockOrder order = (StockOrder) result[1];
 
-        return toDtoFillingDerived(trade, stockTradeMapper);
+            NewOrderSingle orderSingle = stockOrderService.createNewOrderSingleMessage(order, trade.getStock().getSymbol());
+            omsService.sendOrderToOMS(orderSingle, order.getId());
+
+            return toDtoFillingDerived(trade, stockTradeMapper);
+        }
+    }
+
+    private StockTradeDTO saveManualEntry(StockTradeDTO tradeDTO) {
+        StockTrade trade = stockTradeMapper.toEntity(tradeDTO);
+        trade.setCreatedAt(ZonedDateTime.now());
+        trade.setStatus(StockTrade.STATUS_FIX_FILLED);
+        trade.setMarket(StockTrade.MARKET_SPOT);
+
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(trade::setCreatedBy);
+
+        Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
+            .findByIdAndCurrentUser(trade.getBrokerageAccount().getId());
+
+        if (accountOptional.isPresent()) {
+            BigDecimal totalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
+            trade.setTotalPrice(totalPrice);
+            trade.setTotalPriceActual(totalPrice);
+            trade = stockTradeRepository.save(trade);
+
+            trade.getStock().setSymbol(tradeDTO.getStockSymbol());
+            stockFlowService.addManualEntry(trade, trade.getCreatedBy(), accountOptional.get());
+
+            return toDtoFillingDerived(trade, stockTradeMapper);
+
+        } else {
+            throw new BusinessException("Conta não encontrada.");
+        }
     }
 
     /**
@@ -102,7 +140,7 @@ public class StockTradeService {
 
         OrderCancelReplaceRequest orderReplace = stockOrderService.createOrderCancelReplaceRequest(localOrder,
             orderToEdit, trade.getStock().getSymbol());
-        omsService.sendMessegeToOMS(orderReplace, localOrder.getId());
+        omsService.sendOrderToOMS(orderReplace, localOrder.getId());
 
         return toDtoFillingDerived(trade, stockTradeMapper);
     }
@@ -111,6 +149,7 @@ public class StockTradeService {
         StockTrade trade = stockTradeMapper.toEntity(tradeDTO);
         trade.setCreatedAt(ZonedDateTime.now());
         trade.setStatus(StockTrade.STATUS_LOCAL_NEW);
+        trade.setMarket(StockTrade.MARKET_SPOT);
 
         ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
         expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),

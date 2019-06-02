@@ -16,6 +16,13 @@ public class StockFlowDTO implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
+    private ZonedDateTime tradeDate;
+
+    @NotNull
+    @Size(max = 1)
+    private String side;
+
+    @NotNull
     @Size(max = 8)
     private String symbol;
 
@@ -23,11 +30,21 @@ public class StockFlowDTO implements Serializable {
     private Long quantity;
 
     @NotNull
-    private BigDecimal totalValue;
+    private BigDecimal unitPrice;
+
+    @NotNull
+    private BigDecimal totalPrice;
+
+    @NotNull
+    private Boolean manualEntry;
 
     private Long userId;
 
     private String userLogin;
+
+    private Long brokerageAccountId;
+
+    private Long tradeId;
 
     private Long execReportId;
 
@@ -53,6 +70,22 @@ public class StockFlowDTO implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public ZonedDateTime getTradeDate() {
+        return tradeDate;
+    }
+
+    public void setTradeDate(ZonedDateTime tradeDate) {
+        this.tradeDate = tradeDate;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
     public String getSymbol() {
         return symbol;
     }
@@ -69,12 +102,28 @@ public class StockFlowDTO implements Serializable {
         this.quantity = quantity;
     }
 
-    public BigDecimal getTotalValue() {
-        return totalValue;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Boolean isManualEntry() {
+        return manualEntry;
+    }
+
+    public void setManualEntry(Boolean manualEntry) {
+        this.manualEntry = manualEntry;
     }
 
     public Long getUserId() {
@@ -91,6 +140,22 @@ public class StockFlowDTO implements Serializable {
 
     public void setUserLogin(String userLogin) {
         this.userLogin = userLogin;
+    }
+
+    public Long getBrokerageAccountId() {
+        return brokerageAccountId;
+    }
+
+    public void setBrokerageAccountId(Long brokerageAccountId) {
+        this.brokerageAccountId = brokerageAccountId;
+    }
+
+    public Long getTradeId() {
+        return tradeId;
+    }
+
+    public void setTradeId(Long stockTradeId) {
+        this.tradeId = stockTradeId;
     }
 
     public Long getExecReportId() {
@@ -151,11 +216,17 @@ public class StockFlowDTO implements Serializable {
         return "StockFlowDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", tradeDate='" + getTradeDate() + "'" +
+            ", side='" + getSide() + "'" +
             ", symbol='" + getSymbol() + "'" +
             ", quantity=" + getQuantity() +
-            ", totalValue=" + getTotalValue() +
+            ", unitPrice=" + getUnitPrice() +
+            ", totalPrice=" + getTotalPrice() +
+            ", manualEntry='" + isManualEntry() + "'" +
             ", user=" + getUserId() +
             ", user='" + getUserLogin() + "'" +
+            ", brokerageAccount=" + getBrokerageAccountId() +
+            ", trade=" + getTradeId() +
             ", execReport=" + getExecReportId() +
             ", execReport='" + getExecReportExecId() + "'" +
             ", stock=" + getStockId() +

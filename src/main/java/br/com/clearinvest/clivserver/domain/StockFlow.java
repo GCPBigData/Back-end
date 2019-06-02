@@ -31,6 +31,15 @@ public class StockFlow implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
+    @Column(name = "trade_date", nullable = false)
+    private ZonedDateTime tradeDate;
+
+    @NotNull
+    @Size(max = 1)
+    @Column(name = "side", length = 1, nullable = false)
+    private String side;
+
+    @NotNull
     @Size(max = 8)
     @Column(name = "symbol", length = 8, nullable = false)
     private String symbol;
@@ -40,13 +49,29 @@ public class StockFlow implements Serializable {
     private Long quantity;
 
     @NotNull
-    @Column(name = "total_value", precision = 10, scale = 2, nullable = false)
-    private BigDecimal totalValue;
+    @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal unitPrice;
+
+    @NotNull
+    @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal totalPrice;
+
+    @NotNull
+    @Column(name = "manual_entry", nullable = false)
+    private Boolean manualEntry;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
     private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties("")
+    private BrokerageAccount brokerageAccount;
+
+    @ManyToOne
+    @JsonIgnoreProperties("")
+    private StockTrade trade;
 
     @ManyToOne
     @JsonIgnoreProperties("")
@@ -78,6 +103,32 @@ public class StockFlow implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public ZonedDateTime getTradeDate() {
+        return tradeDate;
+    }
+
+    public StockFlow tradeDate(ZonedDateTime tradeDate) {
+        this.tradeDate = tradeDate;
+        return this;
+    }
+
+    public void setTradeDate(ZonedDateTime tradeDate) {
+        this.tradeDate = tradeDate;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public StockFlow side(String side) {
+        this.side = side;
+        return this;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
     public String getSymbol() {
         return symbol;
     }
@@ -104,17 +155,43 @@ public class StockFlow implements Serializable {
         this.quantity = quantity;
     }
 
-    public BigDecimal getTotalValue() {
-        return totalValue;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public StockFlow totalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
+    public StockFlow unitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
         return this;
     }
 
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public StockFlow totalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+        return this;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Boolean isManualEntry() {
+        return manualEntry;
+    }
+
+    public StockFlow manualEntry(Boolean manualEntry) {
+        this.manualEntry = manualEntry;
+        return this;
+    }
+
+    public void setManualEntry(Boolean manualEntry) {
+        this.manualEntry = manualEntry;
     }
 
     public User getUser() {
@@ -128,6 +205,32 @@ public class StockFlow implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public BrokerageAccount getBrokerageAccount() {
+        return brokerageAccount;
+    }
+
+    public StockFlow brokerageAccount(BrokerageAccount brokerageAccount) {
+        this.brokerageAccount = brokerageAccount;
+        return this;
+    }
+
+    public void setBrokerageAccount(BrokerageAccount brokerageAccount) {
+        this.brokerageAccount = brokerageAccount;
+    }
+
+    public StockTrade getTrade() {
+        return trade;
+    }
+
+    public StockFlow trade(StockTrade stockTrade) {
+        this.trade = stockTrade;
+        return this;
+    }
+
+    public void setTrade(StockTrade stockTrade) {
+        this.trade = stockTrade;
     }
 
     public ExecutionReport getExecReport() {
@@ -182,9 +285,13 @@ public class StockFlow implements Serializable {
         return "StockFlow{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", tradeDate='" + getTradeDate() + "'" +
+            ", side='" + getSide() + "'" +
             ", symbol='" + getSymbol() + "'" +
             ", quantity=" + getQuantity() +
-            ", totalValue=" + getTotalValue() +
+            ", unitPrice=" + getUnitPrice() +
+            ", totalPrice=" + getTotalPrice() +
+            ", manualEntry='" + isManualEntry() + "'" +
             "}";
     }
 }

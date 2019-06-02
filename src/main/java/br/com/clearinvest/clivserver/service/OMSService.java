@@ -5,6 +5,9 @@ import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import br.com.clearinvest.clivserver.web.rest.errors.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +28,18 @@ public class OMSService {
 
     public static final String OMS_ACCOUNT = "160119";
 
-    // TODO move to application.yml
-    public static final boolean ORDER_SEND_TO_OMS_IN_DEV_MODE = false;
-
     private final AppService appService;
 
     private final StockOrderRepository stockOrderRepository;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Value("${cliv.sendOrderToOmsInDevMode}")
+    boolean sendOrderToOmsInDevMode = false;
+
+    @Value("${cliv.createFakeOrderInDevMode}")
+    boolean createFakeOrderInDevMode = false;
 
     public OMSService(AppService appService, StockOrderRepository stockOrderRepository) {
         this.appService = appService;
@@ -38,7 +47,7 @@ public class OMSService {
     }
 
     @Async
-    public void sendMessegeToOMS(Message message, Long orderId) throws RuntimeException {
+    public void sendOrderToOMS(Message message, Long orderId) throws RuntimeException {
         Optional<StockOrder> orderOptional = Optional.empty();
         for (int i = 0; i < 50; i++) {
             orderOptional = stockOrderRepository.findById(orderId);
@@ -62,8 +71,13 @@ public class OMSService {
         }
 
         try {
-            if (appService.isEnvironmentDev() && ORDER_SEND_TO_OMS_IN_DEV_MODE) {
-                Session.sendToTarget(message, OMS_ACCOUNT, "CDRFIX");
+            if (appService.isEnvironmentDev()) {
+                if (sendOrderToOmsInDevMode) {
+                    Session.sendToTarget(message, OMS_ACCOUNT, "CDRFIX");
+                } else if (createFakeOrderInDevMode) {
+                    FakeTradeService fakeTradeService = (FakeTradeService) applicationContext.getBean("fakeTradeService");
+                    fakeTradeService.executeOrder(orderId, 1000L);
+                }
             } else if (appService.isEnvironmentProd()) {
                 Session.sendToTarget(message, OMS_ACCOUNT, "CDRFIX");
             }

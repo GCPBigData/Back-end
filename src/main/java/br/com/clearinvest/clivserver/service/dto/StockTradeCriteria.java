@@ -28,15 +28,19 @@ public class StockTradeCriteria implements Serializable {
 
     private ZonedDateTimeFilter createdAt;
 
-    private ZonedDateTimeFilter lastExecReportTime;
-
-    private StringFilter lastExecReportDescr;
-
     private StringFilter createdByIp;
+
+    private StringFilter status;
+
+    private ZonedDateTimeFilter tradeDate;
 
     private StringFilter kind;
 
+    private StringFilter market;
+
     private StringFilter side;
+
+    private BooleanFilter manualEntry;
 
     private ZonedDateTimeFilter expireTime;
 
@@ -50,11 +54,23 @@ public class StockTradeCriteria implements Serializable {
 
     private BigDecimalFilter averagePrice;
 
-    private BigDecimalFilter stockTotalPrice;
-
     private BigDecimalFilter totalPrice;
 
-    private StringFilter status;
+    private BigDecimalFilter totalPriceActual;
+
+    private BigDecimalFilter brokerageFee;
+
+    private BigDecimalFilter brokerageFeeIss;
+
+    private BigDecimalFilter negotiationPerc;
+
+    private BigDecimalFilter liquidationPerc;
+
+    private BigDecimalFilter registryPerc;
+
+    private ZonedDateTimeFilter lastExecReportTime;
+
+    private StringFilter lastExecReportDescr;
 
     private LongFilter stockId;
 
@@ -85,28 +101,28 @@ public class StockTradeCriteria implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTimeFilter getLastExecReportTime() {
-        return lastExecReportTime;
-    }
-
-    public void setLastExecReportTime(ZonedDateTimeFilter lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-    }
-
-    public StringFilter getLastExecReportDescr() {
-        return lastExecReportDescr;
-    }
-
-    public void setLastExecReportDescr(StringFilter lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
-    }
-
     public StringFilter getCreatedByIp() {
         return createdByIp;
     }
 
     public void setCreatedByIp(StringFilter createdByIp) {
         this.createdByIp = createdByIp;
+    }
+
+    public StringFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(StringFilter status) {
+        this.status = status;
+    }
+
+    public ZonedDateTimeFilter getTradeDate() {
+        return tradeDate;
+    }
+
+    public void setTradeDate(ZonedDateTimeFilter tradeDate) {
+        this.tradeDate = tradeDate;
     }
 
     public StringFilter getKind() {
@@ -117,12 +133,28 @@ public class StockTradeCriteria implements Serializable {
         this.kind = kind;
     }
 
+    public StringFilter getMarket() {
+        return market;
+    }
+
+    public void setMarket(StringFilter market) {
+        this.market = market;
+    }
+
     public StringFilter getSide() {
         return side;
     }
 
     public void setSide(StringFilter side) {
         this.side = side;
+    }
+
+    public BooleanFilter getManualEntry() {
+        return manualEntry;
+    }
+
+    public void setManualEntry(BooleanFilter manualEntry) {
+        this.manualEntry = manualEntry;
     }
 
     public ZonedDateTimeFilter getExpireTime() {
@@ -173,14 +205,6 @@ public class StockTradeCriteria implements Serializable {
         this.averagePrice = averagePrice;
     }
 
-    public BigDecimalFilter getStockTotalPrice() {
-        return stockTotalPrice;
-    }
-
-    public void setStockTotalPrice(BigDecimalFilter stockTotalPrice) {
-        this.stockTotalPrice = stockTotalPrice;
-    }
-
     public BigDecimalFilter getTotalPrice() {
         return totalPrice;
     }
@@ -189,12 +213,68 @@ public class StockTradeCriteria implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public StringFilter getStatus() {
-        return status;
+    public BigDecimalFilter getTotalPriceActual() {
+        return totalPriceActual;
     }
 
-    public void setStatus(StringFilter status) {
-        this.status = status;
+    public void setTotalPriceActual(BigDecimalFilter totalPriceActual) {
+        this.totalPriceActual = totalPriceActual;
+    }
+
+    public BigDecimalFilter getBrokerageFee() {
+        return brokerageFee;
+    }
+
+    public void setBrokerageFee(BigDecimalFilter brokerageFee) {
+        this.brokerageFee = brokerageFee;
+    }
+
+    public BigDecimalFilter getBrokerageFeeIss() {
+        return brokerageFeeIss;
+    }
+
+    public void setBrokerageFeeIss(BigDecimalFilter brokerageFeeIss) {
+        this.brokerageFeeIss = brokerageFeeIss;
+    }
+
+    public BigDecimalFilter getNegotiationPerc() {
+        return negotiationPerc;
+    }
+
+    public void setNegotiationPerc(BigDecimalFilter negotiationPerc) {
+        this.negotiationPerc = negotiationPerc;
+    }
+
+    public BigDecimalFilter getLiquidationPerc() {
+        return liquidationPerc;
+    }
+
+    public void setLiquidationPerc(BigDecimalFilter liquidationPerc) {
+        this.liquidationPerc = liquidationPerc;
+    }
+
+    public BigDecimalFilter getRegistryPerc() {
+        return registryPerc;
+    }
+
+    public void setRegistryPerc(BigDecimalFilter registryPerc) {
+        this.registryPerc = registryPerc;
+    }
+
+    public ZonedDateTimeFilter getLastExecReportTime() {
+        return lastExecReportTime;
+    }
+
+    public void setLastExecReportTime(ZonedDateTimeFilter lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
+    }
+
+    public StringFilter getLastExecReportDescr() {
+        return lastExecReportDescr;
+    }
+
+    public void setLastExecReportDescr(StringFilter lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
     }
 
     public LongFilter getStockId() {
@@ -250,20 +330,28 @@ public class StockTradeCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(createdAt, that.createdAt) &&
-            Objects.equals(lastExecReportTime, that.lastExecReportTime) &&
-            Objects.equals(lastExecReportDescr, that.lastExecReportDescr) &&
             Objects.equals(createdByIp, that.createdByIp) &&
+            Objects.equals(status, that.status) &&
+            Objects.equals(tradeDate, that.tradeDate) &&
             Objects.equals(kind, that.kind) &&
+            Objects.equals(market, that.market) &&
             Objects.equals(side, that.side) &&
+            Objects.equals(manualEntry, that.manualEntry) &&
             Objects.equals(expireTime, that.expireTime) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(execQuantity, that.execQuantity) &&
             Objects.equals(unitPrice, that.unitPrice) &&
             Objects.equals(stopPrice, that.stopPrice) &&
             Objects.equals(averagePrice, that.averagePrice) &&
-            Objects.equals(stockTotalPrice, that.stockTotalPrice) &&
             Objects.equals(totalPrice, that.totalPrice) &&
-            Objects.equals(status, that.status) &&
+            Objects.equals(totalPriceActual, that.totalPriceActual) &&
+            Objects.equals(brokerageFee, that.brokerageFee) &&
+            Objects.equals(brokerageFeeIss, that.brokerageFeeIss) &&
+            Objects.equals(negotiationPerc, that.negotiationPerc) &&
+            Objects.equals(liquidationPerc, that.liquidationPerc) &&
+            Objects.equals(registryPerc, that.registryPerc) &&
+            Objects.equals(lastExecReportTime, that.lastExecReportTime) &&
+            Objects.equals(lastExecReportDescr, that.lastExecReportDescr) &&
             Objects.equals(stockId, that.stockId) &&
             Objects.equals(brokerageAccountId, that.brokerageAccountId) &&
             Objects.equals(mainOrderId, that.mainOrderId) &&
@@ -276,20 +364,28 @@ public class StockTradeCriteria implements Serializable {
         return Objects.hash(
         id,
         createdAt,
-        lastExecReportTime,
-        lastExecReportDescr,
         createdByIp,
+        status,
+        tradeDate,
         kind,
+        market,
         side,
+        manualEntry,
         expireTime,
         quantity,
         execQuantity,
         unitPrice,
         stopPrice,
         averagePrice,
-        stockTotalPrice,
         totalPrice,
-        status,
+        totalPriceActual,
+        brokerageFee,
+        brokerageFeeIss,
+        negotiationPerc,
+        liquidationPerc,
+        registryPerc,
+        lastExecReportTime,
+        lastExecReportDescr,
         stockId,
         brokerageAccountId,
         mainOrderId,
@@ -303,20 +399,28 @@ public class StockTradeCriteria implements Serializable {
         return "StockTradeCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
-                (lastExecReportTime != null ? "lastExecReportTime=" + lastExecReportTime + ", " : "") +
-                (lastExecReportDescr != null ? "lastExecReportDescr=" + lastExecReportDescr + ", " : "") +
                 (createdByIp != null ? "createdByIp=" + createdByIp + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
+                (tradeDate != null ? "tradeDate=" + tradeDate + ", " : "") +
                 (kind != null ? "kind=" + kind + ", " : "") +
+                (market != null ? "market=" + market + ", " : "") +
                 (side != null ? "side=" + side + ", " : "") +
+                (manualEntry != null ? "manualEntry=" + manualEntry + ", " : "") +
                 (expireTime != null ? "expireTime=" + expireTime + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (execQuantity != null ? "execQuantity=" + execQuantity + ", " : "") +
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +
                 (stopPrice != null ? "stopPrice=" + stopPrice + ", " : "") +
                 (averagePrice != null ? "averagePrice=" + averagePrice + ", " : "") +
-                (stockTotalPrice != null ? "stockTotalPrice=" + stockTotalPrice + ", " : "") +
                 (totalPrice != null ? "totalPrice=" + totalPrice + ", " : "") +
-                (status != null ? "status=" + status + ", " : "") +
+                (totalPriceActual != null ? "totalPriceActual=" + totalPriceActual + ", " : "") +
+                (brokerageFee != null ? "brokerageFee=" + brokerageFee + ", " : "") +
+                (brokerageFeeIss != null ? "brokerageFeeIss=" + brokerageFeeIss + ", " : "") +
+                (negotiationPerc != null ? "negotiationPerc=" + negotiationPerc + ", " : "") +
+                (liquidationPerc != null ? "liquidationPerc=" + liquidationPerc + ", " : "") +
+                (registryPerc != null ? "registryPerc=" + registryPerc + ", " : "") +
+                (lastExecReportTime != null ? "lastExecReportTime=" + lastExecReportTime + ", " : "") +
+                (lastExecReportDescr != null ? "lastExecReportDescr=" + lastExecReportDescr + ", " : "") +
                 (stockId != null ? "stockId=" + stockId + ", " : "") +
                 (brokerageAccountId != null ? "brokerageAccountId=" + brokerageAccountId + ", " : "") +
                 (mainOrderId != null ? "mainOrderId=" + mainOrderId + ", " : "") +

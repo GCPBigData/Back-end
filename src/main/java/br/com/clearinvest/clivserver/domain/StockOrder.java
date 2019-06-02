@@ -53,6 +53,10 @@ public class StockOrder implements Serializable {
     public static final String STATUS_FIX_PENDING_REPLACE = "E";
     public static final String STATUS_FIX_RECEIVED = "R";
 
+    public static final char FIX_EXEC_TYPE_RECEIVED = 'R';
+    public static final char FIX_EXEC_TYPE_NEW = '0';
+    public static final char FIX_EXEC_TYPE_TRADE = 'F';
+
     // TODO adicionar campo originalOrder ou targetOrder, para armazenar ordem q está sendo alterada ou cancelada
 
     @Id

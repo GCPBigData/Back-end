@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity BrokerageFlow.
+    -->
+    <changeSet id="20190601120001-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="brokerage_flow"
+                                 constraintName="fk_brokerage_flow_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="brokerage_account_id"
+                                 baseTableName="brokerage_flow"
+                                 constraintName="fk_brokerage_flow_brokerage_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="trade_id"
+                                 baseTableName="brokerage_flow"
+                                 constraintName="fk_brokerage_flow_trade_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stock_trade"/>
+
+    </changeSet>
+</databaseChangeLog>

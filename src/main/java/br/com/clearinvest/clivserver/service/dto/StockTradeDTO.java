@@ -1,7 +1,5 @@
 package br.com.clearinvest.clivserver.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -17,21 +15,28 @@ public class StockTradeDTO implements Serializable {
 
     private ZonedDateTime createdAt;
 
-    private ZonedDateTime lastExecReportTime;
-
-    private String lastExecReportDescr;
-
     @Size(max = 45)
     private String createdByIp;
+
+    private String status;
+
+    @NotNull
+    private ZonedDateTime tradeDate;
 
     @NotNull
     @Size(max = 10)
     @Pattern(regexp = "T|SL|SG")
     private String kind;
 
+    @Size(max = 1)
+    private String market;
+
     @NotNull
     @Size(max = 1)
     private String side;
+
+    @NotNull
+    private Boolean manualEntry;
 
     //@JsonFormat(pattern = "yyyy-MM-dd'T'mm:HH:ss.SSSZZZZZ")
     private ZonedDateTime expireTime;
@@ -51,11 +56,23 @@ public class StockTradeDTO implements Serializable {
 
     private BigDecimal averagePrice;
 
-    private BigDecimal stockTotalPrice;
-
     private BigDecimal totalPrice;
 
-    private String status;
+    private BigDecimal totalPriceActual;
+
+    private BigDecimal brokerageFee;
+
+    private BigDecimal brokerageFeeIss;
+
+    private BigDecimal negotiationPerc;
+
+    private BigDecimal liquidationPerc;
+
+    private BigDecimal registryPerc;
+
+    private ZonedDateTime lastExecReportTime;
+
+    private String lastExecReportDescr;
 
     private Long stockId;
 
@@ -93,28 +110,28 @@ public class StockTradeDTO implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTime getLastExecReportTime() {
-        return lastExecReportTime;
-    }
-
-    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
-        this.lastExecReportTime = lastExecReportTime;
-    }
-
-    public String getLastExecReportDescr() {
-        return lastExecReportDescr;
-    }
-
-    public void setLastExecReportDescr(String lastExecReportDescr) {
-        this.lastExecReportDescr = lastExecReportDescr;
-    }
-
     public String getCreatedByIp() {
         return createdByIp;
     }
 
     public void setCreatedByIp(String createdByIp) {
         this.createdByIp = createdByIp;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public ZonedDateTime getTradeDate() {
+        return tradeDate;
+    }
+
+    public void setTradeDate(ZonedDateTime tradeDate) {
+        this.tradeDate = tradeDate;
     }
 
     public String getKind() {
@@ -125,12 +142,28 @@ public class StockTradeDTO implements Serializable {
         this.kind = kind;
     }
 
+    public String getMarket() {
+        return market;
+    }
+
+    public void setMarket(String market) {
+        this.market = market;
+    }
+
     public String getSide() {
         return side;
     }
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public Boolean isManualEntry() {
+        return manualEntry;
+    }
+
+    public void setManualEntry(Boolean manualEntry) {
+        this.manualEntry = manualEntry;
     }
 
     public ZonedDateTime getExpireTime() {
@@ -181,14 +214,6 @@ public class StockTradeDTO implements Serializable {
         this.averagePrice = averagePrice;
     }
 
-    public BigDecimal getStockTotalPrice() {
-        return stockTotalPrice;
-    }
-
-    public void setStockTotalPrice(BigDecimal stockTotalPrice) {
-        this.stockTotalPrice = stockTotalPrice;
-    }
-
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -197,12 +222,68 @@ public class StockTradeDTO implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public String getStatus() {
-        return status;
+    public BigDecimal getTotalPriceActual() {
+        return totalPriceActual;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTotalPriceActual(BigDecimal totalPriceActual) {
+        this.totalPriceActual = totalPriceActual;
+    }
+
+    public BigDecimal getBrokerageFee() {
+        return brokerageFee;
+    }
+
+    public void setBrokerageFee(BigDecimal brokerageFee) {
+        this.brokerageFee = brokerageFee;
+    }
+
+    public BigDecimal getBrokerageFeeIss() {
+        return brokerageFeeIss;
+    }
+
+    public void setBrokerageFeeIss(BigDecimal brokerageFeeIss) {
+        this.brokerageFeeIss = brokerageFeeIss;
+    }
+
+    public BigDecimal getNegotiationPerc() {
+        return negotiationPerc;
+    }
+
+    public void setNegotiationPerc(BigDecimal negotiationPerc) {
+        this.negotiationPerc = negotiationPerc;
+    }
+
+    public BigDecimal getLiquidationPerc() {
+        return liquidationPerc;
+    }
+
+    public void setLiquidationPerc(BigDecimal liquidationPerc) {
+        this.liquidationPerc = liquidationPerc;
+    }
+
+    public BigDecimal getRegistryPerc() {
+        return registryPerc;
+    }
+
+    public void setRegistryPerc(BigDecimal registryPerc) {
+        this.registryPerc = registryPerc;
+    }
+
+    public ZonedDateTime getLastExecReportTime() {
+        return lastExecReportTime;
+    }
+
+    public void setLastExecReportTime(ZonedDateTime lastExecReportTime) {
+        this.lastExecReportTime = lastExecReportTime;
+    }
+
+    public String getLastExecReportDescr() {
+        return lastExecReportDescr;
+    }
+
+    public void setLastExecReportDescr(String lastExecReportDescr) {
+        this.lastExecReportDescr = lastExecReportDescr;
     }
 
     public Long getStockId() {
@@ -303,20 +384,28 @@ public class StockTradeDTO implements Serializable {
         return "StockTradeDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
-            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", createdByIp='" + getCreatedByIp() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", tradeDate='" + getTradeDate() + "'" +
             ", kind='" + getKind() + "'" +
+            ", market='" + getMarket() + "'" +
             ", side='" + getSide() + "'" +
+            ", manualEntry='" + isManualEntry() + "'" +
             ", expireTime='" + getExpireTime() + "'" +
             ", quantity=" + getQuantity() +
             ", execQuantity=" + getExecQuantity() +
             ", unitPrice=" + getUnitPrice() +
             ", stopPrice=" + getStopPrice() +
             ", averagePrice=" + getAveragePrice() +
-            ", stockTotalPrice=" + getStockTotalPrice() +
             ", totalPrice=" + getTotalPrice() +
-            ", status='" + getStatus() + "'" +
+            ", totalPriceActual=" + getTotalPriceActual() +
+            ", brokerageFee=" + getBrokerageFee() +
+            ", brokerageFeeIss=" + getBrokerageFeeIss() +
+            ", negotiationPerc=" + getNegotiationPerc() +
+            ", liquidationPerc=" + getLiquidationPerc() +
+            ", registryPerc=" + getRegistryPerc() +
+            ", lastExecReportTime='" + getLastExecReportTime() + "'" +
+            ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +
             ", stock='" + getStockSymbol() + "'" +
             ", brokerageAccount=" + getBrokerageAccountId() +

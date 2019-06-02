@@ -25,23 +25,31 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="last_exec_report_time" type="datetime">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="last_exec_report_descr" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="created_by_ip" type="varchar(45)">
                 <constraints nullable="true" />
+            </column>
+
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="trade_date" type="datetime">
+                <constraints nullable="false" />
             </column>
 
             <column name="kind" type="varchar(10)">
                 <constraints nullable="false" />
             </column>
 
+            <column name="market" type="varchar(1)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="side" type="varchar(1)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="manual_entry" type="boolean">
                 <constraints nullable="false" />
             </column>
 
@@ -69,16 +77,40 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="stock_total_price" type="decimal(10,2)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="total_price" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="status" type="varchar(255)">
-                <constraints nullable="false" />
+            <column name="total_price_actual" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="brokerage_fee" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="brokerage_fee_iss" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="negotiation_perc" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="liquidation_perc" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="registry_perc" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="last_exec_report_time" type="datetime">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="last_exec_report_descr" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
 
             <column name="stock_id" type="bigint">
@@ -100,8 +132,9 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="stock_trade" columnName="created_at" columnDataType="datetime"/>
-        <dropDefaultValue tableName="stock_trade" columnName="last_exec_report_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="stock_trade" columnName="trade_date" columnDataType="datetime"/>
         <dropDefaultValue tableName="stock_trade" columnName="expire_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="stock_trade" columnName="last_exec_report_time" columnDataType="datetime"/>
         
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

@@ -14,6 +14,18 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="brokerage_account_id"
+                                 baseTableName="stock_flow"
+                                 constraintName="fk_stock_flow_brokerage_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="trade_id"
+                                 baseTableName="stock_flow"
+                                 constraintName="fk_stock_flow_trade_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stock_trade"/>
+
         <addForeignKeyConstraint baseColumnNames="exec_report_id"
                                  baseTableName="stock_flow"
                                  constraintName="fk_stock_flow_exec_report_id"

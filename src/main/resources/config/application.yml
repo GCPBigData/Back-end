@@ -119,6 +119,8 @@ jhipster:
 
 cliv:
     serverIpAndName: ''
+    sendOrderToOmsInDevMode: false
+    createFakeOrderInDevMode: false
 
 quickfixj:
     client:
