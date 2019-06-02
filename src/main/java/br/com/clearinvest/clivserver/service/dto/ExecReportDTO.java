@@ -25,11 +25,9 @@ public class ExecReportDTO implements Serializable {
     private String execId;
 
     @NotNull
-    @Max(value = 1)
     private String execType;
 
     @NotNull
-    @Max(value = 1)
     private String ordStatus;
 
     private Integer ordRejReason;

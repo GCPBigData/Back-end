@@ -35,17 +35,16 @@ public class ExecReport implements Serializable {
     @Column(name = "transact_time", nullable = false)
     private ZonedDateTime transactTime;
 
+    
     @Lob
     @Column(name = "exec_id", nullable = false)
     private String execId;
 
     @NotNull
-    @Max(value = 1)
     @Column(name = "exec_type", nullable = false)
     private String execType;
 
     @NotNull
-    @Max(value = 1)
     @Column(name = "ord_status", nullable = false)
     private String ordStatus;
 

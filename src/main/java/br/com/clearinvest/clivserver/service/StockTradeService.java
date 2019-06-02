@@ -151,6 +151,7 @@ public class StockTradeService {
         trade.setCreatedAt(ZonedDateTime.now());
         trade.setStatus(StockTrade.STATUS_LOCAL_NEW);
         trade.setMarket(StockTrade.MARKET_SPOT);
+        trade.setExecQuantity(0L);
 
         ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
         expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),

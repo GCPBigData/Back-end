@@ -40,19 +40,15 @@
             "fieldName": "execType",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
-                "max"
-            ],
-            "fieldValidateRulesMax": "2"
+                "required"
+            ]
         },
         {
             "fieldName": "ordStatus",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
-                "max"
-            ],
-            "fieldValidateRulesMax": "2"
+                "required"
+            ]
         },
         {
             "fieldName": "ordRejReason",

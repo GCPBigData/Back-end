@@ -1,6 +1,7 @@
 package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.StockOrder;
+import br.com.clearinvest.clivserver.domain.StockTrade;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import quickfix.field.*;
 import quickfix.fix44.ExecutionReport;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 /**
@@ -40,38 +42,40 @@ public class FakeTradeService {
         }
 
         StockOrder order = stockOrderRepository.findById(orderId).get();
+        StockTrade trade = order.getTrade();
 
         ExecutionReport executionReport = null;
         long lastQty = 0;
         if (order.getStatus().equals(StockOrder.STATUS_LOCAL_NEW)) {
-            executionReport = createExecutionReport(order, 0,
+            executionReport = createExecutionReport(order, 0, null,
                 StockOrder.FIX_EXEC_TYPE_RECEIVED, StockOrder.STATUS_FIX_RECEIVED.charAt(0));
 
         } else if (order.getStatus().equals(StockOrder.STATUS_FIX_RECEIVED)) {
-            executionReport = createExecutionReport(order, 0,
+            executionReport = createExecutionReport(order, 0, null,
                 StockOrder.FIX_EXEC_TYPE_NEW, StockOrder.STATUS_FIX_NEW.charAt(0));
 
-        } else if (order.getExecQuantity() + 100 < order.getQuantity()) {
+        } else if (trade.getExecQuantity() + 100 < trade.getQuantity()) {
             lastQty = 100;
-            executionReport = createExecutionReport(order, lastQty,
+            executionReport = createExecutionReport(order, lastQty, order.getUnitPrice(),
                 StockOrder.FIX_EXEC_TYPE_TRADE, StockOrder.STATUS_FIX_PARTIALLY_FILLED.charAt(0));
 
-        } else if (order.getExecQuantity() + 100 == order.getQuantity()) {
+        } else if (trade.getExecQuantity() + 100 == trade.getQuantity()) {
             lastQty = 100;
-            executionReport = createExecutionReport(order, lastQty,
+            executionReport = createExecutionReport(order, lastQty, order.getUnitPrice(),
                 StockOrder.FIX_EXEC_TYPE_TRADE, StockOrder.STATUS_FIX_FILLED.charAt(0));
         }
 
         if (executionReport != null) {
             stockOrderService.proccessExecutionReport(executionReport);
 
-            if (order.getExecQuantity() + lastQty < order.getQuantity()) {
+            if (trade.getExecQuantity() + lastQty < trade.getQuantity()) {
                 asyncService.fakeTradeExecuteOrder(orderId, delayMillis);
             }
         }
     }
 
-    private ExecutionReport createExecutionReport(StockOrder order, long lastQty, char execType, char ordStatus) {
+    private ExecutionReport createExecutionReport(StockOrder order, long lastQty, BigDecimal lastPx, char execType,
+            char ordStatus) {
         ExecutionReport executionReport = new ExecutionReport(
             new OrderID("FER" + order.getId()),
             new ExecID("FERE" + order.getId() + "-" + System.currentTimeMillis()),
@@ -84,6 +88,11 @@ public class FakeTradeService {
         );
         executionReport.set(new ClOrdID(order.getId().toString()));
         executionReport.set(new LastQty(lastQty));
+
+        if (lastPx != null) {
+            executionReport.set(new LastPx(lastPx.doubleValue()));
+        }
+
         executionReport.set(new TransactTime(ZonedDateTime.now().toLocalDateTime()));
 
         return executionReport;
