@@ -29,9 +29,13 @@ public class StockFlowService {
 
     private final StockFlowMapper stockFlowMapper;
 
-    public StockFlowService(StockFlowRepository stockFlowRepository, StockFlowMapper stockFlowMapper) {
+    private final StockBalanceService stockBalanceService;
+
+    public StockFlowService(StockFlowRepository stockFlowRepository, StockFlowMapper stockFlowMapper,
+            StockBalanceService stockBalanceService) {
         this.stockFlowRepository = stockFlowRepository;
         this.stockFlowMapper = stockFlowMapper;
+        this.stockBalanceService = stockBalanceService;
     }
 
     /**
@@ -59,6 +63,9 @@ public class StockFlowService {
                 .tradeDate(trade.getTradeDate());
 
         stockFlow = stockFlowRepository.save(stockFlow);
+
+        // TODO update balance from trade date until now
+
         return stockFlow;
     }
 
@@ -73,6 +80,9 @@ public class StockFlowService {
                 .execReport(execReport);
 
         stockFlow = stockFlowRepository.save(stockFlow);
+
+        // TODO update balance
+
         return stockFlow;
     }
 

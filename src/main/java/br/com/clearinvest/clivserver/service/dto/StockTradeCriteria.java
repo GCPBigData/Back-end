@@ -68,6 +68,8 @@ public class StockTradeCriteria implements Serializable {
 
     private BigDecimalFilter registryPerc;
 
+    private BigDecimalFilter irrfPerc;
+
     private ZonedDateTimeFilter lastExecReportTime;
 
     private StringFilter lastExecReportDescr;
@@ -261,6 +263,14 @@ public class StockTradeCriteria implements Serializable {
         this.registryPerc = registryPerc;
     }
 
+    public BigDecimalFilter getIrrfPerc() {
+        return irrfPerc;
+    }
+
+    public void setIrrfPerc(BigDecimalFilter irrfPerc) {
+        this.irrfPerc = irrfPerc;
+    }
+
     public ZonedDateTimeFilter getLastExecReportTime() {
         return lastExecReportTime;
     }
@@ -350,6 +360,7 @@ public class StockTradeCriteria implements Serializable {
             Objects.equals(negotiationPerc, that.negotiationPerc) &&
             Objects.equals(liquidationPerc, that.liquidationPerc) &&
             Objects.equals(registryPerc, that.registryPerc) &&
+            Objects.equals(irrfPerc, that.irrfPerc) &&
             Objects.equals(lastExecReportTime, that.lastExecReportTime) &&
             Objects.equals(lastExecReportDescr, that.lastExecReportDescr) &&
             Objects.equals(stockId, that.stockId) &&
@@ -384,6 +395,7 @@ public class StockTradeCriteria implements Serializable {
         negotiationPerc,
         liquidationPerc,
         registryPerc,
+        irrfPerc,
         lastExecReportTime,
         lastExecReportDescr,
         stockId,
@@ -419,6 +431,7 @@ public class StockTradeCriteria implements Serializable {
                 (negotiationPerc != null ? "negotiationPerc=" + negotiationPerc + ", " : "") +
                 (liquidationPerc != null ? "liquidationPerc=" + liquidationPerc + ", " : "") +
                 (registryPerc != null ? "registryPerc=" + registryPerc + ", " : "") +
+                (irrfPerc != null ? "irrfPerc=" + irrfPerc + ", " : "") +
                 (lastExecReportTime != null ? "lastExecReportTime=" + lastExecReportTime + ", " : "") +
                 (lastExecReportDescr != null ? "lastExecReportDescr=" + lastExecReportDescr + ", " : "") +
                 (stockId != null ? "stockId=" + stockId + ", " : "") +

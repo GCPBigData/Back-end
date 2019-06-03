@@ -20,9 +20,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="brokerage"/>
 
-        <addUniqueConstraint columnNames="brokerage_id, user_id"
-                             constraintName="un_brokerage_user"
-                             tableName="brokerage_account"/>
-
     </changeSet>
 </databaseChangeLog>

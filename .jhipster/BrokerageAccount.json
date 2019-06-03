@@ -58,10 +58,15 @@
         },
         {
             "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "fee",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
-                "required"
-            ]
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
         }
     ],
     "changelogDate": "20190219165502",

@@ -138,11 +138,21 @@
         },
         {
             "fieldName": "totalPrice",
-            "fieldType": "BigDecimal"
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0.01"
         },
         {
             "fieldName": "totalPriceActual",
-            "fieldType": "BigDecimal"
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0.01"
         },
         {
             "fieldName": "brokerageFee",
@@ -162,6 +172,10 @@
         },
         {
             "fieldName": "registryPerc",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "irrfPerc",
             "fieldType": "BigDecimal"
         },
         {

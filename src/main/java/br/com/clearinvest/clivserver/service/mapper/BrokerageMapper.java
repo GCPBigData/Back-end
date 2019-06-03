@@ -11,6 +11,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface BrokerageMapper extends EntityMapper<BrokerageDTO, Brokerage> {
 
+
+
     default Brokerage fromId(Long id) {
         if (id == null) {
             return null;

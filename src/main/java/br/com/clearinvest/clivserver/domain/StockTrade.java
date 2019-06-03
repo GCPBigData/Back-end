@@ -111,10 +111,14 @@ public class StockTrade implements Serializable {
     @Column(name = "average_price", precision = 10, scale = 2)
     private BigDecimal averagePrice;
 
-    @Column(name = "total_price", precision = 10, scale = 2)
+    @NotNull
+    @DecimalMin(value = "0.01")
+    @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "total_price_actual", precision = 10, scale = 2)
+    @NotNull
+    @DecimalMin(value = "0.01")
+    @Column(name = "total_price_actual", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPriceActual;
 
     @Column(name = "brokerage_fee", precision = 10, scale = 2)
@@ -131,6 +135,9 @@ public class StockTrade implements Serializable {
 
     @Column(name = "registry_perc", precision = 10, scale = 2)
     private BigDecimal registryPerc;
+
+    @Column(name = "irrf_perc", precision = 10, scale = 2)
+    private BigDecimal irrfPerc;
 
     @Column(name = "last_exec_report_time")
     private ZonedDateTime lastExecReportTime;
@@ -440,6 +447,19 @@ public class StockTrade implements Serializable {
         this.registryPerc = registryPerc;
     }
 
+    public BigDecimal getIrrfPerc() {
+        return irrfPerc;
+    }
+
+    public StockTrade irrfPerc(BigDecimal irrfPerc) {
+        this.irrfPerc = irrfPerc;
+        return this;
+    }
+
+    public void setIrrfPerc(BigDecimal irrfPerc) {
+        this.irrfPerc = irrfPerc;
+    }
+
     public ZonedDateTime getLastExecReportTime() {
         return lastExecReportTime;
     }
@@ -589,6 +609,7 @@ public class StockTrade implements Serializable {
             ", negotiationPerc=" + getNegotiationPerc() +
             ", liquidationPerc=" + getLiquidationPerc() +
             ", registryPerc=" + getRegistryPerc() +
+            ", irrfPerc=" + getIrrfPerc() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";

@@ -24,8 +24,10 @@ public class BrokerageAccountDTO implements Serializable {
     @Size(max = 100)
     private String loginPassword;
 
-    @NotNull
     private BigDecimal balance;
+
+    @DecimalMin(value = "0")
+    private BigDecimal fee;
 
     private Long userId;
 
@@ -81,6 +83,14 @@ public class BrokerageAccountDTO implements Serializable {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public Long getUserId() {
@@ -145,6 +155,7 @@ public class BrokerageAccountDTO implements Serializable {
             ", loginCpf='" + getLoginCpf() + "'" +
             ", loginPassword='" + getLoginPassword() + "'" +
             ", balance=" + getBalance() +
+            ", fee=" + getFee() +
             ", user=" + getUserId() +
             ", user='" + getUserLogin() + "'" +
             ", brokerage=" + getBrokerageId() +

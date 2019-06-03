@@ -111,22 +111,13 @@
             ]
         },
         {
-            "fieldName": "feeValue",
+            "fieldName": "fee",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
+                "required",
                 "min"
             ],
             "fieldValidateRulesMin": "0"
-        },
-        {
-            "fieldName": "feePercent",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "min",
-                "max"
-            ],
-            "fieldValidateRulesMin": "0",
-            "fieldValidateRulesMax": "99.99"
         },
         {
             "fieldName": "iss",
@@ -136,7 +127,7 @@
                 "max"
             ],
             "fieldValidateRulesMin": "0",
-            "fieldValidateRulesMax": "99.99"
+            "fieldValidateRulesMax": "100.00"
         }
     ],
     "changelogDate": "20190212230309",

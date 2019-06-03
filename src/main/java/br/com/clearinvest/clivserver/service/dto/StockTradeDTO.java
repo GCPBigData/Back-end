@@ -56,8 +56,12 @@ public class StockTradeDTO implements Serializable {
 
     private BigDecimal averagePrice;
 
+    @NotNull
+    @DecimalMin(value = "0.01")
     private BigDecimal totalPrice;
 
+    @NotNull
+    @DecimalMin(value = "0.01")
     private BigDecimal totalPriceActual;
 
     private BigDecimal brokerageFee;
@@ -69,6 +73,8 @@ public class StockTradeDTO implements Serializable {
     private BigDecimal liquidationPerc;
 
     private BigDecimal registryPerc;
+
+    private BigDecimal irrfPerc;
 
     private ZonedDateTime lastExecReportTime;
 
@@ -91,6 +97,11 @@ public class StockTradeDTO implements Serializable {
     private String statusDescr;
     private boolean canCancel;
     private boolean canEdit;
+    private BigDecimal brokerageFeeIssVal;
+    private BigDecimal negotiationVal;
+    private BigDecimal liquidationVal;
+    private BigDecimal registryVal;
+    private BigDecimal irrfVal;
 
     // getters and setters
 
@@ -270,6 +281,14 @@ public class StockTradeDTO implements Serializable {
         this.registryPerc = registryPerc;
     }
 
+    public BigDecimal getIrrfPerc() {
+        return irrfPerc;
+    }
+
+    public void setIrrfPerc(BigDecimal irrfPerc) {
+        this.irrfPerc = irrfPerc;
+    }
+
     public ZonedDateTime getLastExecReportTime() {
         return lastExecReportTime;
     }
@@ -358,6 +377,46 @@ public class StockTradeDTO implements Serializable {
         this.canEdit = canEdit;
     }
 
+    public BigDecimal getBrokerageFeeIssVal() {
+        return brokerageFeeIssVal;
+    }
+
+    public void setBrokerageFeeIssVal(BigDecimal brokerageFeeIssVal) {
+        this.brokerageFeeIssVal = brokerageFeeIssVal;
+    }
+
+    public BigDecimal getNegotiationVal() {
+        return negotiationVal;
+    }
+
+    public void setNegotiationVal(BigDecimal negotiationVal) {
+        this.negotiationVal = negotiationVal;
+    }
+
+    public BigDecimal getLiquidationVal() {
+        return liquidationVal;
+    }
+
+    public void setLiquidationVal(BigDecimal liquidationVal) {
+        this.liquidationVal = liquidationVal;
+    }
+
+    public BigDecimal getRegistryVal() {
+        return registryVal;
+    }
+
+    public void setRegistryVal(BigDecimal registryVal) {
+        this.registryVal = registryVal;
+    }
+
+    public BigDecimal getIrrfVal() {
+        return irrfVal;
+    }
+
+    public void setIrrfVal(BigDecimal irrfVal) {
+        this.irrfVal = irrfVal;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -404,6 +463,7 @@ public class StockTradeDTO implements Serializable {
             ", negotiationPerc=" + getNegotiationPerc() +
             ", liquidationPerc=" + getLiquidationPerc() +
             ", registryPerc=" + getRegistryPerc() +
+            ", irrfPerc=" + getIrrfPerc() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +

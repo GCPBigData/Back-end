@@ -73,12 +73,8 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="fee_value" type="decimal(10,2)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="fee_percent" type="decimal(10,2)">
-                <constraints nullable="true" />
+            <column name="fee" type="decimal(10,2)">
+                <constraints nullable="false" />
             </column>
 
             <column name="iss" type="decimal(10,2)">

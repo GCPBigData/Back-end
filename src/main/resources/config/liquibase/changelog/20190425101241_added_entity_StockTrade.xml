@@ -78,11 +78,11 @@
             </column>
 
             <column name="total_price" type="decimal(10,2)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
 
             <column name="total_price_actual" type="decimal(10,2)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
 
             <column name="brokerage_fee" type="decimal(10,2)">
@@ -102,6 +102,10 @@
             </column>
 
             <column name="registry_perc" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="rfb_inform_perc" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 

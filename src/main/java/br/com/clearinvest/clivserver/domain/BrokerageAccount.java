@@ -42,9 +42,12 @@ public class BrokerageAccount implements Serializable {
     @Column(name = "login_password", length = 100)
     private String loginPassword;
 
-    @NotNull
-    @Column(name = "balance", precision = 10, scale = 2, nullable = false)
+    @Column(name = "balance", precision = 10, scale = 2)
     private BigDecimal balance;
+
+    @DecimalMin(value = "0")
+    @Column(name = "fee", precision = 10, scale = 2)
+    private BigDecimal fee;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -130,6 +133,19 @@ public class BrokerageAccount implements Serializable {
         this.balance = balance;
     }
 
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public BrokerageAccount fee(BigDecimal fee) {
+        this.fee = fee;
+        return this;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
     public User getUser() {
         return user;
     }
@@ -186,6 +202,7 @@ public class BrokerageAccount implements Serializable {
             ", loginCpf='" + getLoginCpf() + "'" +
             ", loginPassword='" + getLoginPassword() + "'" +
             ", balance=" + getBalance() +
+            ", fee=" + getFee() +
             "}";
     }
 }

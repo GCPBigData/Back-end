@@ -56,15 +56,12 @@ public class BrokerageDTO implements Serializable {
     @NotNull
     private Boolean loginToken;
 
+    @NotNull
     @DecimalMin(value = "0")
-    private BigDecimal feeValue;
+    private BigDecimal fee;
 
     @DecimalMin(value = "0")
-    @DecimalMax(value = "99.99")
-    private BigDecimal feePercent;
-
-    @DecimalMin(value = "0")
-    @DecimalMax(value = "99.99")
+    @DecimalMax(value = "100.00")
     private BigDecimal iss;
 
     public Long getId() {
@@ -179,20 +176,12 @@ public class BrokerageDTO implements Serializable {
         this.loginToken = loginToken;
     }
 
-    public BigDecimal getFeeValue() {
-        return feeValue;
+    public BigDecimal getFee() {
+        return fee;
     }
 
-    public void setFeeValue(BigDecimal feeValue) {
-        this.feeValue = feeValue;
-    }
-
-    public BigDecimal getFeePercent() {
-        return feePercent;
-    }
-
-    public void setFeePercent(BigDecimal feePercent) {
-        this.feePercent = feePercent;
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public BigDecimal getIss() {
@@ -241,8 +230,7 @@ public class BrokerageDTO implements Serializable {
             ", loginCpf='" + isLoginCpf() + "'" +
             ", loginPassword='" + isLoginPassword() + "'" +
             ", loginToken='" + isLoginToken() + "'" +
-            ", feeValue=" + getFeeValue() +
-            ", feePercent=" + getFeePercent() +
+            ", fee=" + getFee() +
             ", iss=" + getIss() +
             "}";
     }

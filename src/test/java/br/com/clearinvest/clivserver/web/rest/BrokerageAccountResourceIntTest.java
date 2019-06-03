@@ -60,6 +60,9 @@ public class BrokerageAccountResourceIntTest {
     private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
     private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
 
+    private static final BigDecimal DEFAULT_FEE = new BigDecimal(0);
+    private static final BigDecimal UPDATED_FEE = new BigDecimal(1);
+
     @Autowired
     private BrokerageAccountRepository brokerageAccountRepository;
 
@@ -108,7 +111,8 @@ public class BrokerageAccountResourceIntTest {
             .loginAccessCode(DEFAULT_LOGIN_ACCESS_CODE)
             .loginCpf(DEFAULT_LOGIN_CPF)
             .loginPassword(DEFAULT_LOGIN_PASSWORD)
-            .balance(DEFAULT_BALANCE);
+            .balance(DEFAULT_BALANCE)
+            .fee(DEFAULT_FEE);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
         em.persist(user);
@@ -148,6 +152,7 @@ public class BrokerageAccountResourceIntTest {
         assertThat(testBrokerageAccount.getLoginCpf()).isEqualTo(DEFAULT_LOGIN_CPF);
         assertThat(testBrokerageAccount.getLoginPassword()).isEqualTo(DEFAULT_LOGIN_PASSWORD);
         assertThat(testBrokerageAccount.getBalance()).isEqualTo(DEFAULT_BALANCE);
+        assertThat(testBrokerageAccount.getFee()).isEqualTo(DEFAULT_FEE);
     }
 
     @Test
@@ -172,25 +177,6 @@ public class BrokerageAccountResourceIntTest {
 
     @Test
     @Transactional
-    public void checkBalanceIsRequired() throws Exception {
-        int databaseSizeBeforeTest = brokerageAccountRepository.findAll().size();
-        // set the field null
-        brokerageAccount.setBalance(null);
-
-        // Create the BrokerageAccount, which fails.
-        BrokerageAccountDTO brokerageAccountDTO = brokerageAccountMapper.toDto(brokerageAccount);
-
-        restBrokerageAccountMockMvc.perform(post("/api/brokerage-accounts")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(brokerageAccountDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<BrokerageAccount> brokerageAccountList = brokerageAccountRepository.findAll();
-        assertThat(brokerageAccountList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllBrokerageAccounts() throws Exception {
         // Initialize the database
         brokerageAccountRepository.saveAndFlush(brokerageAccount);
@@ -204,7 +190,8 @@ public class BrokerageAccountResourceIntTest {
             .andExpect(jsonPath("$.[*].loginAccessCode").value(hasItem(DEFAULT_LOGIN_ACCESS_CODE.toString())))
             .andExpect(jsonPath("$.[*].loginCpf").value(hasItem(DEFAULT_LOGIN_CPF.toString())))
             .andExpect(jsonPath("$.[*].loginPassword").value(hasItem(DEFAULT_LOGIN_PASSWORD.toString())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())));
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
+            .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.intValue())));
     }
     
     @Test
@@ -222,7 +209,8 @@ public class BrokerageAccountResourceIntTest {
             .andExpect(jsonPath("$.loginAccessCode").value(DEFAULT_LOGIN_ACCESS_CODE.toString()))
             .andExpect(jsonPath("$.loginCpf").value(DEFAULT_LOGIN_CPF.toString()))
             .andExpect(jsonPath("$.loginPassword").value(DEFAULT_LOGIN_PASSWORD.toString()))
-            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()));
+            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
+            .andExpect(jsonPath("$.fee").value(DEFAULT_FEE.intValue()));
     }
 
     @Test
@@ -250,7 +238,8 @@ public class BrokerageAccountResourceIntTest {
             .loginAccessCode(UPDATED_LOGIN_ACCESS_CODE)
             .loginCpf(UPDATED_LOGIN_CPF)
             .loginPassword(UPDATED_LOGIN_PASSWORD)
-            .balance(UPDATED_BALANCE);
+            .balance(UPDATED_BALANCE)
+            .fee(UPDATED_FEE);
         BrokerageAccountDTO brokerageAccountDTO = brokerageAccountMapper.toDto(updatedBrokerageAccount);
 
         restBrokerageAccountMockMvc.perform(put("/api/brokerage-accounts")
@@ -267,6 +256,7 @@ public class BrokerageAccountResourceIntTest {
         assertThat(testBrokerageAccount.getLoginCpf()).isEqualTo(UPDATED_LOGIN_CPF);
         assertThat(testBrokerageAccount.getLoginPassword()).isEqualTo(UPDATED_LOGIN_PASSWORD);
         assertThat(testBrokerageAccount.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testBrokerageAccount.getFee()).isEqualTo(UPDATED_FEE);
     }
 
     @Test

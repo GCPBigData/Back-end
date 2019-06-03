@@ -82,17 +82,13 @@ public class Brokerage implements Serializable {
     @Column(name = "login_token", nullable = false)
     private Boolean loginToken;
 
+    @NotNull
     @DecimalMin(value = "0")
-    @Column(name = "fee_value", precision = 10, scale = 2)
-    private BigDecimal feeValue;
+    @Column(name = "fee", precision = 10, scale = 2, nullable = false)
+    private BigDecimal fee;
 
     @DecimalMin(value = "0")
-    @DecimalMax(value = "99.99")
-    @Column(name = "fee_percent", precision = 10, scale = 2)
-    private BigDecimal feePercent;
-
-    @DecimalMin(value = "0")
-    @DecimalMax(value = "99.99")
+    @DecimalMax(value = "100.00")
     @Column(name = "iss", precision = 10, scale = 2)
     private BigDecimal iss;
 
@@ -274,30 +270,17 @@ public class Brokerage implements Serializable {
         this.loginToken = loginToken;
     }
 
-    public BigDecimal getFeeValue() {
-        return feeValue;
+    public BigDecimal getFee() {
+        return fee;
     }
 
-    public Brokerage feeValue(BigDecimal feeValue) {
-        this.feeValue = feeValue;
+    public Brokerage fee(BigDecimal fee) {
+        this.fee = fee;
         return this;
     }
 
-    public void setFeeValue(BigDecimal feeValue) {
-        this.feeValue = feeValue;
-    }
-
-    public BigDecimal getFeePercent() {
-        return feePercent;
-    }
-
-    public Brokerage feePercent(BigDecimal feePercent) {
-        this.feePercent = feePercent;
-        return this;
-    }
-
-    public void setFeePercent(BigDecimal feePercent) {
-        this.feePercent = feePercent;
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public BigDecimal getIss() {
@@ -351,8 +334,7 @@ public class Brokerage implements Serializable {
             ", loginCpf='" + isLoginCpf() + "'" +
             ", loginPassword='" + isLoginPassword() + "'" +
             ", loginToken='" + isLoginToken() + "'" +
-            ", feeValue=" + getFeeValue() +
-            ", feePercent=" + getFeePercent() +
+            ", fee=" + getFee() +
             ", iss=" + getIss() +
             "}";
     }

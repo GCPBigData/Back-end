@@ -82,11 +82,8 @@ public class BrokerageResourceIntTest {
     private static final Boolean DEFAULT_LOGIN_TOKEN = false;
     private static final Boolean UPDATED_LOGIN_TOKEN = true;
 
-    private static final BigDecimal DEFAULT_FEE_VALUE = new BigDecimal(0);
-    private static final BigDecimal UPDATED_FEE_VALUE = new BigDecimal(1);
-
-    private static final BigDecimal DEFAULT_FEE_PERCENT = new BigDecimal(0);
-    private static final BigDecimal UPDATED_FEE_PERCENT = new BigDecimal(1);
+    private static final BigDecimal DEFAULT_FEE = new BigDecimal(0);
+    private static final BigDecimal UPDATED_FEE = new BigDecimal(1);
 
     private static final BigDecimal DEFAULT_ISS = new BigDecimal(0);
     private static final BigDecimal UPDATED_ISS = new BigDecimal(1);
@@ -148,8 +145,7 @@ public class BrokerageResourceIntTest {
             .loginCpf(DEFAULT_LOGIN_CPF)
             .loginPassword(DEFAULT_LOGIN_PASSWORD)
             .loginToken(DEFAULT_LOGIN_TOKEN)
-            .feeValue(DEFAULT_FEE_VALUE)
-            .feePercent(DEFAULT_FEE_PERCENT)
+            .fee(DEFAULT_FEE)
             .iss(DEFAULT_ISS);
         return brokerage;
     }
@@ -188,8 +184,7 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.isLoginCpf()).isEqualTo(DEFAULT_LOGIN_CPF);
         assertThat(testBrokerage.isLoginPassword()).isEqualTo(DEFAULT_LOGIN_PASSWORD);
         assertThat(testBrokerage.isLoginToken()).isEqualTo(DEFAULT_LOGIN_TOKEN);
-        assertThat(testBrokerage.getFeeValue()).isEqualTo(DEFAULT_FEE_VALUE);
-        assertThat(testBrokerage.getFeePercent()).isEqualTo(DEFAULT_FEE_PERCENT);
+        assertThat(testBrokerage.getFee()).isEqualTo(DEFAULT_FEE);
         assertThat(testBrokerage.getIss()).isEqualTo(DEFAULT_ISS);
     }
 
@@ -443,6 +438,25 @@ public class BrokerageResourceIntTest {
 
     @Test
     @Transactional
+    public void checkFeeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = brokerageRepository.findAll().size();
+        // set the field null
+        brokerage.setFee(null);
+
+        // Create the Brokerage, which fails.
+        BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
+
+        restBrokerageMockMvc.perform(post("/api/brokerages")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(brokerageDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Brokerage> brokerageList = brokerageRepository.findAll();
+        assertThat(brokerageList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBrokerages() throws Exception {
         // Initialize the database
         brokerageRepository.saveAndFlush(brokerage);
@@ -465,8 +479,7 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.[*].loginCpf").value(hasItem(DEFAULT_LOGIN_CPF.booleanValue())))
             .andExpect(jsonPath("$.[*].loginPassword").value(hasItem(DEFAULT_LOGIN_PASSWORD.booleanValue())))
             .andExpect(jsonPath("$.[*].loginToken").value(hasItem(DEFAULT_LOGIN_TOKEN.booleanValue())))
-            .andExpect(jsonPath("$.[*].feeValue").value(hasItem(DEFAULT_FEE_VALUE.intValue())))
-            .andExpect(jsonPath("$.[*].feePercent").value(hasItem(DEFAULT_FEE_PERCENT.intValue())))
+            .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.intValue())))
             .andExpect(jsonPath("$.[*].iss").value(hasItem(DEFAULT_ISS.intValue())));
     }
     
@@ -494,8 +507,7 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.loginCpf").value(DEFAULT_LOGIN_CPF.booleanValue()))
             .andExpect(jsonPath("$.loginPassword").value(DEFAULT_LOGIN_PASSWORD.booleanValue()))
             .andExpect(jsonPath("$.loginToken").value(DEFAULT_LOGIN_TOKEN.booleanValue()))
-            .andExpect(jsonPath("$.feeValue").value(DEFAULT_FEE_VALUE.intValue()))
-            .andExpect(jsonPath("$.feePercent").value(DEFAULT_FEE_PERCENT.intValue()))
+            .andExpect(jsonPath("$.fee").value(DEFAULT_FEE.intValue()))
             .andExpect(jsonPath("$.iss").value(DEFAULT_ISS.intValue()));
     }
 
@@ -533,8 +545,7 @@ public class BrokerageResourceIntTest {
             .loginCpf(UPDATED_LOGIN_CPF)
             .loginPassword(UPDATED_LOGIN_PASSWORD)
             .loginToken(UPDATED_LOGIN_TOKEN)
-            .feeValue(UPDATED_FEE_VALUE)
-            .feePercent(UPDATED_FEE_PERCENT)
+            .fee(UPDATED_FEE)
             .iss(UPDATED_ISS);
         BrokerageDTO brokerageDTO = brokerageMapper.toDto(updatedBrokerage);
 
@@ -560,8 +571,7 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.isLoginCpf()).isEqualTo(UPDATED_LOGIN_CPF);
         assertThat(testBrokerage.isLoginPassword()).isEqualTo(UPDATED_LOGIN_PASSWORD);
         assertThat(testBrokerage.isLoginToken()).isEqualTo(UPDATED_LOGIN_TOKEN);
-        assertThat(testBrokerage.getFeeValue()).isEqualTo(UPDATED_FEE_VALUE);
-        assertThat(testBrokerage.getFeePercent()).isEqualTo(UPDATED_FEE_PERCENT);
+        assertThat(testBrokerage.getFee()).isEqualTo(UPDATED_FEE);
         assertThat(testBrokerage.getIss()).isEqualTo(UPDATED_ISS);
     }
 

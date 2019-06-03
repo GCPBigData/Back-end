@@ -83,4 +83,8 @@ public class StockBalanceService {
         log.debug("Request to delete StockBalance : {}", id);
         stockBalanceRepository.deleteById(id);
     }
+
+    public void update() {
+
+    }
 }

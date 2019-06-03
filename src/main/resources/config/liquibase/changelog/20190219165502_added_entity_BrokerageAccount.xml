@@ -25,11 +25,11 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="login_cpf" type="varchar(11)">
+            <column name="login_access_code" type="varchar(300)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="login_access_code" type="varchar(300)">
+            <column name="login_cpf" type="varchar(11)">
                 <constraints nullable="true" />
             </column>
 
@@ -38,7 +38,11 @@
             </column>
 
             <column name="balance" type="decimal(10,2)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fee" type="decimal(10,2)">
+                <constraints nullable="true" />
             </column>
 
             <column name="user_id" type="bigint">

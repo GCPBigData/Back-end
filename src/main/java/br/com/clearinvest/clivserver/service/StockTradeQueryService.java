@@ -183,6 +183,9 @@ public class StockTradeQueryService extends QueryService<StockTrade> {
             if (criteria.getRegistryPerc() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getRegistryPerc(), StockTrade_.registryPerc));
             }
+            if (criteria.getIrrfPerc() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIrrfPerc(), StockTrade_.irrfPerc));
+            }
             if (criteria.getLastExecReportTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLastExecReportTime(), StockTrade_.lastExecReportTime));
             }

@@ -512,17 +512,21 @@ public class StockOrderService {
         trade.setLastExecReportTime(execReport.getCreatedAt());
         trade.setStatus(execReport.getOrdStatus());
 
-        log.debug("StockOrderService: proccessExecutionReport finished; resulting exec report: {}", execReport);
-        log.debug("StockOrderService: proccessExecutionReport finished; resulting stock order: {}", order);
-        log.debug("StockOrderService: proccessExecutionReport finished; resulting stock trade: {}", trade);
+        log.debug("StockOrderService: proccessExecutionReport; resulting exec report: {}", execReport);
+        log.debug("StockOrderService: proccessExecutionReport; resulting stock order: {}", order);
 
         execReportRepository.save(execReport);
         stockOrderRepository.save(order);
-        stockTradeRepository.save(trade);
 
         if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
             stockFlowService.add(trade, execReport);
+
+            trade.setTotalPrice(trade.getTotalPrice().add(execReport.getLastPx()));
+            trade.setTotalPriceActual(StockTradeService.calculateTotalPriceActual(trade));
         }
+
+        log.debug("StockOrderService: proccessExecutionReport; resulting stock trade: {}", trade);
+        stockTradeRepository.save(trade);
     }
 
     private String getFixOrdRejReasonDescription(ExecutionReport executionReport) throws FieldNotFound {
