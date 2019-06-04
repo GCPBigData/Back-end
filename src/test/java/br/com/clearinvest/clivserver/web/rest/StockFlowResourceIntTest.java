@@ -58,8 +58,8 @@ public class StockFlowResourceIntTest {
     private static final ZonedDateTime DEFAULT_CREATED_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATED_AT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
-    private static final ZonedDateTime DEFAULT_TRADE_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_TRADE_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime DEFAULT_FLOW_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_FLOW_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     private static final String DEFAULT_SIDE = "A";
     private static final String UPDATED_SIDE = "B";
@@ -127,7 +127,7 @@ public class StockFlowResourceIntTest {
     public static StockFlow createEntity(EntityManager em) {
         StockFlow stockFlow = new StockFlow()
             .createdAt(DEFAULT_CREATED_AT)
-            .tradeDate(DEFAULT_TRADE_DATE)
+            .flowDate(DEFAULT_FLOW_DATE)
             .side(DEFAULT_SIDE)
             .symbol(DEFAULT_SYMBOL)
             .quantity(DEFAULT_QUANTITY)
@@ -164,7 +164,7 @@ public class StockFlowResourceIntTest {
         assertThat(stockFlowList).hasSize(databaseSizeBeforeCreate + 1);
         StockFlow testStockFlow = stockFlowList.get(stockFlowList.size() - 1);
         assertThat(testStockFlow.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
-        assertThat(testStockFlow.getTradeDate()).isEqualTo(DEFAULT_TRADE_DATE);
+        assertThat(testStockFlow.getFlowDate()).isEqualTo(DEFAULT_FLOW_DATE);
         assertThat(testStockFlow.getSide()).isEqualTo(DEFAULT_SIDE);
         assertThat(testStockFlow.getSymbol()).isEqualTo(DEFAULT_SYMBOL);
         assertThat(testStockFlow.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
@@ -195,10 +195,10 @@ public class StockFlowResourceIntTest {
 
     @Test
     @Transactional
-    public void checkTradeDateIsRequired() throws Exception {
+    public void checkFlowDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = stockFlowRepository.findAll().size();
         // set the field null
-        stockFlow.setTradeDate(null);
+        stockFlow.setFlowDate(null);
 
         // Create the StockFlow, which fails.
         StockFlowDTO stockFlowDTO = stockFlowMapper.toDto(stockFlow);
@@ -338,7 +338,7 @@ public class StockFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stockFlow.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
-            .andExpect(jsonPath("$.[*].tradeDate").value(hasItem(sameInstant(DEFAULT_TRADE_DATE))))
+            .andExpect(jsonPath("$.[*].flowDate").value(hasItem(sameInstant(DEFAULT_FLOW_DATE))))
             .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL.toString())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
@@ -359,7 +359,7 @@ public class StockFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(stockFlow.getId().intValue()))
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
-            .andExpect(jsonPath("$.tradeDate").value(sameInstant(DEFAULT_TRADE_DATE)))
+            .andExpect(jsonPath("$.flowDate").value(sameInstant(DEFAULT_FLOW_DATE)))
             .andExpect(jsonPath("$.side").value(DEFAULT_SIDE.toString()))
             .andExpect(jsonPath("$.symbol").value(DEFAULT_SYMBOL.toString()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
@@ -436,67 +436,67 @@ public class StockFlowResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllStockFlowsByTradeDateIsEqualToSomething() throws Exception {
+    public void getAllStockFlowsByFlowDateIsEqualToSomething() throws Exception {
         // Initialize the database
         stockFlowRepository.saveAndFlush(stockFlow);
 
-        // Get all the stockFlowList where tradeDate equals to DEFAULT_TRADE_DATE
-        defaultStockFlowShouldBeFound("tradeDate.equals=" + DEFAULT_TRADE_DATE);
+        // Get all the stockFlowList where flowDate equals to DEFAULT_FLOW_DATE
+        defaultStockFlowShouldBeFound("flowDate.equals=" + DEFAULT_FLOW_DATE);
 
-        // Get all the stockFlowList where tradeDate equals to UPDATED_TRADE_DATE
-        defaultStockFlowShouldNotBeFound("tradeDate.equals=" + UPDATED_TRADE_DATE);
+        // Get all the stockFlowList where flowDate equals to UPDATED_FLOW_DATE
+        defaultStockFlowShouldNotBeFound("flowDate.equals=" + UPDATED_FLOW_DATE);
     }
 
     @Test
     @Transactional
-    public void getAllStockFlowsByTradeDateIsInShouldWork() throws Exception {
+    public void getAllStockFlowsByFlowDateIsInShouldWork() throws Exception {
         // Initialize the database
         stockFlowRepository.saveAndFlush(stockFlow);
 
-        // Get all the stockFlowList where tradeDate in DEFAULT_TRADE_DATE or UPDATED_TRADE_DATE
-        defaultStockFlowShouldBeFound("tradeDate.in=" + DEFAULT_TRADE_DATE + "," + UPDATED_TRADE_DATE);
+        // Get all the stockFlowList where flowDate in DEFAULT_FLOW_DATE or UPDATED_FLOW_DATE
+        defaultStockFlowShouldBeFound("flowDate.in=" + DEFAULT_FLOW_DATE + "," + UPDATED_FLOW_DATE);
 
-        // Get all the stockFlowList where tradeDate equals to UPDATED_TRADE_DATE
-        defaultStockFlowShouldNotBeFound("tradeDate.in=" + UPDATED_TRADE_DATE);
+        // Get all the stockFlowList where flowDate equals to UPDATED_FLOW_DATE
+        defaultStockFlowShouldNotBeFound("flowDate.in=" + UPDATED_FLOW_DATE);
     }
 
     @Test
     @Transactional
-    public void getAllStockFlowsByTradeDateIsNullOrNotNull() throws Exception {
+    public void getAllStockFlowsByFlowDateIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockFlowRepository.saveAndFlush(stockFlow);
 
-        // Get all the stockFlowList where tradeDate is not null
-        defaultStockFlowShouldBeFound("tradeDate.specified=true");
+        // Get all the stockFlowList where flowDate is not null
+        defaultStockFlowShouldBeFound("flowDate.specified=true");
 
-        // Get all the stockFlowList where tradeDate is null
-        defaultStockFlowShouldNotBeFound("tradeDate.specified=false");
+        // Get all the stockFlowList where flowDate is null
+        defaultStockFlowShouldNotBeFound("flowDate.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockFlowsByTradeDateIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllStockFlowsByFlowDateIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         stockFlowRepository.saveAndFlush(stockFlow);
 
-        // Get all the stockFlowList where tradeDate greater than or equals to DEFAULT_TRADE_DATE
-        defaultStockFlowShouldBeFound("tradeDate.greaterOrEqualThan=" + DEFAULT_TRADE_DATE);
+        // Get all the stockFlowList where flowDate greater than or equals to DEFAULT_FLOW_DATE
+        defaultStockFlowShouldBeFound("flowDate.greaterOrEqualThan=" + DEFAULT_FLOW_DATE);
 
-        // Get all the stockFlowList where tradeDate greater than or equals to UPDATED_TRADE_DATE
-        defaultStockFlowShouldNotBeFound("tradeDate.greaterOrEqualThan=" + UPDATED_TRADE_DATE);
+        // Get all the stockFlowList where flowDate greater than or equals to UPDATED_FLOW_DATE
+        defaultStockFlowShouldNotBeFound("flowDate.greaterOrEqualThan=" + UPDATED_FLOW_DATE);
     }
 
     @Test
     @Transactional
-    public void getAllStockFlowsByTradeDateIsLessThanSomething() throws Exception {
+    public void getAllStockFlowsByFlowDateIsLessThanSomething() throws Exception {
         // Initialize the database
         stockFlowRepository.saveAndFlush(stockFlow);
 
-        // Get all the stockFlowList where tradeDate less than or equals to DEFAULT_TRADE_DATE
-        defaultStockFlowShouldNotBeFound("tradeDate.lessThan=" + DEFAULT_TRADE_DATE);
+        // Get all the stockFlowList where flowDate less than or equals to DEFAULT_FLOW_DATE
+        defaultStockFlowShouldNotBeFound("flowDate.lessThan=" + DEFAULT_FLOW_DATE);
 
-        // Get all the stockFlowList where tradeDate less than or equals to UPDATED_TRADE_DATE
-        defaultStockFlowShouldBeFound("tradeDate.lessThan=" + UPDATED_TRADE_DATE);
+        // Get all the stockFlowList where flowDate less than or equals to UPDATED_FLOW_DATE
+        defaultStockFlowShouldBeFound("flowDate.lessThan=" + UPDATED_FLOW_DATE);
     }
 
 
@@ -864,7 +864,7 @@ public class StockFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stockFlow.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
-            .andExpect(jsonPath("$.[*].tradeDate").value(hasItem(sameInstant(DEFAULT_TRADE_DATE))))
+            .andExpect(jsonPath("$.[*].flowDate").value(hasItem(sameInstant(DEFAULT_FLOW_DATE))))
             .andExpect(jsonPath("$.[*].side").value(hasItem(DEFAULT_SIDE.toString())))
             .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL.toString())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
@@ -919,7 +919,7 @@ public class StockFlowResourceIntTest {
         em.detach(updatedStockFlow);
         updatedStockFlow
             .createdAt(UPDATED_CREATED_AT)
-            .tradeDate(UPDATED_TRADE_DATE)
+            .flowDate(UPDATED_FLOW_DATE)
             .side(UPDATED_SIDE)
             .symbol(UPDATED_SYMBOL)
             .quantity(UPDATED_QUANTITY)
@@ -938,7 +938,7 @@ public class StockFlowResourceIntTest {
         assertThat(stockFlowList).hasSize(databaseSizeBeforeUpdate);
         StockFlow testStockFlow = stockFlowList.get(stockFlowList.size() - 1);
         assertThat(testStockFlow.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testStockFlow.getTradeDate()).isEqualTo(UPDATED_TRADE_DATE);
+        assertThat(testStockFlow.getFlowDate()).isEqualTo(UPDATED_FLOW_DATE);
         assertThat(testStockFlow.getSide()).isEqualTo(UPDATED_SIDE);
         assertThat(testStockFlow.getSymbol()).isEqualTo(UPDATED_SYMBOL);
         assertThat(testStockFlow.getQuantity()).isEqualTo(UPDATED_QUANTITY);

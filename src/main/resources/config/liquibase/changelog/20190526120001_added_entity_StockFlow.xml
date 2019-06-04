@@ -25,7 +25,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="trade_date" type="datetime">
+            <column name="flow_date" type="datetime">
                 <constraints nullable="false" />
             </column>
 
@@ -76,7 +76,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="stock_flow" columnName="created_at" columnDataType="datetime"/>
-        <dropDefaultValue tableName="stock_flow" columnName="trade_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="stock_flow" columnName="flow_date" columnDataType="datetime"/>
         
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

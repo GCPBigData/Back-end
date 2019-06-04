@@ -92,8 +92,8 @@ public class StockFlowQueryService extends QueryService<StockFlow> {
             if (criteria.getCreatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), StockFlow_.createdAt));
             }
-            if (criteria.getTradeDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTradeDate(), StockFlow_.tradeDate));
+            if (criteria.getFlowDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getFlowDate(), StockFlow_.flowDate));
             }
             if (criteria.getSide() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSide(), StockFlow_.side));

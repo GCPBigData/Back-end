@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +53,7 @@ public class BrokerageAccountResource {
         if (brokerageAccountDTO.getId() != null) {
             throw new BadRequestAlertException("A new brokerageAccount cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BrokerageAccountDTO result = brokerageAccountService.saveWithCurrentUser(brokerageAccountDTO);
+        BrokerageAccountDTO result = brokerageAccountService.add(brokerageAccountDTO);
         return ResponseEntity.created(new URI("/api/brokerage-accounts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +75,7 @@ public class BrokerageAccountResource {
         if (brokerageAccountDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BrokerageAccountDTO result = brokerageAccountService.saveWithCurrentUser(brokerageAccountDTO);
+        BrokerageAccountDTO result = brokerageAccountService.add(brokerageAccountDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, brokerageAccountDTO.getId().toString()))
             .body(result);

@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -30,12 +32,16 @@ public class BrokerageAccountService {
 
     private final BrokerageAccountMapper brokerageAccountMapper;
 
+    private BrokerageFlowService brokerageFlowService;
+
     private final UserRepository userRepository;
 
     public BrokerageAccountService(BrokerageAccountRepository brokerageAccountRepository,
-        BrokerageAccountMapper brokerageAccountMapper, UserRepository userRepository) {
+            BrokerageAccountMapper brokerageAccountMapper, BrokerageFlowService brokerageFlowService,
+            UserRepository userRepository) {
         this.brokerageAccountRepository = brokerageAccountRepository;
         this.brokerageAccountMapper = brokerageAccountMapper;
+        this.brokerageFlowService = brokerageFlowService;
         this.userRepository = userRepository;
     }
 
@@ -54,13 +60,13 @@ public class BrokerageAccountService {
     }
 
     /**
-     * Save a brokerageAccount.
+     * Add a brokerageAccount.
      *
-     * @param accountDTO the entity to save
+     * @param accountDTO the entity to add
      * @return the persisted entity
      */
-    public BrokerageAccountDTO saveWithCurrentUser(BrokerageAccountDTO accountDTO) {
-        log.debug("Request to save BrokerageAccount : {}", accountDTO);
+    public BrokerageAccountDTO add(BrokerageAccountDTO accountDTO) {
+        log.debug("Request to add BrokerageAccount : {}", accountDTO);
 
         if (accountDTO.getId() == null) {
             Optional<BrokerageAccount> accountOptional = brokerageAccountRepository
@@ -72,12 +78,16 @@ public class BrokerageAccountService {
                 // TODO validar conta (se email for obrigatório para corretora, verificar se email veio, etc)
 
                 BrokerageAccount account = brokerageAccountMapper.toEntity(accountDTO);
+                BigDecimal initialBalance = account.getBalance();
+                account.setBalance(null);
 
                 SecurityUtils.getCurrentUserLogin()
                     .flatMap(userRepository::findOneByLogin)
                     .ifPresent(account::setUser);
 
                 account = brokerageAccountRepository.save(account);
+                brokerageFlowService.addManualEntry(account, initialBalance, ZonedDateTime.now());
+
                 return brokerageAccountMapper.toDto(account);
             }
 

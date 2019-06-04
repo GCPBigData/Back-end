@@ -57,9 +57,12 @@ public class StockOrderService {
 
     private final StockFlowService stockFlowService;
 
+    private final BrokerageFlowService brokerageFlowService;
+
     public StockOrderService(StockOrderRepository stockOrderRepository, StockTradeRepository stockTradeRepository,
             ExecReportRepository execReportRepository, StockOrderMapper stockOrderMapper, OMSService omsService,
-            FixMessageFactory fixMessageFactory, StockFlowService stockFlowService) {
+            FixMessageFactory fixMessageFactory, StockFlowService stockFlowService,
+            BrokerageFlowService brokerageFlowService) {
         this.stockOrderRepository = stockOrderRepository;
         this.stockTradeRepository = stockTradeRepository;
         this.execReportRepository = execReportRepository;
@@ -67,6 +70,7 @@ public class StockOrderService {
         this.omsService = omsService;
         this.fixMessageFactory = fixMessageFactory;
         this.stockFlowService = stockFlowService;
+        this.brokerageFlowService = brokerageFlowService;
     }
 
     /**
@@ -518,9 +522,17 @@ public class StockOrderService {
 
         if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
             StockFlow stockFlow = stockFlowService.add(trade, execReport);
+            brokerageFlowService.add(trade, stockFlow.getTotalPrice());
 
             trade.setTotalPrice(trade.getTotalPrice().add(stockFlow.getTotalPrice()));
             trade.setTotalPriceActual(StockTradeService.calculateTotalPriceActual(trade));
+        }
+
+        String ordStatus = execReport.getOrdStatus();
+        if (ordStatus.equals(StockOrder.STATUS_FIX_FILLED)
+                || (ordStatus.equals(StockOrder.STATUS_FIX_CANCELED) && trade.getExecQuantity() > 0)
+                || (ordStatus.equals(StockOrder.STATUS_FIX_EXPIRED) && trade.getExecQuantity() > 0)) {
+            brokerageFlowService.add(trade, StockTradeService.calculateFees(trade));
         }
 
         log.debug("StockOrderService: proccessExecutionReport; resulting stock trade: {}", trade);

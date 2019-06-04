@@ -28,7 +28,7 @@ public class StockFlowCriteria implements Serializable {
 
     private ZonedDateTimeFilter createdAt;
 
-    private ZonedDateTimeFilter tradeDate;
+    private ZonedDateTimeFilter flowDate;
 
     private StringFilter side;
 
@@ -71,12 +71,12 @@ public class StockFlowCriteria implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTimeFilter getTradeDate() {
-        return tradeDate;
+    public ZonedDateTimeFilter getFlowDate() {
+        return flowDate;
     }
 
-    public void setTradeDate(ZonedDateTimeFilter tradeDate) {
-        this.tradeDate = tradeDate;
+    public void setFlowDate(ZonedDateTimeFilter flowDate) {
+        this.flowDate = flowDate;
     }
 
     public StringFilter getSide() {
@@ -180,7 +180,7 @@ public class StockFlowCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(createdAt, that.createdAt) &&
-            Objects.equals(tradeDate, that.tradeDate) &&
+            Objects.equals(flowDate, that.flowDate) &&
             Objects.equals(side, that.side) &&
             Objects.equals(symbol, that.symbol) &&
             Objects.equals(quantity, that.quantity) &&
@@ -199,7 +199,7 @@ public class StockFlowCriteria implements Serializable {
         return Objects.hash(
         id,
         createdAt,
-        tradeDate,
+        flowDate,
         side,
         symbol,
         quantity,
@@ -219,7 +219,7 @@ public class StockFlowCriteria implements Serializable {
         return "StockFlowCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
-                (tradeDate != null ? "tradeDate=" + tradeDate + ", " : "") +
+                (flowDate != null ? "flowDate=" + flowDate + ", " : "") +
                 (side != null ? "side=" + side + ", " : "") +
                 (symbol != null ? "symbol=" + symbol + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +

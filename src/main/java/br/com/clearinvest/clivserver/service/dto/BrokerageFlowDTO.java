@@ -16,9 +16,11 @@ public class BrokerageFlowDTO implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
-    private BigDecimal value;
+    private ZonedDateTime flowDate;
 
     @NotNull
+    private BigDecimal value;
+
     private Boolean manualEntry;
 
     private Long userId;
@@ -43,6 +45,14 @@ public class BrokerageFlowDTO implements Serializable {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getFlowDate() {
+        return flowDate;
+    }
+
+    public void setFlowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
     }
 
     public BigDecimal getValue() {
@@ -119,6 +129,7 @@ public class BrokerageFlowDTO implements Serializable {
         return "BrokerageFlowDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", flowDate='" + getFlowDate() + "'" +
             ", value=" + getValue() +
             ", manualEntry='" + isManualEntry() + "'" +
             ", user=" + getUserId() +

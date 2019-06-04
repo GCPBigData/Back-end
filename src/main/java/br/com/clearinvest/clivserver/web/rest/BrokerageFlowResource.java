@@ -55,11 +55,13 @@ public class BrokerageFlowResource {
     @PostMapping("/brokerage-flows")
     @Timed
     public ResponseEntity<BrokerageFlowDTO> createBrokerageFlow(@Valid @RequestBody BrokerageFlowDTO brokerageFlowDTO) throws URISyntaxException {
-        log.debug("REST request to save BrokerageFlow : {}", brokerageFlowDTO);
+        log.debug("REST request to add a BrokerageFlow : {}", brokerageFlowDTO);
         if (brokerageFlowDTO.getId() != null) {
             throw new BadRequestAlertException("A new brokerageFlow cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BrokerageFlowDTO result = brokerageFlowService.save(brokerageFlowDTO);
+
+        BrokerageFlowDTO result = brokerageFlowService.add(brokerageFlowDTO);
+
         return ResponseEntity.created(new URI("/api/brokerage-flows/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

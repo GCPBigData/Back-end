@@ -16,7 +16,7 @@ public class StockFlowDTO implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
-    private ZonedDateTime tradeDate;
+    private ZonedDateTime flowDate;
 
     @NotNull
     @Size(max = 1)
@@ -70,12 +70,12 @@ public class StockFlowDTO implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTime getTradeDate() {
-        return tradeDate;
+    public ZonedDateTime getFlowDate() {
+        return flowDate;
     }
 
-    public void setTradeDate(ZonedDateTime tradeDate) {
-        this.tradeDate = tradeDate;
+    public void setFlowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
     }
 
     public String getSide() {
@@ -216,7 +216,7 @@ public class StockFlowDTO implements Serializable {
         return "StockFlowDTO{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", tradeDate='" + getTradeDate() + "'" +
+            ", flowDate='" + getFlowDate() + "'" +
             ", side='" + getSide() + "'" +
             ", symbol='" + getSymbol() + "'" +
             ", quantity=" + getQuantity() +

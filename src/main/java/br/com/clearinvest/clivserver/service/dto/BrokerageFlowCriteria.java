@@ -28,6 +28,8 @@ public class BrokerageFlowCriteria implements Serializable {
 
     private ZonedDateTimeFilter createdAt;
 
+    private ZonedDateTimeFilter flowDate;
+
     private BigDecimalFilter value;
 
     private BooleanFilter manualEntry;
@@ -55,6 +57,14 @@ public class BrokerageFlowCriteria implements Serializable {
 
     public void setCreatedAt(ZonedDateTimeFilter createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public ZonedDateTimeFilter getFlowDate() {
+        return flowDate;
+    }
+
+    public void setFlowDate(ZonedDateTimeFilter flowDate) {
+        this.flowDate = flowDate;
     }
 
     public BigDecimalFilter getValue() {
@@ -110,6 +120,7 @@ public class BrokerageFlowCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(flowDate, that.flowDate) &&
             Objects.equals(value, that.value) &&
             Objects.equals(manualEntry, that.manualEntry) &&
             Objects.equals(userId, that.userId) &&
@@ -122,6 +133,7 @@ public class BrokerageFlowCriteria implements Serializable {
         return Objects.hash(
         id,
         createdAt,
+        flowDate,
         value,
         manualEntry,
         userId,
@@ -135,6 +147,7 @@ public class BrokerageFlowCriteria implements Serializable {
         return "BrokerageFlowCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
+                (flowDate != null ? "flowDate=" + flowDate + ", " : "") +
                 (value != null ? "value=" + value + ", " : "") +
                 (manualEntry != null ? "manualEntry=" + manualEntry + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +

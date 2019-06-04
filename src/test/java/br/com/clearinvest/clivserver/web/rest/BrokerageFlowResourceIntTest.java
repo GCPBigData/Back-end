@@ -56,6 +56,9 @@ public class BrokerageFlowResourceIntTest {
     private static final ZonedDateTime DEFAULT_CREATED_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATED_AT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
+    private static final ZonedDateTime DEFAULT_FLOW_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_FLOW_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
     private static final BigDecimal DEFAULT_VALUE = new BigDecimal(1);
     private static final BigDecimal UPDATED_VALUE = new BigDecimal(2);
 
@@ -110,6 +113,7 @@ public class BrokerageFlowResourceIntTest {
     public static BrokerageFlow createEntity(EntityManager em) {
         BrokerageFlow brokerageFlow = new BrokerageFlow()
             .createdAt(DEFAULT_CREATED_AT)
+            .flowDate(DEFAULT_FLOW_DATE)
             .value(DEFAULT_VALUE)
             .manualEntry(DEFAULT_MANUAL_ENTRY);
         // Add required entity
@@ -142,6 +146,7 @@ public class BrokerageFlowResourceIntTest {
         assertThat(brokerageFlowList).hasSize(databaseSizeBeforeCreate + 1);
         BrokerageFlow testBrokerageFlow = brokerageFlowList.get(brokerageFlowList.size() - 1);
         assertThat(testBrokerageFlow.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
+        assertThat(testBrokerageFlow.getFlowDate()).isEqualTo(DEFAULT_FLOW_DATE);
         assertThat(testBrokerageFlow.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testBrokerageFlow.isManualEntry()).isEqualTo(DEFAULT_MANUAL_ENTRY);
     }
@@ -164,6 +169,25 @@ public class BrokerageFlowResourceIntTest {
         // Validate the BrokerageFlow in the database
         List<BrokerageFlow> brokerageFlowList = brokerageFlowRepository.findAll();
         assertThat(brokerageFlowList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkFlowDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = brokerageFlowRepository.findAll().size();
+        // set the field null
+        brokerageFlow.setFlowDate(null);
+
+        // Create the BrokerageFlow, which fails.
+        BrokerageFlowDTO brokerageFlowDTO = brokerageFlowMapper.toDto(brokerageFlow);
+
+        restBrokerageFlowMockMvc.perform(post("/api/brokerage-flows")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(brokerageFlowDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<BrokerageFlow> brokerageFlowList = brokerageFlowRepository.findAll();
+        assertThat(brokerageFlowList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -216,6 +240,7 @@ public class BrokerageFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(brokerageFlow.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
+            .andExpect(jsonPath("$.[*].flowDate").value(hasItem(sameInstant(DEFAULT_FLOW_DATE))))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].manualEntry").value(hasItem(DEFAULT_MANUAL_ENTRY.booleanValue())));
     }
@@ -232,6 +257,7 @@ public class BrokerageFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(brokerageFlow.getId().intValue()))
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
+            .andExpect(jsonPath("$.flowDate").value(sameInstant(DEFAULT_FLOW_DATE)))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.intValue()))
             .andExpect(jsonPath("$.manualEntry").value(DEFAULT_MANUAL_ENTRY.booleanValue()));
     }
@@ -299,6 +325,72 @@ public class BrokerageFlowResourceIntTest {
 
         // Get all the brokerageFlowList where createdAt less than or equals to UPDATED_CREATED_AT
         defaultBrokerageFlowShouldBeFound("createdAt.lessThan=" + UPDATED_CREATED_AT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllBrokerageFlowsByFlowDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        brokerageFlowRepository.saveAndFlush(brokerageFlow);
+
+        // Get all the brokerageFlowList where flowDate equals to DEFAULT_FLOW_DATE
+        defaultBrokerageFlowShouldBeFound("flowDate.equals=" + DEFAULT_FLOW_DATE);
+
+        // Get all the brokerageFlowList where flowDate equals to UPDATED_FLOW_DATE
+        defaultBrokerageFlowShouldNotBeFound("flowDate.equals=" + UPDATED_FLOW_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBrokerageFlowsByFlowDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        brokerageFlowRepository.saveAndFlush(brokerageFlow);
+
+        // Get all the brokerageFlowList where flowDate in DEFAULT_FLOW_DATE or UPDATED_FLOW_DATE
+        defaultBrokerageFlowShouldBeFound("flowDate.in=" + DEFAULT_FLOW_DATE + "," + UPDATED_FLOW_DATE);
+
+        // Get all the brokerageFlowList where flowDate equals to UPDATED_FLOW_DATE
+        defaultBrokerageFlowShouldNotBeFound("flowDate.in=" + UPDATED_FLOW_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBrokerageFlowsByFlowDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        brokerageFlowRepository.saveAndFlush(brokerageFlow);
+
+        // Get all the brokerageFlowList where flowDate is not null
+        defaultBrokerageFlowShouldBeFound("flowDate.specified=true");
+
+        // Get all the brokerageFlowList where flowDate is null
+        defaultBrokerageFlowShouldNotBeFound("flowDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllBrokerageFlowsByFlowDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        brokerageFlowRepository.saveAndFlush(brokerageFlow);
+
+        // Get all the brokerageFlowList where flowDate greater than or equals to DEFAULT_FLOW_DATE
+        defaultBrokerageFlowShouldBeFound("flowDate.greaterOrEqualThan=" + DEFAULT_FLOW_DATE);
+
+        // Get all the brokerageFlowList where flowDate greater than or equals to UPDATED_FLOW_DATE
+        defaultBrokerageFlowShouldNotBeFound("flowDate.greaterOrEqualThan=" + UPDATED_FLOW_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBrokerageFlowsByFlowDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        brokerageFlowRepository.saveAndFlush(brokerageFlow);
+
+        // Get all the brokerageFlowList where flowDate less than or equals to DEFAULT_FLOW_DATE
+        defaultBrokerageFlowShouldNotBeFound("flowDate.lessThan=" + DEFAULT_FLOW_DATE);
+
+        // Get all the brokerageFlowList where flowDate less than or equals to UPDATED_FLOW_DATE
+        defaultBrokerageFlowShouldBeFound("flowDate.lessThan=" + UPDATED_FLOW_DATE);
     }
 
 
@@ -445,6 +537,7 @@ public class BrokerageFlowResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(brokerageFlow.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
+            .andExpect(jsonPath("$.[*].flowDate").value(hasItem(sameInstant(DEFAULT_FLOW_DATE))))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].manualEntry").value(hasItem(DEFAULT_MANUAL_ENTRY.booleanValue())));
 
@@ -495,6 +588,7 @@ public class BrokerageFlowResourceIntTest {
         em.detach(updatedBrokerageFlow);
         updatedBrokerageFlow
             .createdAt(UPDATED_CREATED_AT)
+            .flowDate(UPDATED_FLOW_DATE)
             .value(UPDATED_VALUE)
             .manualEntry(UPDATED_MANUAL_ENTRY);
         BrokerageFlowDTO brokerageFlowDTO = brokerageFlowMapper.toDto(updatedBrokerageFlow);
@@ -509,6 +603,7 @@ public class BrokerageFlowResourceIntTest {
         assertThat(brokerageFlowList).hasSize(databaseSizeBeforeUpdate);
         BrokerageFlow testBrokerageFlow = brokerageFlowList.get(brokerageFlowList.size() - 1);
         assertThat(testBrokerageFlow.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testBrokerageFlow.getFlowDate()).isEqualTo(UPDATED_FLOW_DATE);
         assertThat(testBrokerageFlow.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testBrokerageFlow.isManualEntry()).isEqualTo(UPDATED_MANUAL_ENTRY);
     }

@@ -33,6 +33,13 @@
             "fieldType": "ZonedDateTime"
         },
         {
+            "fieldName": "flowDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "value",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

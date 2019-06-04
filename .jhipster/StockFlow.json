@@ -47,7 +47,7 @@
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "tradeDate",
+            "fieldName": "flowDate",
             "fieldType": "ZonedDateTime",
             "fieldValidateRules": [
                 "required"

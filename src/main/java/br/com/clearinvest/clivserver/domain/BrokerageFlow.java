@@ -31,6 +31,10 @@ public class BrokerageFlow implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
+    @Column(name = "flow_date", nullable = false)
+    private ZonedDateTime flowDate;
+
+    @NotNull
     @Column(name = "jhi_value", precision = 10, scale = 2, nullable = false)
     private BigDecimal value;
 
@@ -71,6 +75,19 @@ public class BrokerageFlow implements Serializable {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getFlowDate() {
+        return flowDate;
+    }
+
+    public BrokerageFlow flowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
+        return this;
+    }
+
+    public void setFlowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
     }
 
     public BigDecimal getValue() {
@@ -164,6 +181,7 @@ public class BrokerageFlow implements Serializable {
         return "BrokerageFlow{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", flowDate='" + getFlowDate() + "'" +
             ", value=" + getValue() +
             ", manualEntry='" + isManualEntry() + "'" +
             "}";

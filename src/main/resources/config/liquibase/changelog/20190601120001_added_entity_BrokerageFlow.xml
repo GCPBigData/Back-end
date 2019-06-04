@@ -25,6 +25,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="flow_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+
             <column name="jhi_value" type="decimal(10,2)">
                 <constraints nullable="false" />
             </column>
@@ -48,6 +52,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="brokerage_flow" columnName="created_at" columnDataType="datetime"/>
+        <dropDefaultValue tableName="brokerage_flow" columnName="flow_date" columnDataType="datetime"/>
         
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

@@ -31,8 +31,8 @@ public class StockFlow implements Serializable {
     private ZonedDateTime createdAt;
 
     @NotNull
-    @Column(name = "trade_date", nullable = false)
-    private ZonedDateTime tradeDate;
+    @Column(name = "flow_date", nullable = false)
+    private ZonedDateTime flowDate;
 
     @NotNull
     @Size(max = 1)
@@ -103,17 +103,17 @@ public class StockFlow implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTime getTradeDate() {
-        return tradeDate;
+    public ZonedDateTime getFlowDate() {
+        return flowDate;
     }
 
-    public StockFlow tradeDate(ZonedDateTime tradeDate) {
-        this.tradeDate = tradeDate;
+    public StockFlow flowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
         return this;
     }
 
-    public void setTradeDate(ZonedDateTime tradeDate) {
-        this.tradeDate = tradeDate;
+    public void setFlowDate(ZonedDateTime flowDate) {
+        this.flowDate = flowDate;
     }
 
     public String getSide() {
@@ -285,7 +285,7 @@ public class StockFlow implements Serializable {
         return "StockFlow{" +
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
-            ", tradeDate='" + getTradeDate() + "'" +
+            ", flowDate='" + getFlowDate() + "'" +
             ", side='" + getSide() + "'" +
             ", symbol='" + getSymbol() + "'" +
             ", quantity=" + getQuantity() +

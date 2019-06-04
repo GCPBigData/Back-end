@@ -60,11 +60,11 @@ public class StockFlowService {
 
         StockFlow stockFlow = createStockFlow(trade, trade.getCreatedBy(), trade.getBrokerageAccount(),
                 trade.getQuantity(), trade.getUnitPrice(), totalPrice)
-                .tradeDate(trade.getTradeDate());
+                .flowDate(trade.getTradeDate());
 
         stockFlow = stockFlowRepository.save(stockFlow);
 
-        // TODO update balance from trade date until now
+        // TODO update stock balance from trade date until now
 
         return stockFlow;
     }
@@ -81,7 +81,7 @@ public class StockFlowService {
 
         stockFlow = stockFlowRepository.save(stockFlow);
 
-        // TODO update balance
+        // TODO update stock balance
 
         return stockFlow;
     }
@@ -90,7 +90,7 @@ public class StockFlowService {
             BigDecimal unitPrice, BigDecimal totalPrice) {
         return new StockFlow()
                 .createdAt(ZonedDateTime.now())
-                .tradeDate(ZonedDateTime.now())
+                .flowDate(ZonedDateTime.now())
                 .side(trade.getSide())
                 .symbol(trade.getStock().getSymbol())
                 .quantity(quantity)

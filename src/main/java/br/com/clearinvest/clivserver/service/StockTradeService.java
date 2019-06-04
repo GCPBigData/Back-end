@@ -203,14 +203,19 @@ public class StockTradeService {
     }
 
     public static BigDecimal calculateTotalPriceActual(StockTrade trade) {
+        return trade.getTotalPrice()
+                .add(calculateFees(trade))
+                .setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public static BigDecimal calculateFees(StockTrade trade) {
         BigDecimal iss = calculateIssVal(trade).orElse(BigDecimal.ZERO);
         BigDecimal negotiation = calculateNegotiationFeeVal(trade).orElse(BigDecimal.ZERO);
         BigDecimal liquidation = calculateLiquidationVal(trade).orElse(BigDecimal.ZERO);
         BigDecimal registry = calculateRegistryVal(trade).orElse(BigDecimal.ZERO);
         BigDecimal irrf = calculateIrrfVal(trade).orElse(BigDecimal.ZERO);
 
-        return trade.getTotalPrice()
-                .add(trade.getBrokerageFee())
+        return (trade.getBrokerageFee() != null ? trade.getBrokerageFee() : BigDecimal.ZERO)
                 .add(iss)
                 .add(negotiation)
                 .add(liquidation)
