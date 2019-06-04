@@ -69,7 +69,7 @@ public class BrokerageFlowService {
                 .findByIdAndCurrentUser(entity.getBrokerageAccount().getId())
                 .orElseThrow(() -> new BusinessException("Conta não encontrada."));
 
-        entity = addManualEntry(account, entity.getValue(), entity.getFlowDate());
+        entity = addManualEntry(account, entity.getAmount(), entity.getFlowDate());
 
         return brokerageFlowMapper.toDto(entity);
     }
@@ -118,7 +118,7 @@ public class BrokerageFlowService {
                 .trade(trade)
                 .createdAt(ZonedDateTime.now())
                 .flowDate(ZonedDateTime.now())
-                .value(value)
+                .amount(value)
                 .manualEntry(false);
 
         return brokerageFlowRepository.save(brokerageFlow);
@@ -130,7 +130,7 @@ public class BrokerageFlowService {
                 .brokerageAccount(brokerageAccount)
                 .createdAt(ZonedDateTime.now())
                 .flowDate(flowDate != null ? flowDate : ZonedDateTime.now())
-                .value(value)
+                .amount(value)
                 .manualEntry(true);
 
         return brokerageFlowRepository.save(brokerageFlow);

@@ -30,7 +30,7 @@ public class BrokerageFlowCriteria implements Serializable {
 
     private ZonedDateTimeFilter flowDate;
 
-    private BigDecimalFilter value;
+    private BigDecimalFilter amount;
 
     private BooleanFilter manualEntry;
 
@@ -67,12 +67,12 @@ public class BrokerageFlowCriteria implements Serializable {
         this.flowDate = flowDate;
     }
 
-    public BigDecimalFilter getValue() {
-        return value;
+    public BigDecimalFilter getAmount() {
+        return amount;
     }
 
-    public void setValue(BigDecimalFilter value) {
-        this.value = value;
+    public void setAmount(BigDecimalFilter amount) {
+        this.amount = amount;
     }
 
     public BooleanFilter getManualEntry() {
@@ -121,7 +121,7 @@ public class BrokerageFlowCriteria implements Serializable {
             Objects.equals(id, that.id) &&
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(flowDate, that.flowDate) &&
-            Objects.equals(value, that.value) &&
+            Objects.equals(amount, that.amount) &&
             Objects.equals(manualEntry, that.manualEntry) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(brokerageAccountId, that.brokerageAccountId) &&
@@ -134,7 +134,7 @@ public class BrokerageFlowCriteria implements Serializable {
         id,
         createdAt,
         flowDate,
-        value,
+        amount,
         manualEntry,
         userId,
         brokerageAccountId,
@@ -148,7 +148,7 @@ public class BrokerageFlowCriteria implements Serializable {
                 (id != null ? "id=" + id + ", " : "") +
                 (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
                 (flowDate != null ? "flowDate=" + flowDate + ", " : "") +
-                (value != null ? "value=" + value + ", " : "") +
+                (amount != null ? "amount=" + amount + ", " : "") +
                 (manualEntry != null ? "manualEntry=" + manualEntry + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
                 (brokerageAccountId != null ? "brokerageAccountId=" + brokerageAccountId + ", " : "") +

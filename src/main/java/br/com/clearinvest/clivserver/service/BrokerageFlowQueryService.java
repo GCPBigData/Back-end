@@ -95,8 +95,8 @@ public class BrokerageFlowQueryService extends QueryService<BrokerageFlow> {
             if (criteria.getFlowDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getFlowDate(), BrokerageFlow_.flowDate));
             }
-            if (criteria.getValue() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getValue(), BrokerageFlow_.value));
+            if (criteria.getAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getAmount(), BrokerageFlow_.amount));
             }
             if (criteria.getManualEntry() != null) {
                 specification = specification.and(buildSpecification(criteria.getManualEntry(), BrokerageFlow_.manualEntry));

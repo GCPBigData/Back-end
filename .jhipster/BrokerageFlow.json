@@ -40,7 +40,7 @@
             ]
         },
         {
-            "fieldName": "value",
+            "fieldName": "amount",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"

@@ -187,9 +187,11 @@ public class StockTradeService {
         BigDecimal stockTotalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
 
         BigDecimal accountBalance = brokerageAccount.getBalance() == null ? new BigDecimal(0) : brokerageAccount.getBalance();
-        if (stockTotalPrice.compareTo(accountBalance) > 0) {
+
+        // TODO
+        /*if (stockTotalPrice.compareTo(accountBalance) > 0) {
             throw new BusinessException("Saldo na corretora insuficiente.");
-        }
+        }*/
 
         trade = stockTradeRepository.save(trade);
 

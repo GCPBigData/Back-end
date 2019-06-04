@@ -75,7 +75,7 @@ public class BrokerageAccountResource {
         if (brokerageAccountDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BrokerageAccountDTO result = brokerageAccountService.add(brokerageAccountDTO);
+        BrokerageAccountDTO result = brokerageAccountService.update(brokerageAccountDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, brokerageAccountDTO.getId().toString()))
             .body(result);

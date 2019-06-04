@@ -35,8 +35,8 @@ public class BrokerageFlow implements Serializable {
     private ZonedDateTime flowDate;
 
     @NotNull
-    @Column(name = "jhi_value", precision = 10, scale = 2, nullable = false)
-    private BigDecimal value;
+    @Column(name = "amount", precision = 10, scale = 2, nullable = false)
+    private BigDecimal amount;
 
     @NotNull
     @Column(name = "manual_entry", nullable = false)
@@ -90,17 +90,17 @@ public class BrokerageFlow implements Serializable {
         this.flowDate = flowDate;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public BrokerageFlow value(BigDecimal value) {
-        this.value = value;
+    public BrokerageFlow amount(BigDecimal amount) {
+        this.amount = amount;
         return this;
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public Boolean isManualEntry() {
@@ -182,7 +182,7 @@ public class BrokerageFlow implements Serializable {
             "id=" + getId() +
             ", createdAt='" + getCreatedAt() + "'" +
             ", flowDate='" + getFlowDate() + "'" +
-            ", value=" + getValue() +
+            ", amount=" + getAmount() +
             ", manualEntry='" + isManualEntry() + "'" +
             "}";
     }

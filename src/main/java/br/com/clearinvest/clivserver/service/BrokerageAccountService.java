@@ -48,15 +48,20 @@ public class BrokerageAccountService {
     /**
      * Save a brokerageAccount.
      *
-     * @param brokerageAccountDTO the entity to save
+     * @param accountDTO the entity to save
      * @return the persisted entity
      */
-    public BrokerageAccountDTO save(BrokerageAccountDTO brokerageAccountDTO) {
-        log.debug("Request to save BrokerageAccount : {}", brokerageAccountDTO);
+    public BrokerageAccountDTO update(BrokerageAccountDTO accountDTO) {
+        log.debug("Request to save BrokerageAccount : {}", accountDTO);
 
-        BrokerageAccount brokerageAccount = brokerageAccountMapper.toEntity(brokerageAccountDTO);
-        brokerageAccount = brokerageAccountRepository.save(brokerageAccount);
-        return brokerageAccountMapper.toDto(brokerageAccount);
+        BrokerageAccount account = brokerageAccountMapper.toEntity(accountDTO);
+        BrokerageAccount existingAccount = brokerageAccountRepository.findByIdAndCurrentUser(account.getId())
+                .orElseThrow(() -> new BusinessException("Conta não encontrada."));
+
+        account.setUser(existingAccount.getUser());
+        account = brokerageAccountRepository.save(account);
+
+        return brokerageAccountMapper.toDto(account);
     }
 
     /**
