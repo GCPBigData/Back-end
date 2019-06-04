@@ -112,12 +112,12 @@ public class StockTrade implements Serializable {
     private BigDecimal averagePrice;
 
     @NotNull
-    @DecimalMin(value = "0.01")
+    @DecimalMin(value = "0.0")
     @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
     @NotNull
-    @DecimalMin(value = "0.01")
+    @DecimalMin(value = "0.0")
     @Column(name = "total_price_actual", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPriceActual;
 

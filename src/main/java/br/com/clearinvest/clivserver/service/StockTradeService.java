@@ -170,7 +170,10 @@ public class StockTradeService {
             trade.setLiquidationPerc(BigDecimal.valueOf(0.0275));
             trade.setRegistryPerc(BigDecimal.valueOf(0.0));
         }
-        trade.setIrrfPerc(BigDecimal.valueOf(0.005));
+
+        if (trade.getSide().equals(StockOrder.FIX_SIDE_SELL)) {
+            trade.setIrrfPerc(BigDecimal.valueOf(0.005));
+        }
 
         ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
         expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),

@@ -46,22 +46,22 @@ public class FakeTradeService {
 
         ExecutionReport executionReport = null;
         long lastQty = 0;
-        if (order.getStatus().equals(StockOrder.STATUS_LOCAL_NEW)) {
-            executionReport = createExecutionReport(order, 0, null,
+        if (trade.getStatus().equals(StockOrder.STATUS_LOCAL_NEW)) {
+            executionReport = createExecutionReport(trade, order,0, null,
                 StockOrder.FIX_EXEC_TYPE_RECEIVED, StockOrder.STATUS_FIX_RECEIVED.charAt(0));
 
-        } else if (order.getStatus().equals(StockOrder.STATUS_FIX_RECEIVED)) {
-            executionReport = createExecutionReport(order, 0, null,
+        } else if (trade.getStatus().equals(StockOrder.STATUS_FIX_RECEIVED)) {
+            executionReport = createExecutionReport(trade, order, 0, null,
                 StockOrder.FIX_EXEC_TYPE_NEW, StockOrder.STATUS_FIX_NEW.charAt(0));
 
         } else if (trade.getExecQuantity() + 100 < trade.getQuantity()) {
             lastQty = 100;
-            executionReport = createExecutionReport(order, lastQty, order.getUnitPrice(),
+            executionReport = createExecutionReport(trade, order, lastQty, order.getUnitPrice(),
                 StockOrder.FIX_EXEC_TYPE_TRADE, StockOrder.STATUS_FIX_PARTIALLY_FILLED.charAt(0));
 
         } else if (trade.getExecQuantity() + 100 == trade.getQuantity()) {
             lastQty = 100;
-            executionReport = createExecutionReport(order, lastQty, order.getUnitPrice(),
+            executionReport = createExecutionReport(trade, order, lastQty, order.getUnitPrice(),
                 StockOrder.FIX_EXEC_TYPE_TRADE, StockOrder.STATUS_FIX_FILLED.charAt(0));
         }
 
@@ -74,17 +74,17 @@ public class FakeTradeService {
         }
     }
 
-    private ExecutionReport createExecutionReport(StockOrder order, long lastQty, BigDecimal lastPx, char execType,
-            char ordStatus) {
+    private ExecutionReport createExecutionReport(StockTrade trade, StockOrder order, long lastQty, BigDecimal lastPx,
+            char execType, char ordStatus) {
         ExecutionReport executionReport = new ExecutionReport(
-            new OrderID("FER" + order.getId()),
-            new ExecID("FERE" + order.getId() + "-" + System.currentTimeMillis()),
+            new OrderID("FAKE-EXEC-REPORT-" + trade.getId()),
+            new ExecID(trade.getId() + "-" + System.currentTimeMillis()),
             new ExecType(execType), // received
             new OrdStatus(ordStatus), // received
-            new Side(order.getSide().charAt(0)),
-            new LeavesQty(order.getQuantity() - (order.getExecQuantity() + lastQty)),
-            new CumQty(order.getExecQuantity() + lastQty),
-            new AvgPx(order.getUnitPrice().doubleValue())
+            new Side(trade.getSide().charAt(0)),
+            new LeavesQty(trade.getQuantity() - (trade.getExecQuantity() + lastQty)),
+            new CumQty(trade.getExecQuantity() + lastQty),
+            new AvgPx(trade.getUnitPrice().doubleValue())
         );
         executionReport.set(new ClOrdID(order.getId().toString()));
         executionReport.set(new LastQty(lastQty));

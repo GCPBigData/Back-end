@@ -56,11 +56,9 @@ public class StockTradeDTO implements Serializable {
 
     private BigDecimal averagePrice;
 
-    @NotNull
     @DecimalMin(value = "0.01")
     private BigDecimal totalPrice;
 
-    @NotNull
     @DecimalMin(value = "0.01")
     private BigDecimal totalPriceActual;
 

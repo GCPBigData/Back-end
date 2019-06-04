@@ -1,10 +1,7 @@
 package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.ClivServerApp;
-import br.com.clearinvest.clivserver.domain.ExecReport;
-import br.com.clearinvest.clivserver.domain.StockOrder;
-import br.com.clearinvest.clivserver.domain.StockTrade;
-import br.com.clearinvest.clivserver.domain.User;
+import br.com.clearinvest.clivserver.domain.*;
 import br.com.clearinvest.clivserver.factory.FixMessageFactory;
 import br.com.clearinvest.clivserver.repository.ExecReportRepository;
 import br.com.clearinvest.clivserver.repository.StockOrderRepository;
@@ -484,6 +481,7 @@ public class StockOrderService {
             trade.setAveragePrice(execReport.getAvgPx());
         }
 
+        // TODO clone exec report and remove sensible fields
         execReport.setFixMessage(execReportMessage.toRawString());
 
         if (execReport.getOrdStatus().equals(StockOrder.STATUS_FIX_REJECTED)) {
@@ -519,9 +517,9 @@ public class StockOrderService {
         stockOrderRepository.save(order);
 
         if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
-            stockFlowService.add(trade, execReport);
+            StockFlow stockFlow = stockFlowService.add(trade, execReport);
 
-            trade.setTotalPrice(trade.getTotalPrice().add(execReport.getLastPx()));
+            trade.setTotalPrice(trade.getTotalPrice().add(stockFlow.getTotalPrice()));
             trade.setTotalPriceActual(StockTradeService.calculateTotalPriceActual(trade));
         }
 

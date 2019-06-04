@@ -118,8 +118,8 @@ public class StockTradeResourceIntTest {
     private static final BigDecimal DEFAULT_REGISTRY_PERC = new BigDecimal(1);
     private static final BigDecimal UPDATED_REGISTRY_PERC = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_RFB_INFORM_PERC = new BigDecimal(1);
-    private static final BigDecimal UPDATED_RFB_INFORM_PERC = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_IRRF_PERC = new BigDecimal(1);
+    private static final BigDecimal UPDATED_IRRF_PERC = new BigDecimal(2);
 
     private static final ZonedDateTime DEFAULT_LAST_EXEC_REPORT_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_LAST_EXEC_REPORT_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -195,7 +195,7 @@ public class StockTradeResourceIntTest {
             .negotiationPerc(DEFAULT_NEGOTIATION_PERC)
             .liquidationPerc(DEFAULT_LIQUIDATION_PERC)
             .registryPerc(DEFAULT_REGISTRY_PERC)
-            .irrfPerc(DEFAULT_RFB_INFORM_PERC)
+            .irrfPerc(DEFAULT_IRRF_PERC)
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR);
         // Add required entity
@@ -248,7 +248,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getNegotiationPerc()).isEqualTo(DEFAULT_NEGOTIATION_PERC);
         assertThat(testStockTrade.getLiquidationPerc()).isEqualTo(DEFAULT_LIQUIDATION_PERC);
         assertThat(testStockTrade.getRegistryPerc()).isEqualTo(DEFAULT_REGISTRY_PERC);
-        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(DEFAULT_RFB_INFORM_PERC);
+        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(DEFAULT_IRRF_PERC);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
     }
@@ -495,7 +495,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].negotiationPerc").value(hasItem(DEFAULT_NEGOTIATION_PERC.intValue())))
             .andExpect(jsonPath("$.[*].liquidationPerc").value(hasItem(DEFAULT_LIQUIDATION_PERC.intValue())))
             .andExpect(jsonPath("$.[*].registryPerc").value(hasItem(DEFAULT_REGISTRY_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_RFB_INFORM_PERC.intValue())))
+            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_IRRF_PERC.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
     }
@@ -532,7 +532,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.negotiationPerc").value(DEFAULT_NEGOTIATION_PERC.intValue()))
             .andExpect(jsonPath("$.liquidationPerc").value(DEFAULT_LIQUIDATION_PERC.intValue()))
             .andExpect(jsonPath("$.registryPerc").value(DEFAULT_REGISTRY_PERC.intValue()))
-            .andExpect(jsonPath("$.irrfPerc").value(DEFAULT_RFB_INFORM_PERC.intValue()))
+            .andExpect(jsonPath("$.irrfPerc").value(DEFAULT_IRRF_PERC.intValue()))
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
             .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()));
     }
@@ -1497,11 +1497,11 @@ public class StockTradeResourceIntTest {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfPerc equals to DEFAULT_RFB_INFORM_PERC
-        defaultStockTradeShouldBeFound("irrfPerc.equals=" + DEFAULT_RFB_INFORM_PERC);
+        // Get all the stockTradeList where irrfPerc equals to DEFAULT_IRRF_PERC
+        defaultStockTradeShouldBeFound("irrfPerc.equals=" + DEFAULT_IRRF_PERC);
 
-        // Get all the stockTradeList where irrfPerc equals to UPDATED_RFB_INFORM_PERC
-        defaultStockTradeShouldNotBeFound("irrfPerc.equals=" + UPDATED_RFB_INFORM_PERC);
+        // Get all the stockTradeList where irrfPerc equals to UPDATED_IRRF_PERC
+        defaultStockTradeShouldNotBeFound("irrfPerc.equals=" + UPDATED_IRRF_PERC);
     }
 
     @Test
@@ -1510,11 +1510,11 @@ public class StockTradeResourceIntTest {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfPerc in DEFAULT_RFB_INFORM_PERC or UPDATED_RFB_INFORM_PERC
-        defaultStockTradeShouldBeFound("irrfPerc.in=" + DEFAULT_RFB_INFORM_PERC + "," + UPDATED_RFB_INFORM_PERC);
+        // Get all the stockTradeList where irrfPerc in DEFAULT_IRRF_PERC or UPDATED_IRRF_PERC
+        defaultStockTradeShouldBeFound("irrfPerc.in=" + DEFAULT_IRRF_PERC + "," + UPDATED_IRRF_PERC);
 
-        // Get all the stockTradeList where irrfPerc equals to UPDATED_RFB_INFORM_PERC
-        defaultStockTradeShouldNotBeFound("irrfPerc.in=" + UPDATED_RFB_INFORM_PERC);
+        // Get all the stockTradeList where irrfPerc equals to UPDATED_IRRF_PERC
+        defaultStockTradeShouldNotBeFound("irrfPerc.in=" + UPDATED_IRRF_PERC);
     }
 
     @Test
@@ -1758,7 +1758,7 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].negotiationPerc").value(hasItem(DEFAULT_NEGOTIATION_PERC.intValue())))
             .andExpect(jsonPath("$.[*].liquidationPerc").value(hasItem(DEFAULT_LIQUIDATION_PERC.intValue())))
             .andExpect(jsonPath("$.[*].registryPerc").value(hasItem(DEFAULT_REGISTRY_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_RFB_INFORM_PERC.intValue())))
+            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_IRRF_PERC.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
 
@@ -1829,7 +1829,7 @@ public class StockTradeResourceIntTest {
             .negotiationPerc(UPDATED_NEGOTIATION_PERC)
             .liquidationPerc(UPDATED_LIQUIDATION_PERC)
             .registryPerc(UPDATED_REGISTRY_PERC)
-            .irrfPerc(UPDATED_RFB_INFORM_PERC)
+            .irrfPerc(UPDATED_IRRF_PERC)
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR);
         StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(updatedStockTrade);
@@ -1864,7 +1864,7 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getNegotiationPerc()).isEqualTo(UPDATED_NEGOTIATION_PERC);
         assertThat(testStockTrade.getLiquidationPerc()).isEqualTo(UPDATED_LIQUIDATION_PERC);
         assertThat(testStockTrade.getRegistryPerc()).isEqualTo(UPDATED_REGISTRY_PERC);
-        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(UPDATED_RFB_INFORM_PERC);
+        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(UPDATED_IRRF_PERC);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
     }
