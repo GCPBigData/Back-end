@@ -4,6 +4,7 @@ import br.com.clearinvest.clivserver.domain.BrokerageFlow;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -15,5 +16,8 @@ public interface BrokerageFlowRepository extends JpaRepository<BrokerageFlow, Lo
 
     @Query("select brokerage_flow from BrokerageFlow brokerage_flow where brokerage_flow.user.login = ?#{principal.username}")
     List<BrokerageFlow> findByUserIsCurrentUser();
+
+    @Query("select sum(f.amount) from BrokerageFlow f where f.user.login = ?#{principal.username}")
+    BigDecimal getBalanceOfCurrentUser();
 
 }

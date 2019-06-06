@@ -2,9 +2,7 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.ClivServerApp;
 import br.com.clearinvest.clivserver.domain.*;
-import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
-import br.com.clearinvest.clivserver.repository.StockTradeRepository;
-import br.com.clearinvest.clivserver.repository.UserRepository;
+import br.com.clearinvest.clivserver.repository.*;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
 import br.com.clearinvest.clivserver.service.dto.StockTradeDTO;
 import br.com.clearinvest.clivserver.service.mapper.StockTradeMapper;
@@ -48,7 +46,9 @@ public class StockTradeService {
 
     private final StockFlowService stockFlowService;
 
-    private final FakeTradeService fakeTradeService;
+    private final BrokerageFlowRepository brokerageFlowRepository;
+
+    private final StockFlowRepository stockFlowRepository;
 
     @Value("${cliv.sendOrderToOmsInDevMode}")
     boolean sendOrderToOmsInDevMode = false;
@@ -58,8 +58,8 @@ public class StockTradeService {
 
     public StockTradeService(StockTradeRepository stockTradeRepository, StockTradeMapper stockTradeMapper,
             BrokerageAccountRepository brokerageAccountRepository, StockOrderService stockOrderService,
-            OMSService omsService, UserRepository userRepository,
-            StockFlowService stockFlowService, FakeTradeService fakeTradeService) {
+            OMSService omsService, UserRepository userRepository, StockFlowService stockFlowService,
+            BrokerageFlowRepository brokerageFlowRepository, StockFlowRepository stockBalanceRepository) {
         this.stockTradeRepository = stockTradeRepository;
         this.stockTradeMapper = stockTradeMapper;
         this.brokerageAccountRepository = brokerageAccountRepository;
@@ -67,7 +67,8 @@ public class StockTradeService {
         this.omsService = omsService;
         this.userRepository = userRepository;
         this.stockFlowService = stockFlowService;
-        this.fakeTradeService = fakeTradeService;
+        this.brokerageFlowRepository = brokerageFlowRepository;
+        this.stockFlowRepository = stockBalanceRepository;
     }
 
     /**
@@ -153,6 +154,19 @@ public class StockTradeService {
                 .findByIdAndCurrentUser(trade.getBrokerageAccount().getId())
                 .orElseThrow(() -> new BusinessException("Conta não encontrada."));
 
+        BigDecimal stockTotalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
+        if (StockOrder.FIX_SIDE_BUY.equals(trade.getSide())) {
+            BigDecimal brokerageBalance = brokerageFlowRepository.getBalanceOfCurrentUser();
+            if (stockTotalPrice.compareTo(brokerageBalance) > 0) {
+                throw new BusinessException("Saldo na corretora insuficiente.");
+            }
+        } else if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
+            Long stockQuantity = stockFlowRepository.getQuantityOfCurrentUserAndStock(trade.getStock());
+            if (stockQuantity == null || trade.getQuantity() > stockQuantity) {
+                throw new BusinessException("Quantidade de papéis na carteira insuficiente.");
+            }
+        }
+
         trade.setCreatedAt(ZonedDateTime.now());
         trade.setTradeDate(ZonedDateTime.now());
         trade.setStatus(StockTrade.STATUS_LOCAL_NEW);
@@ -183,15 +197,6 @@ public class StockTradeService {
         SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByLogin)
                 .ifPresent(trade::setCreatedBy);
-
-        BigDecimal stockTotalPrice = trade.getUnitPrice().multiply(new BigDecimal(trade.getQuantity()));
-
-        BigDecimal accountBalance = brokerageAccount.getBalance() == null ? new BigDecimal(0) : brokerageAccount.getBalance();
-
-        // TODO
-        /*if (stockTotalPrice.compareTo(accountBalance) > 0) {
-            throw new BusinessException("Saldo na corretora insuficiente.");
-        }*/
 
         trade = stockTradeRepository.save(trade);
 
@@ -302,7 +307,7 @@ public class StockTradeService {
                 statusDescr = "Salva";
                 break;
             case (StockTrade.STATUS_FIX_NEW):
-                statusDescr = "Recebida";
+                statusDescr = "Criada";
                 break;
             case (StockTrade.STATUS_FIX_PARTIALLY_FILLED):
                 statusDescr = "Parcialmente Executada";

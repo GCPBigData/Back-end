@@ -522,7 +522,12 @@ public class StockOrderService {
 
         if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
             StockFlow stockFlow = stockFlowService.add(trade, execReport);
-            brokerageFlowService.add(trade, stockFlow.getTotalPrice());
+
+            BigDecimal totalPrice = stockFlow.getTotalPrice();
+            if (StockOrder.FIX_SIDE_BUY.equals(trade.getSide())) {
+                totalPrice = totalPrice.negate();
+            }
+            brokerageFlowService.add(trade, totalPrice);
 
             trade.setTotalPrice(trade.getTotalPrice().add(stockFlow.getTotalPrice()));
             trade.setTotalPriceActual(StockTradeService.calculateTotalPriceActual(trade));
@@ -532,7 +537,7 @@ public class StockOrderService {
         if (ordStatus.equals(StockOrder.STATUS_FIX_FILLED)
                 || (ordStatus.equals(StockOrder.STATUS_FIX_CANCELED) && trade.getExecQuantity() > 0)
                 || (ordStatus.equals(StockOrder.STATUS_FIX_EXPIRED) && trade.getExecQuantity() > 0)) {
-            brokerageFlowService.add(trade, StockTradeService.calculateFees(trade));
+            brokerageFlowService.add(trade, StockTradeService.calculateFees(trade).negate());
         }
 
         log.debug("StockOrderService: proccessExecutionReport; resulting stock trade: {}", trade);

@@ -121,12 +121,12 @@ public class ClivServerApp {
         return new ClientApplicationAdapter();
     }*/
 
-    @Bean
+    /*@Bean
     public Initiator clientInitiator(quickfix.Application clientApplication, MessageStoreFactory clientMessageStoreFactory,
         SessionSettings clientSessionSettings, LogFactory clientLogFactory,
         MessageFactory clientMessageFactory) throws ConfigError {
 
         return new ThreadedSocketInitiator(clientApplication, clientMessageStoreFactory, clientSessionSettings,
             clientLogFactory, clientMessageFactory);
-    }
+    }*/
 }
