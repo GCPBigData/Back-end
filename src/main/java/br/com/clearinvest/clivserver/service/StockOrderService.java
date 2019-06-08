@@ -522,14 +522,9 @@ public class StockOrderService {
 
         if (String.valueOf(StockOrder.FIX_EXEC_TYPE_TRADE).equals(execReport.getExecType())) {
             StockFlow stockFlow = stockFlowService.add(trade, execReport);
+            brokerageFlowService.add(trade, stockFlow.getTotalPrice());
 
-            BigDecimal totalPrice = stockFlow.getTotalPrice();
-            if (StockOrder.FIX_SIDE_BUY.equals(trade.getSide())) {
-                totalPrice = totalPrice.negate();
-            }
-            brokerageFlowService.add(trade, totalPrice);
-
-            trade.setTotalPrice(trade.getTotalPrice().add(stockFlow.getTotalPrice()));
+            trade.setTotalPrice(trade.getTotalPrice().add(execReport.getLastTotalPrice()));
             trade.setTotalPriceActual(StockTradeService.calculateTotalPriceActual(trade));
         }
 

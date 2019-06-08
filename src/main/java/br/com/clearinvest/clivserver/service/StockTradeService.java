@@ -161,7 +161,7 @@ public class StockTradeService {
                 throw new BusinessException("Saldo na corretora insuficiente.");
             }
         } else if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
-            Long stockQuantity = stockFlowRepository.getQuantityOfCurrentUserAndStock(trade.getStock());
+            Long stockQuantity = stockFlowRepository.getQuantityByStockAndCurrentUser(trade.getStock());
             if (stockQuantity == null || trade.getQuantity() > stockQuantity) {
                 throw new BusinessException("Quantidade de papéis na carteira insuficiente.");
             }

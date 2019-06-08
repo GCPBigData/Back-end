@@ -1,5 +1,7 @@
 package br.com.clearinvest.clivserver.web.rest;
 
+import br.com.clearinvest.clivserver.repository.StockFlowRepository;
+import br.com.clearinvest.clivserver.service.dto.StockFlowSummaryDTO;
 import com.codahale.metrics.annotation.Timed;
 import br.com.clearinvest.clivserver.service.StockFlowService;
 import br.com.clearinvest.clivserver.web.rest.errors.BadRequestAlertException;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,13 @@ public class StockFlowResource {
 
     private final StockFlowQueryService stockFlowQueryService;
 
-    public StockFlowResource(StockFlowService stockFlowService, StockFlowQueryService stockFlowQueryService) {
+    private final StockFlowRepository stockFlowRepository;
+
+    public StockFlowResource(StockFlowService stockFlowService, StockFlowQueryService stockFlowQueryService,
+            StockFlowRepository stockFlowRepository) {
         this.stockFlowService = stockFlowService;
         this.stockFlowQueryService = stockFlowQueryService;
+        this.stockFlowRepository = stockFlowRepository;
     }
 
     /**
@@ -142,5 +147,16 @@ public class StockFlowResource {
         log.debug("REST request to delete StockFlow : {}", id);
         stockFlowService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /stock-flows/summary : get the stockFlow summary.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of stockFlows in body
+     */
+    @GetMapping("/stock-flows/summary")
+    @Timed
+    public List<StockFlowSummaryDTO> getStockFlowSummary() {
+        return stockFlowRepository.findAllFlowSummaryByCurrentUser();
     }
 }

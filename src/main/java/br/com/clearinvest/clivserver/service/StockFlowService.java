@@ -54,12 +54,14 @@ public class StockFlowService {
 
     public StockFlow addManualEntry(StockTrade trade) {
         BigDecimal totalPrice = trade.getUnitPrice().multiply(BigDecimal.valueOf(trade.getQuantity()));
+        Long quantity = trade.getQuantity();
         if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
             totalPrice = totalPrice.negate();
+            quantity = -quantity;
         }
 
         StockFlow stockFlow = createStockFlow(trade, trade.getCreatedBy(), trade.getBrokerageAccount(),
-                trade.getQuantity(), trade.getUnitPrice(), totalPrice)
+                quantity, trade.getUnitPrice(), totalPrice)
                 .flowDate(trade.getTradeDate());
 
         stockFlow = stockFlowRepository.save(stockFlow);
@@ -70,13 +72,8 @@ public class StockFlowService {
     }
 
     public StockFlow add(StockTrade trade, ExecReport execReport) {
-        BigDecimal totalPrice = execReport.getLastPx().multiply(BigDecimal.valueOf(execReport.getLastQty()));
-        if (StockOrder.FIX_SIDE_SELL.equals(trade.getSide())) {
-            totalPrice = totalPrice.negate();
-        }
-
         StockFlow stockFlow = createStockFlow(trade, trade.getCreatedBy(), trade.getBrokerageAccount(),
-                execReport.getLastQty(), execReport.getLastPx(), totalPrice)
+                execReport.getLastQuantityWithSign(), execReport.getLastPx(), execReport.getLastTotalPriceWithSign())
                 .execReport(execReport);
 
         stockFlow = stockFlowRepository.save(stockFlow);

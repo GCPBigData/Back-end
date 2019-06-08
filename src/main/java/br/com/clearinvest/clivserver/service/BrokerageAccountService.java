@@ -2,6 +2,7 @@ package br.com.clearinvest.clivserver.service;
 
 import br.com.clearinvest.clivserver.domain.BrokerageAccount;
 import br.com.clearinvest.clivserver.repository.BrokerageAccountRepository;
+import br.com.clearinvest.clivserver.repository.BrokerageFlowRepository;
 import br.com.clearinvest.clivserver.repository.UserRepository;
 import br.com.clearinvest.clivserver.security.AuthoritiesConstants;
 import br.com.clearinvest.clivserver.security.SecurityUtils;
@@ -36,13 +37,16 @@ public class BrokerageAccountService {
 
     private final UserRepository userRepository;
 
+    private final BrokerageFlowRepository brokerageFlowRepository;
+
     public BrokerageAccountService(BrokerageAccountRepository brokerageAccountRepository,
             BrokerageAccountMapper brokerageAccountMapper, BrokerageFlowService brokerageFlowService,
-            UserRepository userRepository) {
+            UserRepository userRepository, BrokerageFlowRepository brokerageFlowRepository) {
         this.brokerageAccountRepository = brokerageAccountRepository;
         this.brokerageAccountMapper = brokerageAccountMapper;
         this.brokerageFlowService = brokerageFlowService;
         this.userRepository = userRepository;
+        this.brokerageFlowRepository = brokerageFlowRepository;
     }
 
     /**
@@ -140,7 +144,12 @@ public class BrokerageAccountService {
 
         } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)) {
             return brokerageAccountRepository.findAllByUserIsCurrentUser(pageable)
-                .map(brokerageAccountMapper::toDto);
+                    .map(brokerageAccountMapper::toDto)
+                    .map((dto) -> {
+                        BigDecimal balance = brokerageFlowRepository.getBalanceOfCurrentUser();
+                        dto.setBalance(balance != null ? balance : BigDecimal.ZERO);
+                        return dto;
+                    });
 
         } else {
             return null;
@@ -156,8 +165,14 @@ public class BrokerageAccountService {
     @Transactional(readOnly = true)
     public Optional<BrokerageAccountDTO> findOne(Long id) {
         log.debug("Request to get BrokerageAccount : {}", id);
-        return brokerageAccountRepository.findById(id)
-            .map(brokerageAccountMapper::toDto);
+
+        BrokerageAccountDTO dto = brokerageAccountRepository.findByIdAndCurrentUser(id)
+                .map(brokerageAccountMapper::toDto).orElseThrow(() -> new BusinessException("Conta não encontrada."));
+
+        BigDecimal balance = brokerageFlowRepository.getBalanceOfCurrentUser();
+        dto.setBalance(balance != null ? balance : BigDecimal.ZERO);
+
+        return Optional.of(dto);
     }
 
     /**

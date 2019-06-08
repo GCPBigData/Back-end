@@ -79,6 +79,24 @@ public class ExecReport implements Serializable {
     @JsonIgnoreProperties("")
     private StockOrder order;
 
+    @Transient
+    public BigDecimal getLastTotalPrice() {
+        return lastPx != null && lastQty != null ?
+                lastPx.multiply(BigDecimal.valueOf(lastQty)) : BigDecimal.ZERO;
+    }
+
+    @Transient
+    public BigDecimal getLastTotalPriceWithSign() {
+        return StockOrder.FIX_SIDE_SELL.equals(getOrder().getSide()) ?
+                getLastTotalPrice().negate() : getLastTotalPrice();
+    }
+
+    @Transient
+    public Long getLastQuantityWithSign() {
+        return StockOrder.FIX_SIDE_SELL.equals(getOrder().getSide()) ?
+                -lastQty : lastQty;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
