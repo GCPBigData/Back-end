@@ -6,13 +6,14 @@ import java.math.BigDecimal;
 /**
  * A DTO for the Stock entity.
  */
-public class StockFlowSummaryDTO implements Serializable {
+public class StockFlowBalanceDTO implements Serializable {
 
     private String symbol;
     private Long quantity;
     private BigDecimal totalPrice;
+    private BigDecimal totalPriceActual;
 
-    public StockFlowSummaryDTO(String symbol, Long quantity, BigDecimal totalPrice) {
+    public StockFlowBalanceDTO(String symbol, Long quantity, BigDecimal totalPrice) {
         this.symbol = symbol;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
@@ -40,5 +41,13 @@ public class StockFlowSummaryDTO implements Serializable {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getTotalPriceActual() {
+        return totalPriceActual;
+    }
+
+    public void setTotalPriceActual(BigDecimal totalPriceActual) {
+        this.totalPriceActual = totalPriceActual;
     }
 }

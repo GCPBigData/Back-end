@@ -1,15 +1,15 @@
 package br.com.clearinvest.clivserver.web.rest;
 
 import br.com.clearinvest.clivserver.repository.StockFlowRepository;
-import br.com.clearinvest.clivserver.service.dto.StockFlowSummaryDTO;
-import com.codahale.metrics.annotation.Timed;
+import br.com.clearinvest.clivserver.service.StockFlowQueryService;
 import br.com.clearinvest.clivserver.service.StockFlowService;
+import br.com.clearinvest.clivserver.service.dto.StockFlowBalanceDTO;
+import br.com.clearinvest.clivserver.service.dto.StockFlowCriteria;
+import br.com.clearinvest.clivserver.service.dto.StockFlowDTO;
 import br.com.clearinvest.clivserver.web.rest.errors.BadRequestAlertException;
 import br.com.clearinvest.clivserver.web.rest.util.HeaderUtil;
 import br.com.clearinvest.clivserver.web.rest.util.PaginationUtil;
-import br.com.clearinvest.clivserver.service.dto.StockFlowDTO;
-import br.com.clearinvest.clivserver.service.dto.StockFlowCriteria;
-import br.com.clearinvest.clivserver.service.StockFlowQueryService;
+import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -150,13 +149,24 @@ public class StockFlowResource {
     }
 
     /**
-     * GET  /stock-flows/summary : get the stockFlow summary.
+     * GET  /stock-flows/balance-by-stock : get the stockFlow summary.
      *
-     * @return the ResponseEntity with status 200 (OK) and the list of stockFlows in body
+     * @return the ResponseEntity with status 200 (OK) and the list of StockFlowBalanceDTO in body
      */
-    @GetMapping("/stock-flows/summary")
+    @GetMapping("/stock-flows/balance-by-stock")
     @Timed
-    public List<StockFlowSummaryDTO> getStockFlowSummary() {
-        return stockFlowRepository.findAllFlowSummaryByCurrentUser();
+    public List<StockFlowBalanceDTO> getBalanceByStock() {
+        return stockFlowRepository.listBalanceByCurrentUserGroupedByStock();
     }
+
+//    /**
+//     * GET  /stock-flows/balance : get the stockFlow balance.
+//     *
+//     * @return the ResponseEntity with status 200 (OK) and the StockFlowBalanceDTO in body
+//     */
+//    @GetMapping("/stock-flows/balance")
+//    @Timed
+//    public StockFlowBalanceDTO getBalance() {
+//        return stockFlowRepository.getBalanceByCurrentUser();
+//    }
 }
