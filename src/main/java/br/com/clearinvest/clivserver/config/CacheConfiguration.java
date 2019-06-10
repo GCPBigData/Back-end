@@ -52,6 +52,7 @@ public class CacheConfiguration {
             cm.createCache(br.com.clearinvest.clivserver.domain.StockFlow.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageFlow.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.ExecReport.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.ChatMessage.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

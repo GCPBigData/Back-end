@@ -17,6 +17,7 @@
     <include file="config/liquibase/changelog/20190526120002_added_entity_StockBalance.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190601120001_added_entity_BrokerageFlow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120000_added_entity_ExecReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190526120003_added_entity_ChatMessage.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20181216152622_added_entity_constraints_Stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181216181907_added_entity_constraints_StockWatch.xml" relativeToChangelogFile="false"/>
@@ -28,6 +29,7 @@
     <include file="config/liquibase/changelog/20190526120002_added_entity_constraints_StockBalance.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190601120001_added_entity_constraints_BrokerageFlow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120000_added_entity_constraints_ExecReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190526120003_added_entity_constraints_ChatMessage.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20181216163000_load_data_maket_sector_stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190212230310_load_data_brokerages.xml" relativeToChangelogFile="false"/>

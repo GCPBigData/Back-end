@@ -149,7 +149,7 @@ public class AppPreferenceService {
         if (homeSectionsPref == null || homeSectionsPref.getValue() == null
                 || homeSectionsPref.getValue().isEmpty()) {
             String valuesString =
-                String.join(",", "balance", "portfolio", "stockList", "balanceChart");
+                String.join(",", "balance", "portfolio", "stockList");
 
             homeSectionsPref = new AppPreference(PREF_HOME_SECTIONS, valuesString);
             prefsByKey.put(PREF_HOME_SECTIONS, homeSectionsPref);
