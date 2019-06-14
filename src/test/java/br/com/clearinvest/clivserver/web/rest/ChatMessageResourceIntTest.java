@@ -9,6 +9,8 @@ import br.com.clearinvest.clivserver.service.ChatMessageService;
 import br.com.clearinvest.clivserver.service.dto.ChatMessageDTO;
 import br.com.clearinvest.clivserver.service.mapper.ChatMessageMapper;
 import br.com.clearinvest.clivserver.web.rest.errors.ExceptionTranslator;
+import br.com.clearinvest.clivserver.service.dto.ChatMessageCriteria;
+import br.com.clearinvest.clivserver.service.ChatMessageQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +67,9 @@ public class ChatMessageResourceIntTest {
     private ChatMessageService chatMessageService;
 
     @Autowired
+    private ChatMessageQueryService chatMessageQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +88,7 @@ public class ChatMessageResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ChatMessageResource chatMessageResource = new ChatMessageResource(chatMessageService);
+        final ChatMessageResource chatMessageResource = new ChatMessageResource(chatMessageService, chatMessageQueryService);
         this.restChatMessageMockMvc = MockMvcBuilders.standaloneSetup(chatMessageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -183,6 +188,126 @@ public class ChatMessageResourceIntTest {
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.message").value(DEFAULT_MESSAGE.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByCreatedAtIsEqualToSomething() throws Exception {
+        // Initialize the database
+        chatMessageRepository.saveAndFlush(chatMessage);
+
+        // Get all the chatMessageList where createdAt equals to DEFAULT_CREATED_AT
+        defaultChatMessageShouldBeFound("createdAt.equals=" + DEFAULT_CREATED_AT);
+
+        // Get all the chatMessageList where createdAt equals to UPDATED_CREATED_AT
+        defaultChatMessageShouldNotBeFound("createdAt.equals=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByCreatedAtIsInShouldWork() throws Exception {
+        // Initialize the database
+        chatMessageRepository.saveAndFlush(chatMessage);
+
+        // Get all the chatMessageList where createdAt in DEFAULT_CREATED_AT or UPDATED_CREATED_AT
+        defaultChatMessageShouldBeFound("createdAt.in=" + DEFAULT_CREATED_AT + "," + UPDATED_CREATED_AT);
+
+        // Get all the chatMessageList where createdAt equals to UPDATED_CREATED_AT
+        defaultChatMessageShouldNotBeFound("createdAt.in=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByCreatedAtIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        chatMessageRepository.saveAndFlush(chatMessage);
+
+        // Get all the chatMessageList where createdAt is not null
+        defaultChatMessageShouldBeFound("createdAt.specified=true");
+
+        // Get all the chatMessageList where createdAt is null
+        defaultChatMessageShouldNotBeFound("createdAt.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByCreatedAtIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        chatMessageRepository.saveAndFlush(chatMessage);
+
+        // Get all the chatMessageList where createdAt greater than or equals to DEFAULT_CREATED_AT
+        defaultChatMessageShouldBeFound("createdAt.greaterOrEqualThan=" + DEFAULT_CREATED_AT);
+
+        // Get all the chatMessageList where createdAt greater than or equals to UPDATED_CREATED_AT
+        defaultChatMessageShouldNotBeFound("createdAt.greaterOrEqualThan=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByCreatedAtIsLessThanSomething() throws Exception {
+        // Initialize the database
+        chatMessageRepository.saveAndFlush(chatMessage);
+
+        // Get all the chatMessageList where createdAt less than or equals to DEFAULT_CREATED_AT
+        defaultChatMessageShouldNotBeFound("createdAt.lessThan=" + DEFAULT_CREATED_AT);
+
+        // Get all the chatMessageList where createdAt less than or equals to UPDATED_CREATED_AT
+        defaultChatMessageShouldBeFound("createdAt.lessThan=" + UPDATED_CREATED_AT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllChatMessagesByUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        User user = UserResourceIntTest.createEntity(em);
+        em.persist(user);
+        em.flush();
+        chatMessage.setUser(user);
+        chatMessageRepository.saveAndFlush(chatMessage);
+        Long userId = user.getId();
+
+        // Get all the chatMessageList where user equals to userId
+        defaultChatMessageShouldBeFound("userId.equals=" + userId);
+
+        // Get all the chatMessageList where user equals to userId + 1
+        defaultChatMessageShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultChatMessageShouldBeFound(String filter) throws Exception {
+        restChatMessageMockMvc.perform(get("/api/chat-messages?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(chatMessage.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
+            .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE.toString())));
+
+        // Check, that the count call also returns 1
+        restChatMessageMockMvc.perform(get("/api/chat-messages/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultChatMessageShouldNotBeFound(String filter) throws Exception {
+        restChatMessageMockMvc.perform(get("/api/chat-messages?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restChatMessageMockMvc.perform(get("/api/chat-messages/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

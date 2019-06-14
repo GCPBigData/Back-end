@@ -11,7 +11,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long>, JpaSpecificationExecutor<ChatMessage> {
 
     @Query("select chat_message from ChatMessage chat_message where chat_message.user.login = ?#{principal.username}")
     List<ChatMessage> findByUserIsCurrentUser();

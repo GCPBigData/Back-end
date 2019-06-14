@@ -6,6 +6,8 @@ import br.com.clearinvest.clivserver.web.rest.errors.BadRequestAlertException;
 import br.com.clearinvest.clivserver.web.rest.util.HeaderUtil;
 import br.com.clearinvest.clivserver.web.rest.util.PaginationUtil;
 import br.com.clearinvest.clivserver.service.dto.ChatMessageDTO;
+import br.com.clearinvest.clivserver.service.dto.ChatMessageCriteria;
+import br.com.clearinvest.clivserver.service.ChatMessageQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,11 @@ public class ChatMessageResource {
 
     private final ChatMessageService chatMessageService;
 
-    public ChatMessageResource(ChatMessageService chatMessageService) {
+    private final ChatMessageQueryService chatMessageQueryService;
+
+    public ChatMessageResource(ChatMessageService chatMessageService, ChatMessageQueryService chatMessageQueryService) {
         this.chatMessageService = chatMessageService;
+        this.chatMessageQueryService = chatMessageQueryService;
     }
 
     /**
@@ -86,15 +91,29 @@ public class ChatMessageResource {
      * GET  /chat-messages : get all the chatMessages.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of chatMessages in body
      */
     @GetMapping("/chat-messages")
     @Timed
-    public ResponseEntity<List<ChatMessageDTO>> getAllChatMessages(Pageable pageable) {
-        log.debug("REST request to get a page of ChatMessages");
-        Page<ChatMessageDTO> page = chatMessageService.findAll(pageable);
+    public ResponseEntity<List<ChatMessageDTO>> getAllChatMessages(ChatMessageCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get ChatMessages by criteria: {}", criteria);
+        Page<ChatMessageDTO> page = chatMessageQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/chat-messages");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /chat-messages/count : count all the chatMessages.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/chat-messages/count")
+    @Timed
+    public ResponseEntity<Long> countChatMessages(ChatMessageCriteria criteria) {
+        log.debug("REST request to count ChatMessages by criteria: {}", criteria);
+        return ResponseEntity.ok().body(chatMessageQueryService.countByCriteria(criteria));
     }
 
     /**
