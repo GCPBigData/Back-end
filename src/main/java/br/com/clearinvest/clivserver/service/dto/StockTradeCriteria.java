@@ -62,13 +62,13 @@ public class StockTradeCriteria implements Serializable {
 
     private BigDecimalFilter brokerageFeeIss;
 
-    private BigDecimalFilter negotiationPerc;
+    private BigDecimalFilter negotiationVal;
 
-    private BigDecimalFilter liquidationPerc;
+    private BigDecimalFilter liquidationVal;
 
-    private BigDecimalFilter registryPerc;
+    private BigDecimalFilter registryVal;
 
-    private BigDecimalFilter irrfPerc;
+    private BigDecimalFilter irrfVal;
 
     private ZonedDateTimeFilter lastExecReportTime;
 
@@ -239,36 +239,36 @@ public class StockTradeCriteria implements Serializable {
         this.brokerageFeeIss = brokerageFeeIss;
     }
 
-    public BigDecimalFilter getNegotiationPerc() {
-        return negotiationPerc;
+    public BigDecimalFilter getNegotiationVal() {
+        return negotiationVal;
     }
 
-    public void setNegotiationPerc(BigDecimalFilter negotiationPerc) {
-        this.negotiationPerc = negotiationPerc;
+    public void setNegotiationVal(BigDecimalFilter negotiationVal) {
+        this.negotiationVal = negotiationVal;
     }
 
-    public BigDecimalFilter getLiquidationPerc() {
-        return liquidationPerc;
+    public BigDecimalFilter getLiquidationVal() {
+        return liquidationVal;
     }
 
-    public void setLiquidationPerc(BigDecimalFilter liquidationPerc) {
-        this.liquidationPerc = liquidationPerc;
+    public void setLiquidationVal(BigDecimalFilter liquidationVal) {
+        this.liquidationVal = liquidationVal;
     }
 
-    public BigDecimalFilter getRegistryPerc() {
-        return registryPerc;
+    public BigDecimalFilter getRegistryVal() {
+        return registryVal;
     }
 
-    public void setRegistryPerc(BigDecimalFilter registryPerc) {
-        this.registryPerc = registryPerc;
+    public void setRegistryVal(BigDecimalFilter registryVal) {
+        this.registryVal = registryVal;
     }
 
-    public BigDecimalFilter getIrrfPerc() {
-        return irrfPerc;
+    public BigDecimalFilter getIrrfVal() {
+        return irrfVal;
     }
 
-    public void setIrrfPerc(BigDecimalFilter irrfPerc) {
-        this.irrfPerc = irrfPerc;
+    public void setIrrfVal(BigDecimalFilter irrfVal) {
+        this.irrfVal = irrfVal;
     }
 
     public ZonedDateTimeFilter getLastExecReportTime() {
@@ -357,10 +357,10 @@ public class StockTradeCriteria implements Serializable {
             Objects.equals(totalPriceActual, that.totalPriceActual) &&
             Objects.equals(brokerageFee, that.brokerageFee) &&
             Objects.equals(brokerageFeeIss, that.brokerageFeeIss) &&
-            Objects.equals(negotiationPerc, that.negotiationPerc) &&
-            Objects.equals(liquidationPerc, that.liquidationPerc) &&
-            Objects.equals(registryPerc, that.registryPerc) &&
-            Objects.equals(irrfPerc, that.irrfPerc) &&
+            Objects.equals(negotiationVal, that.negotiationVal) &&
+            Objects.equals(liquidationVal, that.liquidationVal) &&
+            Objects.equals(registryVal, that.registryVal) &&
+            Objects.equals(irrfVal, that.irrfVal) &&
             Objects.equals(lastExecReportTime, that.lastExecReportTime) &&
             Objects.equals(lastExecReportDescr, that.lastExecReportDescr) &&
             Objects.equals(stockId, that.stockId) &&
@@ -392,10 +392,10 @@ public class StockTradeCriteria implements Serializable {
         totalPriceActual,
         brokerageFee,
         brokerageFeeIss,
-        negotiationPerc,
-        liquidationPerc,
-        registryPerc,
-        irrfPerc,
+        negotiationVal,
+        liquidationVal,
+        registryVal,
+        irrfVal,
         lastExecReportTime,
         lastExecReportDescr,
         stockId,
@@ -428,10 +428,10 @@ public class StockTradeCriteria implements Serializable {
                 (totalPriceActual != null ? "totalPriceActual=" + totalPriceActual + ", " : "") +
                 (brokerageFee != null ? "brokerageFee=" + brokerageFee + ", " : "") +
                 (brokerageFeeIss != null ? "brokerageFeeIss=" + brokerageFeeIss + ", " : "") +
-                (negotiationPerc != null ? "negotiationPerc=" + negotiationPerc + ", " : "") +
-                (liquidationPerc != null ? "liquidationPerc=" + liquidationPerc + ", " : "") +
-                (registryPerc != null ? "registryPerc=" + registryPerc + ", " : "") +
-                (irrfPerc != null ? "irrfPerc=" + irrfPerc + ", " : "") +
+                (negotiationVal != null ? "negotiationVal=" + negotiationVal + ", " : "") +
+                (liquidationVal != null ? "liquidationVal=" + liquidationVal + ", " : "") +
+                (registryVal != null ? "registryVal=" + registryVal + ", " : "") +
+                (irrfVal != null ? "irrfVal=" + irrfVal + ", " : "") +
                 (lastExecReportTime != null ? "lastExecReportTime=" + lastExecReportTime + ", " : "") +
                 (lastExecReportDescr != null ? "lastExecReportDescr=" + lastExecReportDescr + ", " : "") +
                 (stockId != null ? "stockId=" + stockId + ", " : "") +

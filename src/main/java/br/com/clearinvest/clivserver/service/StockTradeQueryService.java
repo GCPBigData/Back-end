@@ -174,17 +174,17 @@ public class StockTradeQueryService extends QueryService<StockTrade> {
             if (criteria.getBrokerageFeeIss() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getBrokerageFeeIss(), StockTrade_.brokerageFeeIss));
             }
-            if (criteria.getNegotiationPerc() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getNegotiationPerc(), StockTrade_.negotiationPerc));
+            if (criteria.getNegotiationVal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNegotiationVal(), StockTrade_.negotiationVal));
             }
-            if (criteria.getLiquidationPerc() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getLiquidationPerc(), StockTrade_.liquidationPerc));
+            if (criteria.getLiquidationVal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLiquidationVal(), StockTrade_.liquidationVal));
             }
-            if (criteria.getRegistryPerc() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getRegistryPerc(), StockTrade_.registryPerc));
+            if (criteria.getRegistryVal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRegistryVal(), StockTrade_.registryVal));
             }
-            if (criteria.getIrrfPerc() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getIrrfPerc(), StockTrade_.irrfPerc));
+            if (criteria.getIrrfVal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIrrfVal(), StockTrade_.irrfVal));
             }
             if (criteria.getLastExecReportTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLastExecReportTime(), StockTrade_.lastExecReportTime));

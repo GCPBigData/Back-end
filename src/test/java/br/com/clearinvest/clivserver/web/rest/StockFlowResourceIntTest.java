@@ -110,7 +110,7 @@ public class StockFlowResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final StockFlowResource stockFlowResource = new StockFlowResource(stockFlowService, stockFlowQueryService);
+        final StockFlowResource stockFlowResource = new StockFlowResource(stockFlowService, stockFlowQueryService, null);
         this.restStockFlowMockMvc = MockMvcBuilders.standaloneSetup(stockFlowResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

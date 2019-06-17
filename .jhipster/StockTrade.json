@@ -163,19 +163,19 @@
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "negotiationPerc",
+            "fieldName": "negotiationVal",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "liquidationPerc",
+            "fieldName": "liquidationVal",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "registryPerc",
+            "fieldName": "registryVal",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "irrfPerc",
+            "fieldName": "irrfVal",
             "fieldType": "BigDecimal"
         },
         {

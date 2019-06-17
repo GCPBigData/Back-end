@@ -532,7 +532,23 @@ public class StockOrderService {
         if (ordStatus.equals(StockOrder.STATUS_FIX_FILLED)
                 || (ordStatus.equals(StockOrder.STATUS_FIX_CANCELED) && trade.getExecQuantity() > 0)
                 || (ordStatus.equals(StockOrder.STATUS_FIX_EXPIRED) && trade.getExecQuantity() > 0)) {
-            brokerageFlowService.add(trade, StockTradeService.calculateFees(trade).negate());
+
+            Brokerage brokerage = trade.getBrokerageAccount().getBrokerage();
+            trade.setBrokerageFeeIss(StockTradeService.calculateIssVal(trade, brokerage.getIss()));
+
+            if (StockTrade.MARKET_SPOT.equals(trade.getMarket())) {
+                trade.setNegotiationVal(StockTradeService.calculateNegotiationFeeVal(trade));
+                trade.setLiquidationVal(StockTradeService.calculateLiquidationVal(trade));
+                trade.setRegistryVal(StockTradeService.calculateRegistryVal(trade));
+            }
+
+            if (trade.getSide().equals(StockOrder.FIX_SIDE_SELL)) {
+                trade.setIrrfVal(StockTradeService.calculateIrrfVal(trade));
+            }
+
+            trade.setTotalPriceActual(trade.calculateTotalPriceActual());
+
+            brokerageFlowService.add(trade, trade.getTotalPriceActual().negate());
         }
 
         log.debug("StockOrderService: proccessExecutionReport; resulting stock trade: {}", trade);

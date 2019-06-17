@@ -56,23 +56,23 @@ public class StockTradeDTO implements Serializable {
 
     private BigDecimal averagePrice;
 
-    @DecimalMin(value = "0.01")
+    @DecimalMin(value = "0.00")
     private BigDecimal totalPrice;
 
-    @DecimalMin(value = "0.01")
+    @DecimalMin(value = "0.00")
     private BigDecimal totalPriceActual;
 
     private BigDecimal brokerageFee;
 
     private BigDecimal brokerageFeeIss;
 
-    private BigDecimal negotiationPerc;
+    private BigDecimal negotiationVal;
 
-    private BigDecimal liquidationPerc;
+    private BigDecimal liquidationVal;
 
-    private BigDecimal registryPerc;
+    private BigDecimal registryVal;
 
-    private BigDecimal irrfPerc;
+    private BigDecimal irrfVal;
 
     private ZonedDateTime lastExecReportTime;
 
@@ -95,11 +95,6 @@ public class StockTradeDTO implements Serializable {
     private String statusDescr;
     private boolean canCancel;
     private boolean canEdit;
-    private BigDecimal brokerageFeeIssVal;
-    private BigDecimal negotiationVal;
-    private BigDecimal liquidationVal;
-    private BigDecimal registryVal;
-    private BigDecimal irrfVal;
 
     // getters and setters
 
@@ -255,36 +250,36 @@ public class StockTradeDTO implements Serializable {
         this.brokerageFeeIss = brokerageFeeIss;
     }
 
-    public BigDecimal getNegotiationPerc() {
-        return negotiationPerc;
+    public BigDecimal getNegotiationVal() {
+        return negotiationVal;
     }
 
-    public void setNegotiationPerc(BigDecimal negotiationPerc) {
-        this.negotiationPerc = negotiationPerc;
+    public void setNegotiationVal(BigDecimal negotiationVal) {
+        this.negotiationVal = negotiationVal;
     }
 
-    public BigDecimal getLiquidationPerc() {
-        return liquidationPerc;
+    public BigDecimal getLiquidationVal() {
+        return liquidationVal;
     }
 
-    public void setLiquidationPerc(BigDecimal liquidationPerc) {
-        this.liquidationPerc = liquidationPerc;
+    public void setLiquidationVal(BigDecimal liquidationVal) {
+        this.liquidationVal = liquidationVal;
     }
 
-    public BigDecimal getRegistryPerc() {
-        return registryPerc;
+    public BigDecimal getRegistryVal() {
+        return registryVal;
     }
 
-    public void setRegistryPerc(BigDecimal registryPerc) {
-        this.registryPerc = registryPerc;
+    public void setRegistryVal(BigDecimal registryVal) {
+        this.registryVal = registryVal;
     }
 
-    public BigDecimal getIrrfPerc() {
-        return irrfPerc;
+    public BigDecimal getIrrfVal() {
+        return irrfVal;
     }
 
-    public void setIrrfPerc(BigDecimal irrfPerc) {
-        this.irrfPerc = irrfPerc;
+    public void setIrrfVal(BigDecimal irrfVal) {
+        this.irrfVal = irrfVal;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -375,46 +370,6 @@ public class StockTradeDTO implements Serializable {
         this.canEdit = canEdit;
     }
 
-    public BigDecimal getBrokerageFeeIssVal() {
-        return brokerageFeeIssVal;
-    }
-
-    public void setBrokerageFeeIssVal(BigDecimal brokerageFeeIssVal) {
-        this.brokerageFeeIssVal = brokerageFeeIssVal;
-    }
-
-    public BigDecimal getNegotiationVal() {
-        return negotiationVal;
-    }
-
-    public void setNegotiationVal(BigDecimal negotiationVal) {
-        this.negotiationVal = negotiationVal;
-    }
-
-    public BigDecimal getLiquidationVal() {
-        return liquidationVal;
-    }
-
-    public void setLiquidationVal(BigDecimal liquidationVal) {
-        this.liquidationVal = liquidationVal;
-    }
-
-    public BigDecimal getRegistryVal() {
-        return registryVal;
-    }
-
-    public void setRegistryVal(BigDecimal registryVal) {
-        this.registryVal = registryVal;
-    }
-
-    public BigDecimal getIrrfVal() {
-        return irrfVal;
-    }
-
-    public void setIrrfVal(BigDecimal irrfVal) {
-        this.irrfVal = irrfVal;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -458,10 +413,10 @@ public class StockTradeDTO implements Serializable {
             ", totalPriceActual=" + getTotalPriceActual() +
             ", brokerageFee=" + getBrokerageFee() +
             ", brokerageFeeIss=" + getBrokerageFeeIss() +
-            ", negotiationPerc=" + getNegotiationPerc() +
-            ", liquidationPerc=" + getLiquidationPerc() +
-            ", registryPerc=" + getRegistryPerc() +
-            ", irrfPerc=" + getIrrfPerc() +
+            ", negotiationVal=" + getNegotiationVal() +
+            ", liquidationVal=" + getLiquidationVal() +
+            ", registryVal=" + getRegistryVal() +
+            ", irrfVal=" + getIrrfVal() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +

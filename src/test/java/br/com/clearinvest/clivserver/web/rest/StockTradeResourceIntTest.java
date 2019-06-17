@@ -97,10 +97,10 @@ public class StockTradeResourceIntTest {
     private static final BigDecimal DEFAULT_AVERAGE_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_AVERAGE_PRICE = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_TOTAL_PRICE = new BigDecimal(0.01);
+    private static final BigDecimal DEFAULT_TOTAL_PRICE = new BigDecimal(0.00);
     private static final BigDecimal UPDATED_TOTAL_PRICE = new BigDecimal(1);
 
-    private static final BigDecimal DEFAULT_TOTAL_PRICE_ACTUAL = new BigDecimal(0.01);
+    private static final BigDecimal DEFAULT_TOTAL_PRICE_ACTUAL = new BigDecimal(0.00);
     private static final BigDecimal UPDATED_TOTAL_PRICE_ACTUAL = new BigDecimal(1);
 
     private static final BigDecimal DEFAULT_BROKERAGE_FEE = new BigDecimal(1);
@@ -109,17 +109,17 @@ public class StockTradeResourceIntTest {
     private static final BigDecimal DEFAULT_BROKERAGE_FEE_ISS = new BigDecimal(1);
     private static final BigDecimal UPDATED_BROKERAGE_FEE_ISS = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_NEGOTIATION_PERC = new BigDecimal(1);
-    private static final BigDecimal UPDATED_NEGOTIATION_PERC = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_NEGOTIATION_VAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_NEGOTIATION_VAL = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_LIQUIDATION_PERC = new BigDecimal(1);
-    private static final BigDecimal UPDATED_LIQUIDATION_PERC = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_LIQUIDATION_VAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_LIQUIDATION_VAL = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_REGISTRY_PERC = new BigDecimal(1);
-    private static final BigDecimal UPDATED_REGISTRY_PERC = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_REGISTRY_VAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_REGISTRY_VAL = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_IRRF_PERC = new BigDecimal(1);
-    private static final BigDecimal UPDATED_IRRF_PERC = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_IRRF_VAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_IRRF_VAL = new BigDecimal(2);
 
     private static final ZonedDateTime DEFAULT_LAST_EXEC_REPORT_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_LAST_EXEC_REPORT_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -192,10 +192,10 @@ public class StockTradeResourceIntTest {
             .totalPriceActual(DEFAULT_TOTAL_PRICE_ACTUAL)
             .brokerageFee(DEFAULT_BROKERAGE_FEE)
             .brokerageFeeIss(DEFAULT_BROKERAGE_FEE_ISS)
-            .negotiationPerc(DEFAULT_NEGOTIATION_PERC)
-            .liquidationPerc(DEFAULT_LIQUIDATION_PERC)
-            .registryPerc(DEFAULT_REGISTRY_PERC)
-            .irrfPerc(DEFAULT_IRRF_PERC)
+            .negotiationVal(DEFAULT_NEGOTIATION_VAL)
+            .liquidationVal(DEFAULT_LIQUIDATION_VAL)
+            .registryVal(DEFAULT_REGISTRY_VAL)
+            .irrfVal(DEFAULT_IRRF_VAL)
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR);
         // Add required entity
@@ -245,10 +245,10 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getTotalPriceActual()).isEqualTo(DEFAULT_TOTAL_PRICE_ACTUAL);
         assertThat(testStockTrade.getBrokerageFee()).isEqualTo(DEFAULT_BROKERAGE_FEE);
         assertThat(testStockTrade.getBrokerageFeeIss()).isEqualTo(DEFAULT_BROKERAGE_FEE_ISS);
-        assertThat(testStockTrade.getNegotiationPerc()).isEqualTo(DEFAULT_NEGOTIATION_PERC);
-        assertThat(testStockTrade.getLiquidationPerc()).isEqualTo(DEFAULT_LIQUIDATION_PERC);
-        assertThat(testStockTrade.getRegistryPerc()).isEqualTo(DEFAULT_REGISTRY_PERC);
-        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(DEFAULT_IRRF_PERC);
+        assertThat(testStockTrade.getNegotiationVal()).isEqualTo(DEFAULT_NEGOTIATION_VAL);
+        assertThat(testStockTrade.getLiquidationVal()).isEqualTo(DEFAULT_LIQUIDATION_VAL);
+        assertThat(testStockTrade.getRegistryVal()).isEqualTo(DEFAULT_REGISTRY_VAL);
+        assertThat(testStockTrade.getIrrfVal()).isEqualTo(DEFAULT_IRRF_VAL);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
     }
@@ -492,10 +492,10 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].totalPriceActual").value(hasItem(DEFAULT_TOTAL_PRICE_ACTUAL.intValue())))
             .andExpect(jsonPath("$.[*].brokerageFee").value(hasItem(DEFAULT_BROKERAGE_FEE.intValue())))
             .andExpect(jsonPath("$.[*].brokerageFeeIss").value(hasItem(DEFAULT_BROKERAGE_FEE_ISS.intValue())))
-            .andExpect(jsonPath("$.[*].negotiationPerc").value(hasItem(DEFAULT_NEGOTIATION_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].liquidationPerc").value(hasItem(DEFAULT_LIQUIDATION_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].registryPerc").value(hasItem(DEFAULT_REGISTRY_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_IRRF_PERC.intValue())))
+            .andExpect(jsonPath("$.[*].negotiationVal").value(hasItem(DEFAULT_NEGOTIATION_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].liquidationVal").value(hasItem(DEFAULT_LIQUIDATION_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].registryVal").value(hasItem(DEFAULT_REGISTRY_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].irrfVal").value(hasItem(DEFAULT_IRRF_VAL.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
     }
@@ -529,10 +529,10 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.totalPriceActual").value(DEFAULT_TOTAL_PRICE_ACTUAL.intValue()))
             .andExpect(jsonPath("$.brokerageFee").value(DEFAULT_BROKERAGE_FEE.intValue()))
             .andExpect(jsonPath("$.brokerageFeeIss").value(DEFAULT_BROKERAGE_FEE_ISS.intValue()))
-            .andExpect(jsonPath("$.negotiationPerc").value(DEFAULT_NEGOTIATION_PERC.intValue()))
-            .andExpect(jsonPath("$.liquidationPerc").value(DEFAULT_LIQUIDATION_PERC.intValue()))
-            .andExpect(jsonPath("$.registryPerc").value(DEFAULT_REGISTRY_PERC.intValue()))
-            .andExpect(jsonPath("$.irrfPerc").value(DEFAULT_IRRF_PERC.intValue()))
+            .andExpect(jsonPath("$.negotiationVal").value(DEFAULT_NEGOTIATION_VAL.intValue()))
+            .andExpect(jsonPath("$.liquidationVal").value(DEFAULT_LIQUIDATION_VAL.intValue()))
+            .andExpect(jsonPath("$.registryVal").value(DEFAULT_REGISTRY_VAL.intValue()))
+            .andExpect(jsonPath("$.irrfVal").value(DEFAULT_IRRF_VAL.intValue()))
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
             .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()));
     }
@@ -1376,158 +1376,158 @@ public class StockTradeResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationPercIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByNegotiationValIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationPerc equals to DEFAULT_NEGOTIATION_PERC
-        defaultStockTradeShouldBeFound("negotiationPerc.equals=" + DEFAULT_NEGOTIATION_PERC);
+        // Get all the stockTradeList where negotiationVal equals to DEFAULT_NEGOTIATION_VAL
+        defaultStockTradeShouldBeFound("negotiationVal.equals=" + DEFAULT_NEGOTIATION_VAL);
 
-        // Get all the stockTradeList where negotiationPerc equals to UPDATED_NEGOTIATION_PERC
-        defaultStockTradeShouldNotBeFound("negotiationPerc.equals=" + UPDATED_NEGOTIATION_PERC);
+        // Get all the stockTradeList where negotiationVal equals to UPDATED_NEGOTIATION_VAL
+        defaultStockTradeShouldNotBeFound("negotiationVal.equals=" + UPDATED_NEGOTIATION_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationPercIsInShouldWork() throws Exception {
+    public void getAllStockTradesByNegotiationValIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationPerc in DEFAULT_NEGOTIATION_PERC or UPDATED_NEGOTIATION_PERC
-        defaultStockTradeShouldBeFound("negotiationPerc.in=" + DEFAULT_NEGOTIATION_PERC + "," + UPDATED_NEGOTIATION_PERC);
+        // Get all the stockTradeList where negotiationVal in DEFAULT_NEGOTIATION_VAL or UPDATED_NEGOTIATION_VAL
+        defaultStockTradeShouldBeFound("negotiationVal.in=" + DEFAULT_NEGOTIATION_VAL + "," + UPDATED_NEGOTIATION_VAL);
 
-        // Get all the stockTradeList where negotiationPerc equals to UPDATED_NEGOTIATION_PERC
-        defaultStockTradeShouldNotBeFound("negotiationPerc.in=" + UPDATED_NEGOTIATION_PERC);
+        // Get all the stockTradeList where negotiationVal equals to UPDATED_NEGOTIATION_VAL
+        defaultStockTradeShouldNotBeFound("negotiationVal.in=" + UPDATED_NEGOTIATION_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationPercIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByNegotiationValIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationPerc is not null
-        defaultStockTradeShouldBeFound("negotiationPerc.specified=true");
+        // Get all the stockTradeList where negotiationVal is not null
+        defaultStockTradeShouldBeFound("negotiationVal.specified=true");
 
-        // Get all the stockTradeList where negotiationPerc is null
-        defaultStockTradeShouldNotBeFound("negotiationPerc.specified=false");
+        // Get all the stockTradeList where negotiationVal is null
+        defaultStockTradeShouldNotBeFound("negotiationVal.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationPercIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByLiquidationValIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationPerc equals to DEFAULT_LIQUIDATION_PERC
-        defaultStockTradeShouldBeFound("liquidationPerc.equals=" + DEFAULT_LIQUIDATION_PERC);
+        // Get all the stockTradeList where liquidationVal equals to DEFAULT_LIQUIDATION_VAL
+        defaultStockTradeShouldBeFound("liquidationVal.equals=" + DEFAULT_LIQUIDATION_VAL);
 
-        // Get all the stockTradeList where liquidationPerc equals to UPDATED_LIQUIDATION_PERC
-        defaultStockTradeShouldNotBeFound("liquidationPerc.equals=" + UPDATED_LIQUIDATION_PERC);
+        // Get all the stockTradeList where liquidationVal equals to UPDATED_LIQUIDATION_VAL
+        defaultStockTradeShouldNotBeFound("liquidationVal.equals=" + UPDATED_LIQUIDATION_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationPercIsInShouldWork() throws Exception {
+    public void getAllStockTradesByLiquidationValIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationPerc in DEFAULT_LIQUIDATION_PERC or UPDATED_LIQUIDATION_PERC
-        defaultStockTradeShouldBeFound("liquidationPerc.in=" + DEFAULT_LIQUIDATION_PERC + "," + UPDATED_LIQUIDATION_PERC);
+        // Get all the stockTradeList where liquidationVal in DEFAULT_LIQUIDATION_VAL or UPDATED_LIQUIDATION_VAL
+        defaultStockTradeShouldBeFound("liquidationVal.in=" + DEFAULT_LIQUIDATION_VAL + "," + UPDATED_LIQUIDATION_VAL);
 
-        // Get all the stockTradeList where liquidationPerc equals to UPDATED_LIQUIDATION_PERC
-        defaultStockTradeShouldNotBeFound("liquidationPerc.in=" + UPDATED_LIQUIDATION_PERC);
+        // Get all the stockTradeList where liquidationVal equals to UPDATED_LIQUIDATION_VAL
+        defaultStockTradeShouldNotBeFound("liquidationVal.in=" + UPDATED_LIQUIDATION_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationPercIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByLiquidationValIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationPerc is not null
-        defaultStockTradeShouldBeFound("liquidationPerc.specified=true");
+        // Get all the stockTradeList where liquidationVal is not null
+        defaultStockTradeShouldBeFound("liquidationVal.specified=true");
 
-        // Get all the stockTradeList where liquidationPerc is null
-        defaultStockTradeShouldNotBeFound("liquidationPerc.specified=false");
+        // Get all the stockTradeList where liquidationVal is null
+        defaultStockTradeShouldNotBeFound("liquidationVal.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryPercIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByRegistryValIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryPerc equals to DEFAULT_REGISTRY_PERC
-        defaultStockTradeShouldBeFound("registryPerc.equals=" + DEFAULT_REGISTRY_PERC);
+        // Get all the stockTradeList where registryVal equals to DEFAULT_REGISTRY_VAL
+        defaultStockTradeShouldBeFound("registryVal.equals=" + DEFAULT_REGISTRY_VAL);
 
-        // Get all the stockTradeList where registryPerc equals to UPDATED_REGISTRY_PERC
-        defaultStockTradeShouldNotBeFound("registryPerc.equals=" + UPDATED_REGISTRY_PERC);
+        // Get all the stockTradeList where registryVal equals to UPDATED_REGISTRY_VAL
+        defaultStockTradeShouldNotBeFound("registryVal.equals=" + UPDATED_REGISTRY_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryPercIsInShouldWork() throws Exception {
+    public void getAllStockTradesByRegistryValIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryPerc in DEFAULT_REGISTRY_PERC or UPDATED_REGISTRY_PERC
-        defaultStockTradeShouldBeFound("registryPerc.in=" + DEFAULT_REGISTRY_PERC + "," + UPDATED_REGISTRY_PERC);
+        // Get all the stockTradeList where registryVal in DEFAULT_REGISTRY_VAL or UPDATED_REGISTRY_VAL
+        defaultStockTradeShouldBeFound("registryVal.in=" + DEFAULT_REGISTRY_VAL + "," + UPDATED_REGISTRY_VAL);
 
-        // Get all the stockTradeList where registryPerc equals to UPDATED_REGISTRY_PERC
-        defaultStockTradeShouldNotBeFound("registryPerc.in=" + UPDATED_REGISTRY_PERC);
+        // Get all the stockTradeList where registryVal equals to UPDATED_REGISTRY_VAL
+        defaultStockTradeShouldNotBeFound("registryVal.in=" + UPDATED_REGISTRY_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryPercIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByRegistryValIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryPerc is not null
-        defaultStockTradeShouldBeFound("registryPerc.specified=true");
+        // Get all the stockTradeList where registryVal is not null
+        defaultStockTradeShouldBeFound("registryVal.specified=true");
 
-        // Get all the stockTradeList where registryPerc is null
-        defaultStockTradeShouldNotBeFound("registryPerc.specified=false");
+        // Get all the stockTradeList where registryVal is null
+        defaultStockTradeShouldNotBeFound("registryVal.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfPercIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByIrrfValIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfPerc equals to DEFAULT_IRRF_PERC
-        defaultStockTradeShouldBeFound("irrfPerc.equals=" + DEFAULT_IRRF_PERC);
+        // Get all the stockTradeList where irrfVal equals to DEFAULT_IRRF_VAL
+        defaultStockTradeShouldBeFound("irrfVal.equals=" + DEFAULT_IRRF_VAL);
 
-        // Get all the stockTradeList where irrfPerc equals to UPDATED_IRRF_PERC
-        defaultStockTradeShouldNotBeFound("irrfPerc.equals=" + UPDATED_IRRF_PERC);
+        // Get all the stockTradeList where irrfVal equals to UPDATED_IRRF_VAL
+        defaultStockTradeShouldNotBeFound("irrfVal.equals=" + UPDATED_IRRF_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfPercIsInShouldWork() throws Exception {
+    public void getAllStockTradesByIrrfValIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfPerc in DEFAULT_IRRF_PERC or UPDATED_IRRF_PERC
-        defaultStockTradeShouldBeFound("irrfPerc.in=" + DEFAULT_IRRF_PERC + "," + UPDATED_IRRF_PERC);
+        // Get all the stockTradeList where irrfVal in DEFAULT_IRRF_VAL or UPDATED_IRRF_VAL
+        defaultStockTradeShouldBeFound("irrfVal.in=" + DEFAULT_IRRF_VAL + "," + UPDATED_IRRF_VAL);
 
-        // Get all the stockTradeList where irrfPerc equals to UPDATED_IRRF_PERC
-        defaultStockTradeShouldNotBeFound("irrfPerc.in=" + UPDATED_IRRF_PERC);
+        // Get all the stockTradeList where irrfVal equals to UPDATED_IRRF_VAL
+        defaultStockTradeShouldNotBeFound("irrfVal.in=" + UPDATED_IRRF_VAL);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfPercIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByIrrfValIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfPerc is not null
-        defaultStockTradeShouldBeFound("irrfPerc.specified=true");
+        // Get all the stockTradeList where irrfVal is not null
+        defaultStockTradeShouldBeFound("irrfVal.specified=true");
 
-        // Get all the stockTradeList where irrfPerc is null
-        defaultStockTradeShouldNotBeFound("irrfPerc.specified=false");
+        // Get all the stockTradeList where irrfVal is null
+        defaultStockTradeShouldNotBeFound("irrfVal.specified=false");
     }
 
     @Test
@@ -1755,10 +1755,10 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].totalPriceActual").value(hasItem(DEFAULT_TOTAL_PRICE_ACTUAL.intValue())))
             .andExpect(jsonPath("$.[*].brokerageFee").value(hasItem(DEFAULT_BROKERAGE_FEE.intValue())))
             .andExpect(jsonPath("$.[*].brokerageFeeIss").value(hasItem(DEFAULT_BROKERAGE_FEE_ISS.intValue())))
-            .andExpect(jsonPath("$.[*].negotiationPerc").value(hasItem(DEFAULT_NEGOTIATION_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].liquidationPerc").value(hasItem(DEFAULT_LIQUIDATION_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].registryPerc").value(hasItem(DEFAULT_REGISTRY_PERC.intValue())))
-            .andExpect(jsonPath("$.[*].irrfPerc").value(hasItem(DEFAULT_IRRF_PERC.intValue())))
+            .andExpect(jsonPath("$.[*].negotiationVal").value(hasItem(DEFAULT_NEGOTIATION_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].liquidationVal").value(hasItem(DEFAULT_LIQUIDATION_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].registryVal").value(hasItem(DEFAULT_REGISTRY_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].irrfVal").value(hasItem(DEFAULT_IRRF_VAL.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
 
@@ -1826,10 +1826,10 @@ public class StockTradeResourceIntTest {
             .totalPriceActual(UPDATED_TOTAL_PRICE_ACTUAL)
             .brokerageFee(UPDATED_BROKERAGE_FEE)
             .brokerageFeeIss(UPDATED_BROKERAGE_FEE_ISS)
-            .negotiationPerc(UPDATED_NEGOTIATION_PERC)
-            .liquidationPerc(UPDATED_LIQUIDATION_PERC)
-            .registryPerc(UPDATED_REGISTRY_PERC)
-            .irrfPerc(UPDATED_IRRF_PERC)
+            .negotiationVal(UPDATED_NEGOTIATION_VAL)
+            .liquidationVal(UPDATED_LIQUIDATION_VAL)
+            .registryVal(UPDATED_REGISTRY_VAL)
+            .irrfVal(UPDATED_IRRF_VAL)
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR);
         StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(updatedStockTrade);
@@ -1861,10 +1861,10 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getTotalPriceActual()).isEqualTo(UPDATED_TOTAL_PRICE_ACTUAL);
         assertThat(testStockTrade.getBrokerageFee()).isEqualTo(UPDATED_BROKERAGE_FEE);
         assertThat(testStockTrade.getBrokerageFeeIss()).isEqualTo(UPDATED_BROKERAGE_FEE_ISS);
-        assertThat(testStockTrade.getNegotiationPerc()).isEqualTo(UPDATED_NEGOTIATION_PERC);
-        assertThat(testStockTrade.getLiquidationPerc()).isEqualTo(UPDATED_LIQUIDATION_PERC);
-        assertThat(testStockTrade.getRegistryPerc()).isEqualTo(UPDATED_REGISTRY_PERC);
-        assertThat(testStockTrade.getIrrfPerc()).isEqualTo(UPDATED_IRRF_PERC);
+        assertThat(testStockTrade.getNegotiationVal()).isEqualTo(UPDATED_NEGOTIATION_VAL);
+        assertThat(testStockTrade.getLiquidationVal()).isEqualTo(UPDATED_LIQUIDATION_VAL);
+        assertThat(testStockTrade.getRegistryVal()).isEqualTo(UPDATED_REGISTRY_VAL);
+        assertThat(testStockTrade.getIrrfVal()).isEqualTo(UPDATED_IRRF_VAL);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
     }

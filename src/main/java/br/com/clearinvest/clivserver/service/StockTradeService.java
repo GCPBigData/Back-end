@@ -179,7 +179,8 @@ public class StockTradeService {
         trade.setBrokerageFee(brokerageAccount.getFee() != null ? brokerageAccount.getFee() : brokerage.getFee());
         trade.setBrokerageFeeIss(brokerage.getIss());
 
-        if (StockTrade.MARKET_SPOT.equals(trade.getMarket())) {
+        // TODO remover, foi movido para StockTradeService
+        /*if (StockTrade.MARKET_SPOT.equals(trade.getMarket())) {
             trade.setNegotiationPerc(BigDecimal.valueOf(0.004476));
             trade.setLiquidationPerc(BigDecimal.valueOf(0.0275));
             trade.setRegistryPerc(BigDecimal.valueOf(0.0));
@@ -187,7 +188,7 @@ public class StockTradeService {
 
         if (trade.getSide().equals(StockOrder.FIX_SIDE_SELL)) {
             trade.setIrrfPerc(BigDecimal.valueOf(0.005));
-        }
+        }*/
 
         ZonedDateTime expireTime = trade.getExpireTime() == null ? ZonedDateTime.now() : trade.getExpireTime();
         expireTime = ZonedDateTime.of(expireTime.getYear(), expireTime.getMonth().getValue(), expireTime.getDayOfMonth(),
@@ -216,11 +217,13 @@ public class StockTradeService {
     }
 
     public static BigDecimal calculateFees(StockTrade trade) {
-        BigDecimal iss = calculateIssVal(trade).orElse(BigDecimal.ZERO);
-        BigDecimal negotiation = calculateNegotiationFeeVal(trade).orElse(BigDecimal.ZERO);
-        BigDecimal liquidation = calculateLiquidationVal(trade).orElse(BigDecimal.ZERO);
-        BigDecimal registry = calculateRegistryVal(trade).orElse(BigDecimal.ZERO);
-        BigDecimal irrf = calculateIrrfVal(trade).orElse(BigDecimal.ZERO);
+        Brokerage brokerage = trade.getBrokerageAccount().getBrokerage();
+
+        BigDecimal iss = calculateIssVal(trade, brokerage.getIss());
+        BigDecimal negotiation = calculateNegotiationFeeVal(trade);
+        BigDecimal liquidation = calculateLiquidationVal(trade);
+        BigDecimal registry = calculateRegistryVal(trade);
+        BigDecimal irrf = calculateIrrfVal(trade);
 
         return (trade.getBrokerageFee() != null ? trade.getBrokerageFee() : BigDecimal.ZERO)
                 .add(iss)
@@ -231,34 +234,34 @@ public class StockTradeService {
                 .setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public static Optional<BigDecimal> calculateIssVal(StockTrade trade) {
-        return trade.getBrokerageFee() != null && trade.getBrokerageFeeIss() != null ?
-                Optional.of(trade.getBrokerageFee().multiply(trade.getBrokerageFeeIss().divide(BigDecimal.valueOf(100.0))))
-                : Optional.empty();
+    public static BigDecimal calculateIssVal(StockTrade trade, BigDecimal issPerc) {
+        return trade.getBrokerageFee() != null && trade.getBrokerageFeeIss() != null
+                ? trade.getBrokerageFee().multiply(issPerc.divide(BigDecimal.valueOf(100.0)))
+                : BigDecimal.ZERO;
     }
 
-    public static Optional<BigDecimal> calculateNegotiationFeeVal(StockTrade trade) {
-        return trade.getNegotiationPerc() != null ?
-                Optional.of(trade.getTotalPrice().multiply(trade.getNegotiationPerc().divide(BigDecimal.valueOf(100.0))))
-                : Optional.empty();
+    public static BigDecimal calculateNegotiationFeeVal(StockTrade trade) {
+        return trade.getTotalPrice() != null
+                ? trade.getTotalPrice().multiply(BigDecimal.valueOf(0.004476).divide(BigDecimal.valueOf(100.0)))
+                : BigDecimal.ZERO;
     }
 
-    public static Optional<BigDecimal> calculateLiquidationVal(StockTrade trade) {
-        return trade.getLiquidationPerc() != null ?
-                Optional.of(trade.getTotalPrice().multiply(trade.getLiquidationPerc().divide(BigDecimal.valueOf(100.0))))
-                : Optional.empty();
+    public static BigDecimal calculateLiquidationVal(StockTrade trade) {
+        return trade.getTotalPrice() != null
+                ? trade.getTotalPrice().multiply(BigDecimal.valueOf(0.0275).divide(BigDecimal.valueOf(100.0)))
+                : BigDecimal.ZERO;
     }
 
-    public static Optional<BigDecimal> calculateRegistryVal(StockTrade trade) {
-        return trade.getRegistryPerc() != null ?
-                Optional.of(trade.getTotalPrice().multiply(trade.getRegistryPerc().divide(BigDecimal.valueOf(100.0))))
-                : Optional.empty();
+    public static BigDecimal calculateRegistryVal(StockTrade trade) {
+        return trade.getTotalPrice() != null
+                ? trade.getTotalPrice().multiply(BigDecimal.valueOf(0.0).divide(BigDecimal.valueOf(100.0)))
+                : BigDecimal.ZERO;
     }
 
-    public static Optional<BigDecimal> calculateIrrfVal(StockTrade trade) {
-        return trade.getIrrfPerc() != null ?
-                Optional.of(trade.getTotalPrice().multiply(trade.getIrrfPerc().divide(BigDecimal.valueOf(100.0))))
-                : Optional.empty();
+    public static BigDecimal calculateIrrfVal(StockTrade trade) {
+        return trade.getSide().equals(StockOrder.FIX_SIDE_SELL) && trade.getTotalPrice() != null
+                ? trade.getTotalPrice().multiply(BigDecimal.valueOf(0.005).divide(BigDecimal.valueOf(100.0)))
+                : BigDecimal.ZERO;
     }
 
     public StockOrder createUpdateOrder(StockTrade trade, StockTradeDTO tradeDTO) {
@@ -364,12 +367,6 @@ public class StockTradeService {
                 || status.equals(StockTrade.STATUS_FIX_REPLACED);
 
         dto.setCanEdit(canEdit);
-
-        dto.setBrokerageFeeIssVal(calculateIssVal(trade).orElse(null));
-        dto.setNegotiationVal(calculateNegotiationFeeVal(trade).orElse(null));
-        dto.setLiquidationVal(calculateLiquidationVal(trade).orElse(null));
-        dto.setRegistryVal(calculateRegistryVal(trade).orElse(null));
-        dto.setIrrfVal(calculateIrrfVal(trade).orElse(null));
 
         return dto;
     }

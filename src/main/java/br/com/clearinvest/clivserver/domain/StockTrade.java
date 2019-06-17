@@ -6,12 +6,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.Objects;
 
 /**
  * A StockTrade. Represents the current data of the negotiation.
@@ -110,12 +111,12 @@ public class StockTrade implements Serializable {
     private BigDecimal averagePrice;
 
     @NotNull
-    @DecimalMin(value = "0.0")
+    @DecimalMin(value = "0.00")
     @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
     @NotNull
-    @DecimalMin(value = "0.0")
+    @DecimalMin(value = "0.00")
     @Column(name = "total_price_actual", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPriceActual;
 
@@ -125,17 +126,17 @@ public class StockTrade implements Serializable {
     @Column(name = "brokerage_fee_iss", precision = 10, scale = 2)
     private BigDecimal brokerageFeeIss;
 
-    @Column(name = "negotiation_perc", precision = 10, scale = 2)
-    private BigDecimal negotiationPerc;
+    @Column(name = "negotiation_val", precision = 10, scale = 2)
+    private BigDecimal negotiationVal;
 
-    @Column(name = "liquidation_perc", precision = 10, scale = 2)
-    private BigDecimal liquidationPerc;
+    @Column(name = "liquidation_val", precision = 10, scale = 2)
+    private BigDecimal liquidationVal;
 
-    @Column(name = "registry_perc", precision = 10, scale = 2)
-    private BigDecimal registryPerc;
+    @Column(name = "registry_val", precision = 10, scale = 2)
+    private BigDecimal registryVal;
 
-    @Column(name = "irrf_perc", precision = 10, scale = 2)
-    private BigDecimal irrfPerc;
+    @Column(name = "irrf_val", precision = 10, scale = 2)
+    private BigDecimal irrfVal;
 
     @Column(name = "last_exec_report_time")
     private ZonedDateTime lastExecReportTime;
@@ -164,6 +165,16 @@ public class StockTrade implements Serializable {
     private User createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+    public BigDecimal calculateTotalPriceActual() {
+        return (brokerageFee != null ? brokerageFee : BigDecimal.ZERO)
+                .add(brokerageFeeIss != null ? brokerageFeeIss : BigDecimal.ZERO)
+                .add(negotiationVal != null ? negotiationVal : BigDecimal.ZERO)
+                .add(liquidationVal != null ? liquidationVal : BigDecimal.ZERO)
+                .add(registryVal != null ? registryVal : BigDecimal.ZERO)
+                .add(irrfVal != null ? irrfVal : BigDecimal.ZERO);
+    }
+
     public Long getId() {
         return id;
     }
@@ -406,56 +417,56 @@ public class StockTrade implements Serializable {
         this.brokerageFeeIss = brokerageFeeIss;
     }
 
-    public BigDecimal getNegotiationPerc() {
-        return negotiationPerc;
+    public BigDecimal getNegotiationVal() {
+        return negotiationVal;
     }
 
-    public StockTrade negotiationPerc(BigDecimal negotiationPerc) {
-        this.negotiationPerc = negotiationPerc;
+    public StockTrade negotiationVal(BigDecimal negotiationVal) {
+        this.negotiationVal = negotiationVal;
         return this;
     }
 
-    public void setNegotiationPerc(BigDecimal negotiationPerc) {
-        this.negotiationPerc = negotiationPerc;
+    public void setNegotiationVal(BigDecimal negotiationVal) {
+        this.negotiationVal = negotiationVal;
     }
 
-    public BigDecimal getLiquidationPerc() {
-        return liquidationPerc;
+    public BigDecimal getLiquidationVal() {
+        return liquidationVal;
     }
 
-    public StockTrade liquidationPerc(BigDecimal liquidationPerc) {
-        this.liquidationPerc = liquidationPerc;
+    public StockTrade liquidationVal(BigDecimal liquidationVal) {
+        this.liquidationVal = liquidationVal;
         return this;
     }
 
-    public void setLiquidationPerc(BigDecimal liquidationPerc) {
-        this.liquidationPerc = liquidationPerc;
+    public void setLiquidationVal(BigDecimal liquidationVal) {
+        this.liquidationVal = liquidationVal;
     }
 
-    public BigDecimal getRegistryPerc() {
-        return registryPerc;
+    public BigDecimal getRegistryVal() {
+        return registryVal;
     }
 
-    public StockTrade registryPerc(BigDecimal registryPerc) {
-        this.registryPerc = registryPerc;
+    public StockTrade registryVal(BigDecimal registryVal) {
+        this.registryVal = registryVal;
         return this;
     }
 
-    public void setRegistryPerc(BigDecimal registryPerc) {
-        this.registryPerc = registryPerc;
+    public void setRegistryVal(BigDecimal registryVal) {
+        this.registryVal = registryVal;
     }
 
-    public BigDecimal getIrrfPerc() {
-        return irrfPerc;
+    public BigDecimal getIrrfVal() {
+        return irrfVal;
     }
 
-    public StockTrade irrfPerc(BigDecimal irrfPerc) {
-        this.irrfPerc = irrfPerc;
+    public StockTrade irrfVal(BigDecimal irrfVal) {
+        this.irrfVal = irrfVal;
         return this;
     }
 
-    public void setIrrfPerc(BigDecimal irrfPerc) {
-        this.irrfPerc = irrfPerc;
+    public void setIrrfVal(BigDecimal irrfVal) {
+        this.irrfVal = irrfVal;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -604,10 +615,10 @@ public class StockTrade implements Serializable {
             ", totalPriceActual=" + getTotalPriceActual() +
             ", brokerageFee=" + getBrokerageFee() +
             ", brokerageFeeIss=" + getBrokerageFeeIss() +
-            ", negotiationPerc=" + getNegotiationPerc() +
-            ", liquidationPerc=" + getLiquidationPerc() +
-            ", registryPerc=" + getRegistryPerc() +
-            ", irrfPerc=" + getIrrfPerc() +
+            ", negotiationVal=" + getNegotiationVal() +
+            ", liquidationVal=" + getLiquidationVal() +
+            ", registryVal=" + getRegistryVal() +
+            ", irrfVal=" + getIrrfVal() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";
