@@ -58,17 +58,17 @@ public class StockTradeCriteria implements Serializable {
 
     private BigDecimalFilter totalPriceActual;
 
-    private BigDecimalFilter brokerageFee;
+    private BigDecimalFilter feeBrokerage;
 
-    private BigDecimalFilter brokerageFeeIss;
+    private BigDecimalFilter feeBrokerageIss;
 
-    private BigDecimalFilter negotiationVal;
+    private BigDecimalFilter feeNegotiation;
 
-    private BigDecimalFilter liquidationVal;
+    private BigDecimalFilter feeLiquidation;
 
-    private BigDecimalFilter registryVal;
+    private BigDecimalFilter feeRegistry;
 
-    private BigDecimalFilter irrfVal;
+    private BigDecimalFilter feeIrrf;
 
     private ZonedDateTimeFilter lastExecReportTime;
 
@@ -223,52 +223,52 @@ public class StockTradeCriteria implements Serializable {
         this.totalPriceActual = totalPriceActual;
     }
 
-    public BigDecimalFilter getBrokerageFee() {
-        return brokerageFee;
+    public BigDecimalFilter getFeeBrokerage() {
+        return feeBrokerage;
     }
 
-    public void setBrokerageFee(BigDecimalFilter brokerageFee) {
-        this.brokerageFee = brokerageFee;
+    public void setFeeBrokerage(BigDecimalFilter feeBrokerage) {
+        this.feeBrokerage = feeBrokerage;
     }
 
-    public BigDecimalFilter getBrokerageFeeIss() {
-        return brokerageFeeIss;
+    public BigDecimalFilter getFeeBrokerageIss() {
+        return feeBrokerageIss;
     }
 
-    public void setBrokerageFeeIss(BigDecimalFilter brokerageFeeIss) {
-        this.brokerageFeeIss = brokerageFeeIss;
+    public void setFeeBrokerageIss(BigDecimalFilter feeBrokerageIss) {
+        this.feeBrokerageIss = feeBrokerageIss;
     }
 
-    public BigDecimalFilter getNegotiationVal() {
-        return negotiationVal;
+    public BigDecimalFilter getFeeNegotiation() {
+        return feeNegotiation;
     }
 
-    public void setNegotiationVal(BigDecimalFilter negotiationVal) {
-        this.negotiationVal = negotiationVal;
+    public void setFeeNegotiation(BigDecimalFilter feeNegotiation) {
+        this.feeNegotiation = feeNegotiation;
     }
 
-    public BigDecimalFilter getLiquidationVal() {
-        return liquidationVal;
+    public BigDecimalFilter getFeeLiquidation() {
+        return feeLiquidation;
     }
 
-    public void setLiquidationVal(BigDecimalFilter liquidationVal) {
-        this.liquidationVal = liquidationVal;
+    public void setFeeLiquidation(BigDecimalFilter feeLiquidation) {
+        this.feeLiquidation = feeLiquidation;
     }
 
-    public BigDecimalFilter getRegistryVal() {
-        return registryVal;
+    public BigDecimalFilter getFeeRegistry() {
+        return feeRegistry;
     }
 
-    public void setRegistryVal(BigDecimalFilter registryVal) {
-        this.registryVal = registryVal;
+    public void setFeeRegistry(BigDecimalFilter feeRegistry) {
+        this.feeRegistry = feeRegistry;
     }
 
-    public BigDecimalFilter getIrrfVal() {
-        return irrfVal;
+    public BigDecimalFilter getFeeIrrf() {
+        return feeIrrf;
     }
 
-    public void setIrrfVal(BigDecimalFilter irrfVal) {
-        this.irrfVal = irrfVal;
+    public void setFeeIrrf(BigDecimalFilter feeIrrf) {
+        this.feeIrrf = feeIrrf;
     }
 
     public ZonedDateTimeFilter getLastExecReportTime() {
@@ -355,12 +355,12 @@ public class StockTradeCriteria implements Serializable {
             Objects.equals(averagePrice, that.averagePrice) &&
             Objects.equals(totalPrice, that.totalPrice) &&
             Objects.equals(totalPriceActual, that.totalPriceActual) &&
-            Objects.equals(brokerageFee, that.brokerageFee) &&
-            Objects.equals(brokerageFeeIss, that.brokerageFeeIss) &&
-            Objects.equals(negotiationVal, that.negotiationVal) &&
-            Objects.equals(liquidationVal, that.liquidationVal) &&
-            Objects.equals(registryVal, that.registryVal) &&
-            Objects.equals(irrfVal, that.irrfVal) &&
+            Objects.equals(feeBrokerage, that.feeBrokerage) &&
+            Objects.equals(feeBrokerageIss, that.feeBrokerageIss) &&
+            Objects.equals(feeNegotiation, that.feeNegotiation) &&
+            Objects.equals(feeLiquidation, that.feeLiquidation) &&
+            Objects.equals(feeRegistry, that.feeRegistry) &&
+            Objects.equals(feeIrrf, that.feeIrrf) &&
             Objects.equals(lastExecReportTime, that.lastExecReportTime) &&
             Objects.equals(lastExecReportDescr, that.lastExecReportDescr) &&
             Objects.equals(stockId, that.stockId) &&
@@ -390,12 +390,12 @@ public class StockTradeCriteria implements Serializable {
         averagePrice,
         totalPrice,
         totalPriceActual,
-        brokerageFee,
-        brokerageFeeIss,
-        negotiationVal,
-        liquidationVal,
-        registryVal,
-        irrfVal,
+        feeBrokerage,
+        feeBrokerageIss,
+        feeNegotiation,
+        feeLiquidation,
+        feeRegistry,
+        feeIrrf,
         lastExecReportTime,
         lastExecReportDescr,
         stockId,
@@ -426,12 +426,12 @@ public class StockTradeCriteria implements Serializable {
                 (averagePrice != null ? "averagePrice=" + averagePrice + ", " : "") +
                 (totalPrice != null ? "totalPrice=" + totalPrice + ", " : "") +
                 (totalPriceActual != null ? "totalPriceActual=" + totalPriceActual + ", " : "") +
-                (brokerageFee != null ? "brokerageFee=" + brokerageFee + ", " : "") +
-                (brokerageFeeIss != null ? "brokerageFeeIss=" + brokerageFeeIss + ", " : "") +
-                (negotiationVal != null ? "negotiationVal=" + negotiationVal + ", " : "") +
-                (liquidationVal != null ? "liquidationVal=" + liquidationVal + ", " : "") +
-                (registryVal != null ? "registryVal=" + registryVal + ", " : "") +
-                (irrfVal != null ? "irrfVal=" + irrfVal + ", " : "") +
+                (feeBrokerage != null ? "feeBrokerage=" + feeBrokerage + ", " : "") +
+                (feeBrokerageIss != null ? "feeBrokerageIss=" + feeBrokerageIss + ", " : "") +
+                (feeNegotiation != null ? "feeNegotiation=" + feeNegotiation + ", " : "") +
+                (feeLiquidation != null ? "feeLiquidation=" + feeLiquidation + ", " : "") +
+                (feeRegistry != null ? "feeRegistry=" + feeRegistry + ", " : "") +
+                (feeIrrf != null ? "feeIrrf=" + feeIrrf + ", " : "") +
                 (lastExecReportTime != null ? "lastExecReportTime=" + lastExecReportTime + ", " : "") +
                 (lastExecReportDescr != null ? "lastExecReportDescr=" + lastExecReportDescr + ", " : "") +
                 (stockId != null ? "stockId=" + stockId + ", " : "") +

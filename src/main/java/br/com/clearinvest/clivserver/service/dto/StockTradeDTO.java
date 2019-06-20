@@ -62,17 +62,17 @@ public class StockTradeDTO implements Serializable {
     @DecimalMin(value = "0.00")
     private BigDecimal totalPriceActual;
 
-    private BigDecimal brokerageFee;
+    private BigDecimal feeBrokerage;
 
-    private BigDecimal brokerageFeeIss;
+    private BigDecimal feeBrokerageIss;
 
-    private BigDecimal negotiationVal;
+    private BigDecimal feeNegotiation;
 
-    private BigDecimal liquidationVal;
+    private BigDecimal feeLiquidation;
 
-    private BigDecimal registryVal;
+    private BigDecimal feeRegistry;
 
-    private BigDecimal irrfVal;
+    private BigDecimal feeIrrf;
 
     private ZonedDateTime lastExecReportTime;
 
@@ -234,52 +234,52 @@ public class StockTradeDTO implements Serializable {
         this.totalPriceActual = totalPriceActual;
     }
 
-    public BigDecimal getBrokerageFee() {
-        return brokerageFee;
+    public BigDecimal getFeeBrokerage() {
+        return feeBrokerage;
     }
 
-    public void setBrokerageFee(BigDecimal brokerageFee) {
-        this.brokerageFee = brokerageFee;
+    public void setFeeBrokerage(BigDecimal feeBrokerage) {
+        this.feeBrokerage = feeBrokerage;
     }
 
-    public BigDecimal getBrokerageFeeIss() {
-        return brokerageFeeIss;
+    public BigDecimal getFeeBrokerageIss() {
+        return feeBrokerageIss;
     }
 
-    public void setBrokerageFeeIss(BigDecimal brokerageFeeIss) {
-        this.brokerageFeeIss = brokerageFeeIss;
+    public void setFeeBrokerageIss(BigDecimal feeBrokerageIss) {
+        this.feeBrokerageIss = feeBrokerageIss;
     }
 
-    public BigDecimal getNegotiationVal() {
-        return negotiationVal;
+    public BigDecimal getFeeNegotiation() {
+        return feeNegotiation;
     }
 
-    public void setNegotiationVal(BigDecimal negotiationVal) {
-        this.negotiationVal = negotiationVal;
+    public void setFeeNegotiation(BigDecimal feeNegotiation) {
+        this.feeNegotiation = feeNegotiation;
     }
 
-    public BigDecimal getLiquidationVal() {
-        return liquidationVal;
+    public BigDecimal getFeeLiquidation() {
+        return feeLiquidation;
     }
 
-    public void setLiquidationVal(BigDecimal liquidationVal) {
-        this.liquidationVal = liquidationVal;
+    public void setFeeLiquidation(BigDecimal feeLiquidation) {
+        this.feeLiquidation = feeLiquidation;
     }
 
-    public BigDecimal getRegistryVal() {
-        return registryVal;
+    public BigDecimal getFeeRegistry() {
+        return feeRegistry;
     }
 
-    public void setRegistryVal(BigDecimal registryVal) {
-        this.registryVal = registryVal;
+    public void setFeeRegistry(BigDecimal feeRegistry) {
+        this.feeRegistry = feeRegistry;
     }
 
-    public BigDecimal getIrrfVal() {
-        return irrfVal;
+    public BigDecimal getFeeIrrf() {
+        return feeIrrf;
     }
 
-    public void setIrrfVal(BigDecimal irrfVal) {
-        this.irrfVal = irrfVal;
+    public void setFeeIrrf(BigDecimal feeIrrf) {
+        this.feeIrrf = feeIrrf;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -411,12 +411,12 @@ public class StockTradeDTO implements Serializable {
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", totalPriceActual=" + getTotalPriceActual() +
-            ", brokerageFee=" + getBrokerageFee() +
-            ", brokerageFeeIss=" + getBrokerageFeeIss() +
-            ", negotiationVal=" + getNegotiationVal() +
-            ", liquidationVal=" + getLiquidationVal() +
-            ", registryVal=" + getRegistryVal() +
-            ", irrfVal=" + getIrrfVal() +
+            ", feeBrokerage=" + getFeeBrokerage() +
+            ", feeBrokerageIss=" + getFeeBrokerageIss() +
+            ", feeNegotiation=" + getFeeNegotiation() +
+            ", feeLiquidation=" + getFeeLiquidation() +
+            ", feeRegistry=" + getFeeRegistry() +
+            ", feeIrrf=" + getFeeIrrf() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             ", stock=" + getStockId() +

@@ -50,12 +50,6 @@ public class StockTradeService {
 
     private final StockFlowRepository stockFlowRepository;
 
-    @Value("${cliv.sendOrderToOmsInDevMode}")
-    boolean sendOrderToOmsInDevMode = false;
-
-    @Value("${cliv.createFakeOrderInDevMode}")
-    boolean createFakeOrderInDevMode = false;
-
     public StockTradeService(StockTradeRepository stockTradeRepository, StockTradeMapper stockTradeMapper,
             BrokerageAccountRepository brokerageAccountRepository, StockOrderService stockOrderService,
             OMSService omsService, UserRepository userRepository, StockFlowService stockFlowService,
@@ -176,8 +170,8 @@ public class StockTradeService {
         trade.setTotalPriceActual(BigDecimal.valueOf(0.0));
 
         Brokerage brokerage = brokerageAccount.getBrokerage();
-        trade.setBrokerageFee(brokerageAccount.getFee() != null ? brokerageAccount.getFee() : brokerage.getFee());
-        trade.setBrokerageFeeIss(brokerage.getIss());
+        trade.setFeeBrokerage(brokerageAccount.getFee() != null ? brokerageAccount.getFee() : brokerage.getFee());
+        trade.setFeeBrokerageIss(calculateIssVal(trade, brokerage.getIss()));
 
         // TODO remover, foi movido para StockTradeService
         /*if (StockTrade.MARKET_SPOT.equals(trade.getMarket())) {
@@ -225,7 +219,7 @@ public class StockTradeService {
         BigDecimal registry = calculateRegistryVal(trade);
         BigDecimal irrf = calculateIrrfVal(trade);
 
-        return (trade.getBrokerageFee() != null ? trade.getBrokerageFee() : BigDecimal.ZERO)
+        return (trade.getFeeBrokerage() != null ? trade.getFeeBrokerage() : BigDecimal.ZERO)
                 .add(iss)
                 .add(negotiation)
                 .add(liquidation)
@@ -235,8 +229,8 @@ public class StockTradeService {
     }
 
     public static BigDecimal calculateIssVal(StockTrade trade, BigDecimal issPerc) {
-        return trade.getBrokerageFee() != null && trade.getBrokerageFeeIss() != null
-                ? trade.getBrokerageFee().multiply(issPerc.divide(BigDecimal.valueOf(100.0)))
+        return trade.getFeeBrokerage() != null
+                ? trade.getFeeBrokerage().multiply(issPerc.divide(BigDecimal.valueOf(100.0)))
                 : BigDecimal.ZERO;
     }
 

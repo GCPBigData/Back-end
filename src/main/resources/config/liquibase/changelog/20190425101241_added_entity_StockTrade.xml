@@ -85,27 +85,27 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="brokerage_fee" type="decimal(10,2)">
+            <column name="fee_brokerage" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="brokerage_fee_iss" type="decimal(10,4)">
+            <column name="fee_brokerage_iss" type="decimal(10,4)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="negotiation_val" type="decimal(10,4)">
+            <column name="fee_negotiation" type="decimal(10,4)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="liquidation_val" type="decimal(10,4)">
+            <column name="fee_liquidation" type="decimal(10,4)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="registry_val" type="decimal(10,4)">
+            <column name="fee_registry" type="decimal(10,4)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="irrf_val" type="decimal(10,4)">
+            <column name="fee_irrf" type="decimal(10,4)">
                 <constraints nullable="true" />
             </column>
 

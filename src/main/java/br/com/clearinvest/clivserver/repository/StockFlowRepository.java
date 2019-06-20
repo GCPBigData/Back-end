@@ -26,7 +26,13 @@ public interface StockFlowRepository extends JpaRepository<StockFlow, Long>, Jpa
     @Query(" select new br.com.clearinvest.clivserver.service.dto.StockFlowBalanceDTO(" +
             "  f.symbol, " +
             "  sum(f.quantity), " +
-            "  sum(f.totalPrice) " +
+            "  sum(f.totalPrice), " +
+            "  sum(f.trade.feeBrokerage), " +
+            "  sum(f.trade.feeBrokerageIss), " +
+            "  sum(f.trade.feeNegotiation), " +
+            "  sum(f.trade.feeLiquidation), " +
+            "  sum(f.trade.feeRegistry), " +
+            "  sum(f.trade.feeIrrf) " +
             ") " +
             "from StockFlow f " +
             "where f.user.login = ?#{principal.username} " +

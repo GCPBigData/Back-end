@@ -144,3 +144,4 @@ jhipster:
 
 cliv:
     serverIpAndName: 3.16.133.186#test01
+    createFakeOrderInProdMode: false

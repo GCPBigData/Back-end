@@ -534,16 +534,16 @@ public class StockOrderService {
                 || (ordStatus.equals(StockOrder.STATUS_FIX_EXPIRED) && trade.getExecQuantity() > 0)) {
 
             Brokerage brokerage = trade.getBrokerageAccount().getBrokerage();
-            trade.setBrokerageFeeIss(StockTradeService.calculateIssVal(trade, brokerage.getIss()));
+            trade.setFeeBrokerageIss(StockTradeService.calculateIssVal(trade, brokerage.getIss()));
 
             if (StockTrade.MARKET_SPOT.equals(trade.getMarket())) {
-                trade.setNegotiationVal(StockTradeService.calculateNegotiationFeeVal(trade));
-                trade.setLiquidationVal(StockTradeService.calculateLiquidationVal(trade));
-                trade.setRegistryVal(StockTradeService.calculateRegistryVal(trade));
+                trade.setFeeNegotiation(StockTradeService.calculateNegotiationFeeVal(trade));
+                trade.setFeeLiquidation(StockTradeService.calculateLiquidationVal(trade));
+                trade.setFeeRegistry(StockTradeService.calculateRegistryVal(trade));
             }
 
             if (trade.getSide().equals(StockOrder.FIX_SIDE_SELL)) {
-                trade.setIrrfVal(StockTradeService.calculateIrrfVal(trade));
+                trade.setFeeIrrf(StockTradeService.calculateIrrfVal(trade));
             }
 
             trade.setTotalPriceActual(trade.calculateTotalPriceActual());

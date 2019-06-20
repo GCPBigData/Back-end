@@ -155,27 +155,27 @@
             "fieldValidateRulesMin": "0.00"
         },
         {
-            "fieldName": "brokerageFee",
+            "fieldName": "feeBrokerage",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "brokerageFeeIss",
+            "fieldName": "feeBrokerageIss",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "negotiationVal",
+            "fieldName": "feeNegotiation",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "liquidationVal",
+            "fieldName": "feeLiquidation",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "registryVal",
+            "fieldName": "feeRegistry",
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "irrfVal",
+            "fieldName": "feeIrrf",
             "fieldType": "BigDecimal"
         },
         {

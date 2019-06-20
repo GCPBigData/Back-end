@@ -41,6 +41,9 @@ public class OMSService {
     @Value("${cliv.createFakeOrderInDevMode}")
     boolean createFakeOrderInDevMode = false;
 
+    @Value("${cliv.createFakeOrderInProdMode}")
+    boolean createFakeOrderInProdMode = false;
+
     public OMSService(AppService appService, StockOrderRepository stockOrderRepository) {
         this.appService = appService;
         this.stockOrderRepository = stockOrderRepository;
@@ -79,7 +82,12 @@ public class OMSService {
                     fakeTradeService.executeOrder(orderId, 1000L);
                 }
             } else if (appService.isEnvironmentProd()) {
-                Session.sendToTarget(message, OMS_ACCOUNT, "CDRFIX");
+                if (createFakeOrderInDevMode) {
+                    FakeTradeService fakeTradeService = (FakeTradeService) applicationContext.getBean("fakeTradeService");
+                    fakeTradeService.executeOrder(orderId, 1000L);
+                } else {
+                    Session.sendToTarget(message, OMS_ACCOUNT, "CDRFIX");
+                }
             }
         } catch (SessionNotFound sessionNotFound) {
             throw new BusinessException("Sem comunicação com corretora.");

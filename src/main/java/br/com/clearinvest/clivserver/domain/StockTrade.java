@@ -1,5 +1,6 @@
 package br.com.clearinvest.clivserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -120,23 +121,23 @@ public class StockTrade implements Serializable {
     @Column(name = "total_price_actual", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPriceActual;
 
-    @Column(name = "brokerage_fee", precision = 10, scale = 2)
-    private BigDecimal brokerageFee;
+    @Column(name = "fee_brokerage", precision = 10, scale = 2)
+    private BigDecimal feeBrokerage;
 
-    @Column(name = "brokerage_fee_iss", precision = 10, scale = 2)
-    private BigDecimal brokerageFeeIss;
+    @Column(name = "fee_brokerage_iss", precision = 10, scale = 2)
+    private BigDecimal feeBrokerageIss;
 
-    @Column(name = "negotiation_val", precision = 10, scale = 2)
-    private BigDecimal negotiationVal;
+    @Column(name = "fee_negotiation", precision = 10, scale = 2)
+    private BigDecimal feeNegotiation;
 
-    @Column(name = "liquidation_val", precision = 10, scale = 2)
-    private BigDecimal liquidationVal;
+    @Column(name = "fee_liquidation", precision = 10, scale = 2)
+    private BigDecimal feeLiquidation;
 
-    @Column(name = "registry_val", precision = 10, scale = 2)
-    private BigDecimal registryVal;
+    @Column(name = "fee_registry", precision = 10, scale = 2)
+    private BigDecimal feeRegistry;
 
-    @Column(name = "irrf_val", precision = 10, scale = 2)
-    private BigDecimal irrfVal;
+    @Column(name = "fee_irrf", precision = 10, scale = 2)
+    private BigDecimal feeIrrf;
 
     @Column(name = "last_exec_report_time")
     private ZonedDateTime lastExecReportTime;
@@ -167,12 +168,13 @@ public class StockTrade implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
     public BigDecimal calculateTotalPriceActual() {
-        return (brokerageFee != null ? brokerageFee : BigDecimal.ZERO)
-                .add(brokerageFeeIss != null ? brokerageFeeIss : BigDecimal.ZERO)
-                .add(negotiationVal != null ? negotiationVal : BigDecimal.ZERO)
-                .add(liquidationVal != null ? liquidationVal : BigDecimal.ZERO)
-                .add(registryVal != null ? registryVal : BigDecimal.ZERO)
-                .add(irrfVal != null ? irrfVal : BigDecimal.ZERO);
+        return (totalPrice != null ? totalPrice : BigDecimal.ZERO)
+                .add(feeBrokerage != null ? feeBrokerage : BigDecimal.ZERO)
+                .add(feeBrokerageIss != null ? feeBrokerageIss : BigDecimal.ZERO)
+                .add(feeNegotiation != null ? feeNegotiation : BigDecimal.ZERO)
+                .add(feeLiquidation != null ? feeLiquidation : BigDecimal.ZERO)
+                .add(feeRegistry != null ? feeRegistry : BigDecimal.ZERO)
+                .add(feeIrrf != null ? feeIrrf : BigDecimal.ZERO);
     }
 
     public Long getId() {
@@ -391,82 +393,82 @@ public class StockTrade implements Serializable {
         this.totalPriceActual = totalPriceActual;
     }
 
-    public BigDecimal getBrokerageFee() {
-        return brokerageFee;
+    public BigDecimal getFeeBrokerage() {
+        return feeBrokerage;
     }
 
-    public StockTrade brokerageFee(BigDecimal brokerageFee) {
-        this.brokerageFee = brokerageFee;
+    public StockTrade feeBrokerage(BigDecimal feeBrokerage) {
+        this.feeBrokerage = feeBrokerage;
         return this;
     }
 
-    public void setBrokerageFee(BigDecimal brokerageFee) {
-        this.brokerageFee = brokerageFee;
+    public void setFeeBrokerage(BigDecimal feeBrokerage) {
+        this.feeBrokerage = feeBrokerage;
     }
 
-    public BigDecimal getBrokerageFeeIss() {
-        return brokerageFeeIss;
+    public BigDecimal getFeeBrokerageIss() {
+        return feeBrokerageIss;
     }
 
-    public StockTrade brokerageFeeIss(BigDecimal brokerageFeeIss) {
-        this.brokerageFeeIss = brokerageFeeIss;
+    public StockTrade feeBrokerageIss(BigDecimal feeBrokerageIss) {
+        this.feeBrokerageIss = feeBrokerageIss;
         return this;
     }
 
-    public void setBrokerageFeeIss(BigDecimal brokerageFeeIss) {
-        this.brokerageFeeIss = brokerageFeeIss;
+    public void setFeeBrokerageIss(BigDecimal feeBrokerageIss) {
+        this.feeBrokerageIss = feeBrokerageIss;
     }
 
-    public BigDecimal getNegotiationVal() {
-        return negotiationVal;
+    public BigDecimal getFeeNegotiation() {
+        return feeNegotiation;
     }
 
-    public StockTrade negotiationVal(BigDecimal negotiationVal) {
-        this.negotiationVal = negotiationVal;
+    public StockTrade feeNegotiation(BigDecimal feeNegotiation) {
+        this.feeNegotiation = feeNegotiation;
         return this;
     }
 
-    public void setNegotiationVal(BigDecimal negotiationVal) {
-        this.negotiationVal = negotiationVal;
+    public void setFeeNegotiation(BigDecimal feeNegotiation) {
+        this.feeNegotiation = feeNegotiation;
     }
 
-    public BigDecimal getLiquidationVal() {
-        return liquidationVal;
+    public BigDecimal getFeeLiquidation() {
+        return feeLiquidation;
     }
 
-    public StockTrade liquidationVal(BigDecimal liquidationVal) {
-        this.liquidationVal = liquidationVal;
+    public StockTrade feeLiquidation(BigDecimal feeLiquidation) {
+        this.feeLiquidation = feeLiquidation;
         return this;
     }
 
-    public void setLiquidationVal(BigDecimal liquidationVal) {
-        this.liquidationVal = liquidationVal;
+    public void setFeeLiquidation(BigDecimal feeLiquidation) {
+        this.feeLiquidation = feeLiquidation;
     }
 
-    public BigDecimal getRegistryVal() {
-        return registryVal;
+    public BigDecimal getFeeRegistry() {
+        return feeRegistry;
     }
 
-    public StockTrade registryVal(BigDecimal registryVal) {
-        this.registryVal = registryVal;
+    public StockTrade feeRegistry(BigDecimal feeRegistry) {
+        this.feeRegistry = feeRegistry;
         return this;
     }
 
-    public void setRegistryVal(BigDecimal registryVal) {
-        this.registryVal = registryVal;
+    public void setFeeRegistry(BigDecimal feeRegistry) {
+        this.feeRegistry = feeRegistry;
     }
 
-    public BigDecimal getIrrfVal() {
-        return irrfVal;
+    public BigDecimal getFeeIrrf() {
+        return feeIrrf;
     }
 
-    public StockTrade irrfVal(BigDecimal irrfVal) {
-        this.irrfVal = irrfVal;
+    public StockTrade feeIrrf(BigDecimal feeIrrf) {
+        this.feeIrrf = feeIrrf;
         return this;
     }
 
-    public void setIrrfVal(BigDecimal irrfVal) {
-        this.irrfVal = irrfVal;
+    public void setFeeIrrf(BigDecimal feeIrrf) {
+        this.feeIrrf = feeIrrf;
     }
 
     public ZonedDateTime getLastExecReportTime() {
@@ -613,12 +615,12 @@ public class StockTrade implements Serializable {
             ", averagePrice=" + getAveragePrice() +
             ", totalPrice=" + getTotalPrice() +
             ", totalPriceActual=" + getTotalPriceActual() +
-            ", brokerageFee=" + getBrokerageFee() +
-            ", brokerageFeeIss=" + getBrokerageFeeIss() +
-            ", negotiationVal=" + getNegotiationVal() +
-            ", liquidationVal=" + getLiquidationVal() +
-            ", registryVal=" + getRegistryVal() +
-            ", irrfVal=" + getIrrfVal() +
+            ", feeBrokerage=" + getFeeBrokerage() +
+            ", feeBrokerageIss=" + getFeeBrokerageIss() +
+            ", feeNegotiation=" + getFeeNegotiation() +
+            ", feeLiquidation=" + getFeeLiquidation() +
+            ", feeRegistry=" + getFeeRegistry() +
+            ", feeIrrf=" + getFeeIrrf() +
             ", lastExecReportTime='" + getLastExecReportTime() + "'" +
             ", lastExecReportDescr='" + getLastExecReportDescr() + "'" +
             "}";

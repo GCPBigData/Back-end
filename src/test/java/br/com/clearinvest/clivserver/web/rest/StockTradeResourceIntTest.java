@@ -103,23 +103,23 @@ public class StockTradeResourceIntTest {
     private static final BigDecimal DEFAULT_TOTAL_PRICE_ACTUAL = new BigDecimal(0.00);
     private static final BigDecimal UPDATED_TOTAL_PRICE_ACTUAL = new BigDecimal(1);
 
-    private static final BigDecimal DEFAULT_BROKERAGE_FEE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_BROKERAGE_FEE = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_BROKERAGE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_BROKERAGE = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_BROKERAGE_FEE_ISS = new BigDecimal(1);
-    private static final BigDecimal UPDATED_BROKERAGE_FEE_ISS = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_BROKERAGE_ISS = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_BROKERAGE_ISS = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_NEGOTIATION_VAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_NEGOTIATION_VAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_NEGOTIATION = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_NEGOTIATION = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_LIQUIDATION_VAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_LIQUIDATION_VAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_LIQUIDATION = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_LIQUIDATION = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_REGISTRY_VAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_REGISTRY_VAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_REGISTRY = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_REGISTRY = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_IRRF_VAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_IRRF_VAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_FEE_IRRF = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FEE_IRRF = new BigDecimal(2);
 
     private static final ZonedDateTime DEFAULT_LAST_EXEC_REPORT_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_LAST_EXEC_REPORT_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -190,12 +190,12 @@ public class StockTradeResourceIntTest {
             .averagePrice(DEFAULT_AVERAGE_PRICE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .totalPriceActual(DEFAULT_TOTAL_PRICE_ACTUAL)
-            .brokerageFee(DEFAULT_BROKERAGE_FEE)
-            .brokerageFeeIss(DEFAULT_BROKERAGE_FEE_ISS)
-            .negotiationVal(DEFAULT_NEGOTIATION_VAL)
-            .liquidationVal(DEFAULT_LIQUIDATION_VAL)
-            .registryVal(DEFAULT_REGISTRY_VAL)
-            .irrfVal(DEFAULT_IRRF_VAL)
+            .feeBrokerage(DEFAULT_FEE_BROKERAGE)
+            .feeBrokerageIss(DEFAULT_FEE_BROKERAGE_ISS)
+            .feeNegotiation(DEFAULT_FEE_NEGOTIATION)
+            .feeLiquidation(DEFAULT_FEE_LIQUIDATION)
+            .feeRegistry(DEFAULT_FEE_REGISTRY)
+            .feeIrrf(DEFAULT_FEE_IRRF)
             .lastExecReportTime(DEFAULT_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(DEFAULT_LAST_EXEC_REPORT_DESCR);
         // Add required entity
@@ -243,12 +243,12 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getAveragePrice()).isEqualTo(DEFAULT_AVERAGE_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPriceActual()).isEqualTo(DEFAULT_TOTAL_PRICE_ACTUAL);
-        assertThat(testStockTrade.getBrokerageFee()).isEqualTo(DEFAULT_BROKERAGE_FEE);
-        assertThat(testStockTrade.getBrokerageFeeIss()).isEqualTo(DEFAULT_BROKERAGE_FEE_ISS);
-        assertThat(testStockTrade.getNegotiationVal()).isEqualTo(DEFAULT_NEGOTIATION_VAL);
-        assertThat(testStockTrade.getLiquidationVal()).isEqualTo(DEFAULT_LIQUIDATION_VAL);
-        assertThat(testStockTrade.getRegistryVal()).isEqualTo(DEFAULT_REGISTRY_VAL);
-        assertThat(testStockTrade.getIrrfVal()).isEqualTo(DEFAULT_IRRF_VAL);
+        assertThat(testStockTrade.getFeeBrokerage()).isEqualTo(DEFAULT_FEE_BROKERAGE);
+        assertThat(testStockTrade.getFeeBrokerageIss()).isEqualTo(DEFAULT_FEE_BROKERAGE_ISS);
+        assertThat(testStockTrade.getFeeNegotiation()).isEqualTo(DEFAULT_FEE_NEGOTIATION);
+        assertThat(testStockTrade.getFeeLiquidation()).isEqualTo(DEFAULT_FEE_LIQUIDATION);
+        assertThat(testStockTrade.getFeeRegistry()).isEqualTo(DEFAULT_FEE_REGISTRY);
+        assertThat(testStockTrade.getFeeIrrf()).isEqualTo(DEFAULT_FEE_IRRF);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(DEFAULT_LAST_EXEC_REPORT_DESCR);
     }
@@ -490,12 +490,12 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPriceActual").value(hasItem(DEFAULT_TOTAL_PRICE_ACTUAL.intValue())))
-            .andExpect(jsonPath("$.[*].brokerageFee").value(hasItem(DEFAULT_BROKERAGE_FEE.intValue())))
-            .andExpect(jsonPath("$.[*].brokerageFeeIss").value(hasItem(DEFAULT_BROKERAGE_FEE_ISS.intValue())))
-            .andExpect(jsonPath("$.[*].negotiationVal").value(hasItem(DEFAULT_NEGOTIATION_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].liquidationVal").value(hasItem(DEFAULT_LIQUIDATION_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].registryVal").value(hasItem(DEFAULT_REGISTRY_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].irrfVal").value(hasItem(DEFAULT_IRRF_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].feeBrokerage").value(hasItem(DEFAULT_FEE_BROKERAGE.intValue())))
+            .andExpect(jsonPath("$.[*].feeBrokerageIss").value(hasItem(DEFAULT_FEE_BROKERAGE_ISS.intValue())))
+            .andExpect(jsonPath("$.[*].feeNegotiation").value(hasItem(DEFAULT_FEE_NEGOTIATION.intValue())))
+            .andExpect(jsonPath("$.[*].feeLiquidation").value(hasItem(DEFAULT_FEE_LIQUIDATION.intValue())))
+            .andExpect(jsonPath("$.[*].feeRegistry").value(hasItem(DEFAULT_FEE_REGISTRY.intValue())))
+            .andExpect(jsonPath("$.[*].feeIrrf").value(hasItem(DEFAULT_FEE_IRRF.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
     }
@@ -527,12 +527,12 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.averagePrice").value(DEFAULT_AVERAGE_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPriceActual").value(DEFAULT_TOTAL_PRICE_ACTUAL.intValue()))
-            .andExpect(jsonPath("$.brokerageFee").value(DEFAULT_BROKERAGE_FEE.intValue()))
-            .andExpect(jsonPath("$.brokerageFeeIss").value(DEFAULT_BROKERAGE_FEE_ISS.intValue()))
-            .andExpect(jsonPath("$.negotiationVal").value(DEFAULT_NEGOTIATION_VAL.intValue()))
-            .andExpect(jsonPath("$.liquidationVal").value(DEFAULT_LIQUIDATION_VAL.intValue()))
-            .andExpect(jsonPath("$.registryVal").value(DEFAULT_REGISTRY_VAL.intValue()))
-            .andExpect(jsonPath("$.irrfVal").value(DEFAULT_IRRF_VAL.intValue()))
+            .andExpect(jsonPath("$.feeBrokerage").value(DEFAULT_FEE_BROKERAGE.intValue()))
+            .andExpect(jsonPath("$.feeBrokerageIss").value(DEFAULT_FEE_BROKERAGE_ISS.intValue()))
+            .andExpect(jsonPath("$.feeNegotiation").value(DEFAULT_FEE_NEGOTIATION.intValue()))
+            .andExpect(jsonPath("$.feeLiquidation").value(DEFAULT_FEE_LIQUIDATION.intValue()))
+            .andExpect(jsonPath("$.feeRegistry").value(DEFAULT_FEE_REGISTRY.intValue()))
+            .andExpect(jsonPath("$.feeIrrf").value(DEFAULT_FEE_IRRF.intValue()))
             .andExpect(jsonPath("$.lastExecReportTime").value(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME)))
             .andExpect(jsonPath("$.lastExecReportDescr").value(DEFAULT_LAST_EXEC_REPORT_DESCR.toString()));
     }
@@ -1298,236 +1298,236 @@ public class StockTradeResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFee equals to DEFAULT_BROKERAGE_FEE
-        defaultStockTradeShouldBeFound("brokerageFee.equals=" + DEFAULT_BROKERAGE_FEE);
+        // Get all the stockTradeList where feeBrokerage equals to DEFAULT_FEE_BROKERAGE
+        defaultStockTradeShouldBeFound("feeBrokerage.equals=" + DEFAULT_FEE_BROKERAGE);
 
-        // Get all the stockTradeList where brokerageFee equals to UPDATED_BROKERAGE_FEE
-        defaultStockTradeShouldNotBeFound("brokerageFee.equals=" + UPDATED_BROKERAGE_FEE);
+        // Get all the stockTradeList where feeBrokerage equals to UPDATED_FEE_BROKERAGE
+        defaultStockTradeShouldNotBeFound("feeBrokerage.equals=" + UPDATED_FEE_BROKERAGE);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFee in DEFAULT_BROKERAGE_FEE or UPDATED_BROKERAGE_FEE
-        defaultStockTradeShouldBeFound("brokerageFee.in=" + DEFAULT_BROKERAGE_FEE + "," + UPDATED_BROKERAGE_FEE);
+        // Get all the stockTradeList where feeBrokerage in DEFAULT_FEE_BROKERAGE or UPDATED_FEE_BROKERAGE
+        defaultStockTradeShouldBeFound("feeBrokerage.in=" + DEFAULT_FEE_BROKERAGE + "," + UPDATED_FEE_BROKERAGE);
 
-        // Get all the stockTradeList where brokerageFee equals to UPDATED_BROKERAGE_FEE
-        defaultStockTradeShouldNotBeFound("brokerageFee.in=" + UPDATED_BROKERAGE_FEE);
+        // Get all the stockTradeList where feeBrokerage equals to UPDATED_FEE_BROKERAGE
+        defaultStockTradeShouldNotBeFound("feeBrokerage.in=" + UPDATED_FEE_BROKERAGE);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFee is not null
-        defaultStockTradeShouldBeFound("brokerageFee.specified=true");
+        // Get all the stockTradeList where feeBrokerage is not null
+        defaultStockTradeShouldBeFound("feeBrokerage.specified=true");
 
-        // Get all the stockTradeList where brokerageFee is null
-        defaultStockTradeShouldNotBeFound("brokerageFee.specified=false");
+        // Get all the stockTradeList where feeBrokerage is null
+        defaultStockTradeShouldNotBeFound("feeBrokerage.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIssIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIssIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFeeIss equals to DEFAULT_BROKERAGE_FEE_ISS
-        defaultStockTradeShouldBeFound("brokerageFeeIss.equals=" + DEFAULT_BROKERAGE_FEE_ISS);
+        // Get all the stockTradeList where feeBrokerageIss equals to DEFAULT_FEE_BROKERAGE_ISS
+        defaultStockTradeShouldBeFound("feeBrokerageIss.equals=" + DEFAULT_FEE_BROKERAGE_ISS);
 
-        // Get all the stockTradeList where brokerageFeeIss equals to UPDATED_BROKERAGE_FEE_ISS
-        defaultStockTradeShouldNotBeFound("brokerageFeeIss.equals=" + UPDATED_BROKERAGE_FEE_ISS);
+        // Get all the stockTradeList where feeBrokerageIss equals to UPDATED_FEE_BROKERAGE_ISS
+        defaultStockTradeShouldNotBeFound("feeBrokerageIss.equals=" + UPDATED_FEE_BROKERAGE_ISS);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIssIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIssIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFeeIss in DEFAULT_BROKERAGE_FEE_ISS or UPDATED_BROKERAGE_FEE_ISS
-        defaultStockTradeShouldBeFound("brokerageFeeIss.in=" + DEFAULT_BROKERAGE_FEE_ISS + "," + UPDATED_BROKERAGE_FEE_ISS);
+        // Get all the stockTradeList where feeBrokerageIss in DEFAULT_FEE_BROKERAGE_ISS or UPDATED_FEE_BROKERAGE_ISS
+        defaultStockTradeShouldBeFound("feeBrokerageIss.in=" + DEFAULT_FEE_BROKERAGE_ISS + "," + UPDATED_FEE_BROKERAGE_ISS);
 
-        // Get all the stockTradeList where brokerageFeeIss equals to UPDATED_BROKERAGE_FEE_ISS
-        defaultStockTradeShouldNotBeFound("brokerageFeeIss.in=" + UPDATED_BROKERAGE_FEE_ISS);
+        // Get all the stockTradeList where feeBrokerageIss equals to UPDATED_FEE_BROKERAGE_ISS
+        defaultStockTradeShouldNotBeFound("feeBrokerageIss.in=" + UPDATED_FEE_BROKERAGE_ISS);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByBrokerageFeeIssIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeBrokerageIssIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where brokerageFeeIss is not null
-        defaultStockTradeShouldBeFound("brokerageFeeIss.specified=true");
+        // Get all the stockTradeList where feeBrokerageIss is not null
+        defaultStockTradeShouldBeFound("feeBrokerageIss.specified=true");
 
-        // Get all the stockTradeList where brokerageFeeIss is null
-        defaultStockTradeShouldNotBeFound("brokerageFeeIss.specified=false");
+        // Get all the stockTradeList where feeBrokerageIss is null
+        defaultStockTradeShouldNotBeFound("feeBrokerageIss.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationValIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeNegotiationIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationVal equals to DEFAULT_NEGOTIATION_VAL
-        defaultStockTradeShouldBeFound("negotiationVal.equals=" + DEFAULT_NEGOTIATION_VAL);
+        // Get all the stockTradeList where feeNegotiation equals to DEFAULT_FEE_NEGOTIATION
+        defaultStockTradeShouldBeFound("feeNegotiation.equals=" + DEFAULT_FEE_NEGOTIATION);
 
-        // Get all the stockTradeList where negotiationVal equals to UPDATED_NEGOTIATION_VAL
-        defaultStockTradeShouldNotBeFound("negotiationVal.equals=" + UPDATED_NEGOTIATION_VAL);
+        // Get all the stockTradeList where feeNegotiation equals to UPDATED_FEE_NEGOTIATION
+        defaultStockTradeShouldNotBeFound("feeNegotiation.equals=" + UPDATED_FEE_NEGOTIATION);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationValIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeNegotiationIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationVal in DEFAULT_NEGOTIATION_VAL or UPDATED_NEGOTIATION_VAL
-        defaultStockTradeShouldBeFound("negotiationVal.in=" + DEFAULT_NEGOTIATION_VAL + "," + UPDATED_NEGOTIATION_VAL);
+        // Get all the stockTradeList where feeNegotiation in DEFAULT_FEE_NEGOTIATION or UPDATED_FEE_NEGOTIATION
+        defaultStockTradeShouldBeFound("feeNegotiation.in=" + DEFAULT_FEE_NEGOTIATION + "," + UPDATED_FEE_NEGOTIATION);
 
-        // Get all the stockTradeList where negotiationVal equals to UPDATED_NEGOTIATION_VAL
-        defaultStockTradeShouldNotBeFound("negotiationVal.in=" + UPDATED_NEGOTIATION_VAL);
+        // Get all the stockTradeList where feeNegotiation equals to UPDATED_FEE_NEGOTIATION
+        defaultStockTradeShouldNotBeFound("feeNegotiation.in=" + UPDATED_FEE_NEGOTIATION);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByNegotiationValIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeNegotiationIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where negotiationVal is not null
-        defaultStockTradeShouldBeFound("negotiationVal.specified=true");
+        // Get all the stockTradeList where feeNegotiation is not null
+        defaultStockTradeShouldBeFound("feeNegotiation.specified=true");
 
-        // Get all the stockTradeList where negotiationVal is null
-        defaultStockTradeShouldNotBeFound("negotiationVal.specified=false");
+        // Get all the stockTradeList where feeNegotiation is null
+        defaultStockTradeShouldNotBeFound("feeNegotiation.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationValIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeLiquidationIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationVal equals to DEFAULT_LIQUIDATION_VAL
-        defaultStockTradeShouldBeFound("liquidationVal.equals=" + DEFAULT_LIQUIDATION_VAL);
+        // Get all the stockTradeList where feeLiquidation equals to DEFAULT_FEE_LIQUIDATION
+        defaultStockTradeShouldBeFound("feeLiquidation.equals=" + DEFAULT_FEE_LIQUIDATION);
 
-        // Get all the stockTradeList where liquidationVal equals to UPDATED_LIQUIDATION_VAL
-        defaultStockTradeShouldNotBeFound("liquidationVal.equals=" + UPDATED_LIQUIDATION_VAL);
+        // Get all the stockTradeList where feeLiquidation equals to UPDATED_FEE_LIQUIDATION
+        defaultStockTradeShouldNotBeFound("feeLiquidation.equals=" + UPDATED_FEE_LIQUIDATION);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationValIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeLiquidationIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationVal in DEFAULT_LIQUIDATION_VAL or UPDATED_LIQUIDATION_VAL
-        defaultStockTradeShouldBeFound("liquidationVal.in=" + DEFAULT_LIQUIDATION_VAL + "," + UPDATED_LIQUIDATION_VAL);
+        // Get all the stockTradeList where feeLiquidation in DEFAULT_FEE_LIQUIDATION or UPDATED_FEE_LIQUIDATION
+        defaultStockTradeShouldBeFound("feeLiquidation.in=" + DEFAULT_FEE_LIQUIDATION + "," + UPDATED_FEE_LIQUIDATION);
 
-        // Get all the stockTradeList where liquidationVal equals to UPDATED_LIQUIDATION_VAL
-        defaultStockTradeShouldNotBeFound("liquidationVal.in=" + UPDATED_LIQUIDATION_VAL);
+        // Get all the stockTradeList where feeLiquidation equals to UPDATED_FEE_LIQUIDATION
+        defaultStockTradeShouldNotBeFound("feeLiquidation.in=" + UPDATED_FEE_LIQUIDATION);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByLiquidationValIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeLiquidationIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where liquidationVal is not null
-        defaultStockTradeShouldBeFound("liquidationVal.specified=true");
+        // Get all the stockTradeList where feeLiquidation is not null
+        defaultStockTradeShouldBeFound("feeLiquidation.specified=true");
 
-        // Get all the stockTradeList where liquidationVal is null
-        defaultStockTradeShouldNotBeFound("liquidationVal.specified=false");
+        // Get all the stockTradeList where feeLiquidation is null
+        defaultStockTradeShouldNotBeFound("feeLiquidation.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryValIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeRegistryIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryVal equals to DEFAULT_REGISTRY_VAL
-        defaultStockTradeShouldBeFound("registryVal.equals=" + DEFAULT_REGISTRY_VAL);
+        // Get all the stockTradeList where feeRegistry equals to DEFAULT_FEE_REGISTRY
+        defaultStockTradeShouldBeFound("feeRegistry.equals=" + DEFAULT_FEE_REGISTRY);
 
-        // Get all the stockTradeList where registryVal equals to UPDATED_REGISTRY_VAL
-        defaultStockTradeShouldNotBeFound("registryVal.equals=" + UPDATED_REGISTRY_VAL);
+        // Get all the stockTradeList where feeRegistry equals to UPDATED_FEE_REGISTRY
+        defaultStockTradeShouldNotBeFound("feeRegistry.equals=" + UPDATED_FEE_REGISTRY);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryValIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeRegistryIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryVal in DEFAULT_REGISTRY_VAL or UPDATED_REGISTRY_VAL
-        defaultStockTradeShouldBeFound("registryVal.in=" + DEFAULT_REGISTRY_VAL + "," + UPDATED_REGISTRY_VAL);
+        // Get all the stockTradeList where feeRegistry in DEFAULT_FEE_REGISTRY or UPDATED_FEE_REGISTRY
+        defaultStockTradeShouldBeFound("feeRegistry.in=" + DEFAULT_FEE_REGISTRY + "," + UPDATED_FEE_REGISTRY);
 
-        // Get all the stockTradeList where registryVal equals to UPDATED_REGISTRY_VAL
-        defaultStockTradeShouldNotBeFound("registryVal.in=" + UPDATED_REGISTRY_VAL);
+        // Get all the stockTradeList where feeRegistry equals to UPDATED_FEE_REGISTRY
+        defaultStockTradeShouldNotBeFound("feeRegistry.in=" + UPDATED_FEE_REGISTRY);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByRegistryValIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeRegistryIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where registryVal is not null
-        defaultStockTradeShouldBeFound("registryVal.specified=true");
+        // Get all the stockTradeList where feeRegistry is not null
+        defaultStockTradeShouldBeFound("feeRegistry.specified=true");
 
-        // Get all the stockTradeList where registryVal is null
-        defaultStockTradeShouldNotBeFound("registryVal.specified=false");
+        // Get all the stockTradeList where feeRegistry is null
+        defaultStockTradeShouldNotBeFound("feeRegistry.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfValIsEqualToSomething() throws Exception {
+    public void getAllStockTradesByFeeIrrfIsEqualToSomething() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfVal equals to DEFAULT_IRRF_VAL
-        defaultStockTradeShouldBeFound("irrfVal.equals=" + DEFAULT_IRRF_VAL);
+        // Get all the stockTradeList where feeIrrf equals to DEFAULT_FEE_IRRF
+        defaultStockTradeShouldBeFound("feeIrrf.equals=" + DEFAULT_FEE_IRRF);
 
-        // Get all the stockTradeList where irrfVal equals to UPDATED_IRRF_VAL
-        defaultStockTradeShouldNotBeFound("irrfVal.equals=" + UPDATED_IRRF_VAL);
+        // Get all the stockTradeList where feeIrrf equals to UPDATED_FEE_IRRF
+        defaultStockTradeShouldNotBeFound("feeIrrf.equals=" + UPDATED_FEE_IRRF);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfValIsInShouldWork() throws Exception {
+    public void getAllStockTradesByFeeIrrfIsInShouldWork() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfVal in DEFAULT_IRRF_VAL or UPDATED_IRRF_VAL
-        defaultStockTradeShouldBeFound("irrfVal.in=" + DEFAULT_IRRF_VAL + "," + UPDATED_IRRF_VAL);
+        // Get all the stockTradeList where feeIrrf in DEFAULT_FEE_IRRF or UPDATED_FEE_IRRF
+        defaultStockTradeShouldBeFound("feeIrrf.in=" + DEFAULT_FEE_IRRF + "," + UPDATED_FEE_IRRF);
 
-        // Get all the stockTradeList where irrfVal equals to UPDATED_IRRF_VAL
-        defaultStockTradeShouldNotBeFound("irrfVal.in=" + UPDATED_IRRF_VAL);
+        // Get all the stockTradeList where feeIrrf equals to UPDATED_FEE_IRRF
+        defaultStockTradeShouldNotBeFound("feeIrrf.in=" + UPDATED_FEE_IRRF);
     }
 
     @Test
     @Transactional
-    public void getAllStockTradesByIrrfValIsNullOrNotNull() throws Exception {
+    public void getAllStockTradesByFeeIrrfIsNullOrNotNull() throws Exception {
         // Initialize the database
         stockTradeRepository.saveAndFlush(stockTrade);
 
-        // Get all the stockTradeList where irrfVal is not null
-        defaultStockTradeShouldBeFound("irrfVal.specified=true");
+        // Get all the stockTradeList where feeIrrf is not null
+        defaultStockTradeShouldBeFound("feeIrrf.specified=true");
 
-        // Get all the stockTradeList where irrfVal is null
-        defaultStockTradeShouldNotBeFound("irrfVal.specified=false");
+        // Get all the stockTradeList where feeIrrf is null
+        defaultStockTradeShouldNotBeFound("feeIrrf.specified=false");
     }
 
     @Test
@@ -1753,12 +1753,12 @@ public class StockTradeResourceIntTest {
             .andExpect(jsonPath("$.[*].averagePrice").value(hasItem(DEFAULT_AVERAGE_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPriceActual").value(hasItem(DEFAULT_TOTAL_PRICE_ACTUAL.intValue())))
-            .andExpect(jsonPath("$.[*].brokerageFee").value(hasItem(DEFAULT_BROKERAGE_FEE.intValue())))
-            .andExpect(jsonPath("$.[*].brokerageFeeIss").value(hasItem(DEFAULT_BROKERAGE_FEE_ISS.intValue())))
-            .andExpect(jsonPath("$.[*].negotiationVal").value(hasItem(DEFAULT_NEGOTIATION_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].liquidationVal").value(hasItem(DEFAULT_LIQUIDATION_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].registryVal").value(hasItem(DEFAULT_REGISTRY_VAL.intValue())))
-            .andExpect(jsonPath("$.[*].irrfVal").value(hasItem(DEFAULT_IRRF_VAL.intValue())))
+            .andExpect(jsonPath("$.[*].feeBrokerage").value(hasItem(DEFAULT_FEE_BROKERAGE.intValue())))
+            .andExpect(jsonPath("$.[*].feeBrokerageIss").value(hasItem(DEFAULT_FEE_BROKERAGE_ISS.intValue())))
+            .andExpect(jsonPath("$.[*].feeNegotiation").value(hasItem(DEFAULT_FEE_NEGOTIATION.intValue())))
+            .andExpect(jsonPath("$.[*].feeLiquidation").value(hasItem(DEFAULT_FEE_LIQUIDATION.intValue())))
+            .andExpect(jsonPath("$.[*].feeRegistry").value(hasItem(DEFAULT_FEE_REGISTRY.intValue())))
+            .andExpect(jsonPath("$.[*].feeIrrf").value(hasItem(DEFAULT_FEE_IRRF.intValue())))
             .andExpect(jsonPath("$.[*].lastExecReportTime").value(hasItem(sameInstant(DEFAULT_LAST_EXEC_REPORT_TIME))))
             .andExpect(jsonPath("$.[*].lastExecReportDescr").value(hasItem(DEFAULT_LAST_EXEC_REPORT_DESCR.toString())));
 
@@ -1824,12 +1824,12 @@ public class StockTradeResourceIntTest {
             .averagePrice(UPDATED_AVERAGE_PRICE)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .totalPriceActual(UPDATED_TOTAL_PRICE_ACTUAL)
-            .brokerageFee(UPDATED_BROKERAGE_FEE)
-            .brokerageFeeIss(UPDATED_BROKERAGE_FEE_ISS)
-            .negotiationVal(UPDATED_NEGOTIATION_VAL)
-            .liquidationVal(UPDATED_LIQUIDATION_VAL)
-            .registryVal(UPDATED_REGISTRY_VAL)
-            .irrfVal(UPDATED_IRRF_VAL)
+            .feeBrokerage(UPDATED_FEE_BROKERAGE)
+            .feeBrokerageIss(UPDATED_FEE_BROKERAGE_ISS)
+            .feeNegotiation(UPDATED_FEE_NEGOTIATION)
+            .feeLiquidation(UPDATED_FEE_LIQUIDATION)
+            .feeRegistry(UPDATED_FEE_REGISTRY)
+            .feeIrrf(UPDATED_FEE_IRRF)
             .lastExecReportTime(UPDATED_LAST_EXEC_REPORT_TIME)
             .lastExecReportDescr(UPDATED_LAST_EXEC_REPORT_DESCR);
         StockTradeDTO stockTradeDTO = stockTradeMapper.toDto(updatedStockTrade);
@@ -1859,12 +1859,12 @@ public class StockTradeResourceIntTest {
         assertThat(testStockTrade.getAveragePrice()).isEqualTo(UPDATED_AVERAGE_PRICE);
         assertThat(testStockTrade.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testStockTrade.getTotalPriceActual()).isEqualTo(UPDATED_TOTAL_PRICE_ACTUAL);
-        assertThat(testStockTrade.getBrokerageFee()).isEqualTo(UPDATED_BROKERAGE_FEE);
-        assertThat(testStockTrade.getBrokerageFeeIss()).isEqualTo(UPDATED_BROKERAGE_FEE_ISS);
-        assertThat(testStockTrade.getNegotiationVal()).isEqualTo(UPDATED_NEGOTIATION_VAL);
-        assertThat(testStockTrade.getLiquidationVal()).isEqualTo(UPDATED_LIQUIDATION_VAL);
-        assertThat(testStockTrade.getRegistryVal()).isEqualTo(UPDATED_REGISTRY_VAL);
-        assertThat(testStockTrade.getIrrfVal()).isEqualTo(UPDATED_IRRF_VAL);
+        assertThat(testStockTrade.getFeeBrokerage()).isEqualTo(UPDATED_FEE_BROKERAGE);
+        assertThat(testStockTrade.getFeeBrokerageIss()).isEqualTo(UPDATED_FEE_BROKERAGE_ISS);
+        assertThat(testStockTrade.getFeeNegotiation()).isEqualTo(UPDATED_FEE_NEGOTIATION);
+        assertThat(testStockTrade.getFeeLiquidation()).isEqualTo(UPDATED_FEE_LIQUIDATION);
+        assertThat(testStockTrade.getFeeRegistry()).isEqualTo(UPDATED_FEE_REGISTRY);
+        assertThat(testStockTrade.getFeeIrrf()).isEqualTo(UPDATED_FEE_IRRF);
         assertThat(testStockTrade.getLastExecReportTime()).isEqualTo(UPDATED_LAST_EXEC_REPORT_TIME);
         assertThat(testStockTrade.getLastExecReportDescr()).isEqualTo(UPDATED_LAST_EXEC_REPORT_DESCR);
     }
