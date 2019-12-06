@@ -31,6 +31,19 @@ Se acontecer erro `/usr/bin/env "sh\r" no such file or directory`, instale o dos
 
 - [Instale o PostgresSQL 9.5](https://www.postgresql.org/download/linux/ubuntu/)
 
+## Building and Running application by docker-compose
+
+### Build docker image
+```shell script
+./gradlew -Pdev bootJar jibDockerBuild
+./gradlew -Pprod bootJar jibDockerBuild
+```
+### Running the docker-compose
+```shell script
+docker-compose -f src/main/docker/app.yml up
+```
+
+
 # Antigo (mover para outro arquivo)
 
 # cliv_server

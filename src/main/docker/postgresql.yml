@@ -3,9 +3,9 @@ services:
     cliv_server-postgresql:
         image: postgres:10.4
         # volumes:
-        #     - ~/volumes/jhipster/cliv_server/postgresql/:/var/lib/postgresql/data/
+        #     - ~/volumes/jhipster/cliv/postgresql/:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=cliv_server
-            - POSTGRES_PASSWORD=
+            - POSTGRES_USER=cliv
+            - POSTGRES_PASSWORD=cliv
         ports:
             - 5432:5432
