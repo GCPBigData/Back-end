@@ -35,13 +35,13 @@ public class OMSService {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Value("${cliv.sendOrderToOmsInDevMode}")
+    @Value("${cliv.sendOrderToOmsInDevMode:false}")
     boolean sendOrderToOmsInDevMode = false;
 
-    @Value("${cliv.createFakeOrderInDevMode}")
+    @Value("${cliv.createFakeOrderInDevMode:false}")
     boolean createFakeOrderInDevMode = false;
 
-    @Value("${cliv.createFakeOrderInProdMode}")
+    @Value("${cliv.createFakeOrderInProdMode:false}")
     boolean createFakeOrderInProdMode = false;
 
     public OMSService(AppService appService, StockOrderRepository stockOrderRepository) {

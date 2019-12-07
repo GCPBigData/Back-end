@@ -40,7 +40,7 @@ Se acontecer erro `/usr/bin/env "sh\r" no such file or directory`, instale o dos
 ```
 ### Running the docker-compose
 ```shell script
-docker-compose -f src/main/docker/app.yml up
+docker-compose -f src/main/docker/app.yml up -d
 ```
 
 
