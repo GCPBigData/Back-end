@@ -149,6 +149,7 @@ public class UserService {
     public User createUser(UserDTO userDTO) {
         User user = new User();
         setUserLogin(user, userDTO);
+        user.setCpf(userDTO.getCpf());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
