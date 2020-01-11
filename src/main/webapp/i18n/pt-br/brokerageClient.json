@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageClient": {
+            "home": {
+                "title": "Corretora - Clientes",
+                "createLabel": "Criar novo Cliente de Corretora",
+                "createOrEditLabel": "Criar ou editar Cliente de Corretora"
+            },
+            "created": "Um novo Cliente de Corretora foi criado com o identificador {{ param }}",
+            "updated": "Um Cliente de Corretora foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Cliente de Corretora foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Cliente de Corretora {{ id }}?"
+            },
+            "detail": {
+                "title": "Cliente de Corretora"
+            },
+            "name": "Nome",
+            "brokerage": "Corretora"
+        }
+    }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Brokerage.
+    -->
+    <changeSet id="20190212230309-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="brokerages_id"
+                                 baseTableName="brokerage_brokerage_client"
+                                 constraintName="fk_brokerage_brokerage_client_brokerages_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage"/>
+        <addForeignKeyConstraint baseColumnNames="brokerage_clients_id"
+                                 baseTableName="brokerage_brokerage_client"
+                                 constraintName="fk_brokerage_brokerage_client_brokerage_clients_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage_client"/>
+        
+        <addForeignKeyConstraint baseColumnNames="brokerages_id"
+                                 baseTableName="brokerage_brokerage_product"
+                                 constraintName="fk_brokerage_brokerage_product_brokerages_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage"/>
+        <addForeignKeyConstraint baseColumnNames="brokerage_products_id"
+                                 baseTableName="brokerage_brokerage_product"
+                                 constraintName="fk_brokerage_brokerage_product_brokerage_products_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage_product"/>
+        
+        <addForeignKeyConstraint baseColumnNames="brokerages_id"
+                                 baseTableName="brokerage_brokerage_assistance"
+                                 constraintName="fk_brokerage_brokerage_assistance_brokerages_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage"/>
+        <addForeignKeyConstraint baseColumnNames="brokerage_assistances_id"
+                                 baseTableName="brokerage_brokerage_assistance"
+                                 constraintName="fk_brokerage_brokerage_assistance_brokerage_assistances_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="brokerage_assistance"/>
+        
+    </changeSet>
+</databaseChangeLog>

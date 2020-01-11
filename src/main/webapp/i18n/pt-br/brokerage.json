@@ -1,0 +1,41 @@
+{
+    "clivServerApp": {
+        "brokerage": {
+            "home": {
+                "title": "Corretoras",
+                "createLabel": "Criar novo Corretora",
+                "createOrEditLabel": "Criar ou editar Corretora"
+            },
+            "created": "Uma nova Corretora foi criada com o identificador {{ param }}",
+            "updated": "Uma Corretora foi atualizada com o identificador {{ param }}",
+            "deleted": "Uma Corretora foi deletada com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Corretora {{ id }}?"
+            },
+            "detail": {
+                "title": "Corretora"
+            },
+            "name": "Nome",
+            "cnpj": "CNPJ",
+            "address": "Endereço",
+            "addressNeighborhood": "Bairro",
+            "addressCity": "Cidade",
+            "addressState": "Estado",
+            "swingTrade": "Swing Trade",
+            "dayTrade": "Day Trade",
+            "loginEmail": "Login Email",
+            "loginAccessCode": "Login Access Code",
+            "loginCpf": "Login Cpf",
+            "loginPassword": "Login Password",
+            "loginToken": "Login Token",
+            "fee": "Imposto",
+            "iss": "ISS",
+            "phone": "Telefone",
+            "website": "Website",
+            "email": "Email",
+            "brokerageClient": "Corretora - Clientes",
+            "brokerageProduct": "Corretora - Produtos",
+            "brokerageAssistance": "Corretora - Serviços"
+        }
+    }
+}

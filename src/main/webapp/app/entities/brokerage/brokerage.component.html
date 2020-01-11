@@ -1,0 +1,96 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="clivServerApp.brokerage.home.title">Brokerages</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-brokerage" [routerLink]="['/brokerage/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="clivServerApp.brokerage.home.createLabel">
+            Create new Brokerage
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="brokerages">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span jhiTranslate="clivServerApp.brokerage.name">Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="cnpj"><span jhiTranslate="clivServerApp.brokerage.cnpj">Cnpj</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="address"><span jhiTranslate="clivServerApp.brokerage.address">Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="addressNeighborhood"><span jhiTranslate="clivServerApp.brokerage.addressNeighborhood">Address Neighborhood</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="addressCity"><span jhiTranslate="clivServerApp.brokerage.addressCity">Address City</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="addressState"><span jhiTranslate="clivServerApp.brokerage.addressState">Address State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="swingTrade"><span jhiTranslate="clivServerApp.brokerage.swingTrade">Swing Trade</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dayTrade"><span jhiTranslate="clivServerApp.brokerage.dayTrade">Day Trade</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="loginEmail"><span jhiTranslate="clivServerApp.brokerage.loginEmail">Login Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="loginAccessCode"><span jhiTranslate="clivServerApp.brokerage.loginAccessCode">Login Access Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="loginCpf"><span jhiTranslate="clivServerApp.brokerage.loginCpf">Login Cpf</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="loginPassword"><span jhiTranslate="clivServerApp.brokerage.loginPassword">Login Password</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="loginToken"><span jhiTranslate="clivServerApp.brokerage.loginToken">Login Token</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="fee"><span jhiTranslate="clivServerApp.brokerage.fee">Fee</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="iss"><span jhiTranslate="clivServerApp.brokerage.iss">Iss</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="phone"><span jhiTranslate="clivServerApp.brokerage.phone">Phone</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="website"><span jhiTranslate="clivServerApp.brokerage.website">Website</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="email"><span jhiTranslate="clivServerApp.brokerage.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let brokerage of brokerages ;trackBy: trackId">
+                <td><a [routerLink]="['/brokerage', brokerage.id, 'view' ]">{{brokerage.id}}</a></td>
+                <td>{{brokerage.name}}</td>
+                <td>{{brokerage.cnpj}}</td>
+                <td>{{brokerage.address}}</td>
+                <td>{{brokerage.addressNeighborhood}}</td>
+                <td>{{brokerage.addressCity}}</td>
+                <td>{{brokerage.addressState}}</td>
+                <td>{{brokerage.swingTrade}}</td>
+                <td>{{brokerage.dayTrade}}</td>
+                <td>{{brokerage.loginEmail}}</td>
+                <td>{{brokerage.loginAccessCode}}</td>
+                <td>{{brokerage.loginCpf}}</td>
+                <td>{{brokerage.loginPassword}}</td>
+                <td>{{brokerage.loginToken}}</td>
+                <td>{{brokerage.fee}}</td>
+                <td>{{brokerage.iss}}</td>
+                <td>{{brokerage.phone}}</td>
+                <td>{{brokerage.website}}</td>
+                <td>{{brokerage.email}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/brokerage', brokerage.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/brokerage', brokerage.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'brokerage/'+ brokerage.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="brokerages && brokerages.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

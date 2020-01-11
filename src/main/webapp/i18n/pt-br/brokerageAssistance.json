@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageAssistance": {
+            "home": {
+                "title": "Corretora - Serviços",
+                "createLabel": "Criar novo Serviço de Corretora",
+                "createOrEditLabel": "Criar ou editar Serviço de Corretora"
+            },
+            "created": "Um novo Serviço de Corretora foi criado com o identificador {{ param }}",
+            "updated": "Um Serviço de Corretora foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Serviço de Corretora foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Serviço de Corretora {{ id }}?"
+            },
+            "detail": {
+                "title": "Serviço de Corretora"
+            },
+            "name": "Nome",
+            "brokerage": "Corretora"
+        }
+    }
+}

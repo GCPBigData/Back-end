@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageAssistance": {
+            "home": {
+                "title": "Brokerage Assistances",
+                "createLabel": "Create a new Brokerage Assistance",
+                "createOrEditLabel": "Create or edit a Brokerage Assistance"
+            },
+            "created": "A new Brokerage Assistance is created with identifier {{ param }}",
+            "updated": "A Brokerage Assistance is updated with identifier {{ param }}",
+            "deleted": "A Brokerage Assistance is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Brokerage Assistance {{ id }}?"
+            },
+            "detail": {
+                "title": "Brokerage Assistance"
+            },
+            "name": "Name",
+            "brokerage": "Brokerage"
+        }
+    }
+}

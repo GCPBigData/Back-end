@@ -10,6 +10,10 @@
                 "marketSector": "Market Sector",
                 "stock": "Stock",
                 "stockWatch": "Ação em Vista",
+                "brokerageClient": "Brokerage Client",
+                "brokerage": "Brokerage",
+                "brokerageProduct": "Brokerage Product",
+                "brokerageAssistance": "Brokerage Assistance",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

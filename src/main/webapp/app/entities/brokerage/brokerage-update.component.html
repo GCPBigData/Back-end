@@ -1,0 +1,264 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-brokerage-heading" jhiTranslate="clivServerApp.brokerage.home.createOrEditLabel">Create or edit a Brokerage</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!brokerage.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="brokerage.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="brokerage.name" required maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.cnpj" for="field_cnpj">Cnpj</label>
+                    <input type="text" class="form-control" name="cnpj" id="field_cnpj"
+                        [(ngModel)]="brokerage.cnpj" minlength="14" maxlength="18"/>
+                    <div [hidden]="!(editForm.controls.cnpj?.dirty && editForm.controls.cnpj?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cnpj?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 14 }">
+                        This field is required to be at least 14 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cnpj?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 18 }">
+                        This field cannot be longer than 18 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.address" for="field_address">Address</label>
+                    <input type="text" class="form-control" name="address" id="field_address"
+                        [(ngModel)]="brokerage.address" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.address?.dirty && editForm.controls.address?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.address?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.addressNeighborhood" for="field_addressNeighborhood">Address Neighborhood</label>
+                    <input type="text" class="form-control" name="addressNeighborhood" id="field_addressNeighborhood"
+                        [(ngModel)]="brokerage.addressNeighborhood" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.addressNeighborhood?.dirty && editForm.controls.addressNeighborhood?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressNeighborhood?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.addressCity" for="field_addressCity">Address City</label>
+                    <input type="text" class="form-control" name="addressCity" id="field_addressCity"
+                        [(ngModel)]="brokerage.addressCity" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.addressCity?.dirty && editForm.controls.addressCity?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressCity?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.addressState" for="field_addressState">Address State</label>
+                    <input type="text" class="form-control" name="addressState" id="field_addressState"
+                        [(ngModel)]="brokerage.addressState" maxlength="50"/>
+                    <div [hidden]="!(editForm.controls.addressState?.dirty && editForm.controls.addressState?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressState?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 50 }">
+                        This field cannot be longer than 50 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.swingTrade" for="field_swingTrade">Swing Trade</label>
+                    <input type="checkbox" class="form-control" name="swingTrade" id="field_swingTrade"
+                        [(ngModel)]="brokerage.swingTrade" />
+                    <div [hidden]="!(editForm.controls.swingTrade?.dirty && editForm.controls.swingTrade?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.swingTrade?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.dayTrade" for="field_dayTrade">Day Trade</label>
+                    <input type="checkbox" class="form-control" name="dayTrade" id="field_dayTrade"
+                        [(ngModel)]="brokerage.dayTrade" />
+                    <div [hidden]="!(editForm.controls.dayTrade?.dirty && editForm.controls.dayTrade?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dayTrade?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.loginEmail" for="field_loginEmail">Login Email</label>
+                    <input type="checkbox" class="form-control" name="loginEmail" id="field_loginEmail"
+                        [(ngModel)]="brokerage.loginEmail" />
+                    <div [hidden]="!(editForm.controls.loginEmail?.dirty && editForm.controls.loginEmail?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.loginEmail?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.loginAccessCode" for="field_loginAccessCode">Login Access Code</label>
+                    <input type="checkbox" class="form-control" name="loginAccessCode" id="field_loginAccessCode"
+                        [(ngModel)]="brokerage.loginAccessCode" />
+                    <div [hidden]="!(editForm.controls.loginAccessCode?.dirty && editForm.controls.loginAccessCode?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.loginAccessCode?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.loginCpf" for="field_loginCpf">Login Cpf</label>
+                    <input type="checkbox" class="form-control" name="loginCpf" id="field_loginCpf"
+                        [(ngModel)]="brokerage.loginCpf" />
+                    <div [hidden]="!(editForm.controls.loginCpf?.dirty && editForm.controls.loginCpf?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.loginCpf?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.loginPassword" for="field_loginPassword">Login Password</label>
+                    <input type="checkbox" class="form-control" name="loginPassword" id="field_loginPassword"
+                        [(ngModel)]="brokerage.loginPassword" />
+                    <div [hidden]="!(editForm.controls.loginPassword?.dirty && editForm.controls.loginPassword?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.loginPassword?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.loginToken" for="field_loginToken">Login Token</label>
+                    <input type="checkbox" class="form-control" name="loginToken" id="field_loginToken"
+                        [(ngModel)]="brokerage.loginToken" />
+                    <div [hidden]="!(editForm.controls.loginToken?.dirty && editForm.controls.loginToken?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.loginToken?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.fee" for="field_fee">Fee</label>
+                    <input type="number" class="form-control" name="fee" id="field_fee"
+                        [(ngModel)]="brokerage.fee" required min="0" jhiMin="0"/>
+                    <div [hidden]="!(editForm.controls.fee?.dirty && editForm.controls.fee?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.fee?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.fee?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.fee?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.iss" for="field_iss">Iss</label>
+                    <input type="number" class="form-control" name="iss" id="field_iss"
+                        [(ngModel)]="brokerage.iss" min="0" jhiMin="0" max="100.00" jhiMax="100.00"/>
+                    <div [hidden]="!(editForm.controls.iss?.dirty && editForm.controls.iss?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.iss?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.iss?.errors?.max" jhiTranslate="entity.validation.max" translateValues="{ max: 100.00 }">
+                            This field cannot be more than 100.00.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.iss?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.phone" for="field_phone">Phone</label>
+                    <input type="text" class="form-control" name="phone" id="field_phone"
+                        [(ngModel)]="brokerage.phone" maxlength="50"/>
+                    <div [hidden]="!(editForm.controls.phone?.dirty && editForm.controls.phone?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.phone?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 50 }">
+                        This field cannot be longer than 50 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.website" for="field_website">Website</label>
+                    <input type="text" class="form-control" name="website" id="field_website"
+                        [(ngModel)]="brokerage.website" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.website?.dirty && editForm.controls.website?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.website?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.brokerage.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                        [(ngModel)]="brokerage.email" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.email?.dirty && editForm.controls.email?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.email?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label jhiTranslate="clivServerApp.brokerage.brokerageClient" for="field_brokerageClient">Brokerage Client</label>
+                    <select class="form-control" id="field_brokerageClient" multiple name="brokerageClient" [(ngModel)]="brokerage.brokerageClients">
+                        <option [ngValue]="getSelected(brokerage.brokerageClients, brokerageClientOption)" *ngFor="let brokerageClientOption of brokerageclients; trackBy: trackBrokerageClientById">{{brokerageClientOption.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label jhiTranslate="clivServerApp.brokerage.brokerageProduct" for="field_brokerageProduct">Brokerage Product</label>
+                    <select class="form-control" id="field_brokerageProduct" multiple name="brokerageProduct" [(ngModel)]="brokerage.brokerageProducts">
+                        <option [ngValue]="getSelected(brokerage.brokerageProducts, brokerageProductOption)" *ngFor="let brokerageProductOption of brokerageproducts; trackBy: trackBrokerageProductById">{{brokerageProductOption.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label jhiTranslate="clivServerApp.brokerage.brokerageAssistance" for="field_brokerageAssistance">Brokerage Assistance</label>
+                    <select class="form-control" id="field_brokerageAssistance" multiple name="brokerageAssistance" [(ngModel)]="brokerage.brokerageAssistances">
+                        <option [ngValue]="getSelected(brokerage.brokerageAssistances, brokerageAssistanceOption)" *ngFor="let brokerageAssistanceOption of brokerageassistances; trackBy: trackBrokerageAssistanceById">{{brokerageAssistanceOption.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

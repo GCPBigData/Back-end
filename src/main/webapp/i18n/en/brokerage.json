@@ -1,0 +1,41 @@
+{
+    "clivServerApp": {
+        "brokerage": {
+            "home": {
+                "title": "Brokerages",
+                "createLabel": "Create a new Brokerage",
+                "createOrEditLabel": "Create or edit a Brokerage"
+            },
+            "created": "A new Brokerage is created with identifier {{ param }}",
+            "updated": "A Brokerage is updated with identifier {{ param }}",
+            "deleted": "A Brokerage is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Brokerage {{ id }}?"
+            },
+            "detail": {
+                "title": "Brokerage"
+            },
+            "name": "Name",
+            "cnpj": "Cnpj",
+            "address": "Address",
+            "addressNeighborhood": "Address Neighborhood",
+            "addressCity": "Address City",
+            "addressState": "Address State",
+            "swingTrade": "Swing Trade",
+            "dayTrade": "Day Trade",
+            "loginEmail": "Login Email",
+            "loginAccessCode": "Login Access Code",
+            "loginCpf": "Login Cpf",
+            "loginPassword": "Login Password",
+            "loginToken": "Login Token",
+            "fee": "Fee",
+            "iss": "Iss",
+            "phone": "Phone",
+            "website": "Website",
+            "email": "Email",
+            "brokerageClient": "Brokerage Client",
+            "brokerageProduct": "Brokerage Product",
+            "brokerageAssistance": "Brokerage Assistance"
+        }
+    }
+}

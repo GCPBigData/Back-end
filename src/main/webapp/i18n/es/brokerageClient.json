@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageClient": {
+            "home": {
+                "title": "Brokerage Clients",
+                "createLabel": "Crear nuevo Brokerage Client",
+                "createOrEditLabel": "Crear o editar Brokerage Client"
+            },
+            "created": "Un nuevo Brokerage Client ha sido creado con el identificador {{ param }}",
+            "updated": "Un Brokerage Client ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Brokerage Client ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Brokerage Client {{ id }}?"
+            },
+            "detail": {
+                "title": "Brokerage Client"
+            },
+            "name": "Name",
+            "brokerage": "Brokerage"
+        }
+    }
+}

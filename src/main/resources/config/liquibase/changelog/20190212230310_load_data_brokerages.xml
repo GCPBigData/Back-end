@@ -6,11 +6,53 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="20181216163000-1" author="jhipster"> <!-- context="dev"> -->
+    <changeSet id="20181216163000-1" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_assistance.csv"
+                  separator=";"
+                  tableName="brokerage_assistance"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-2" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_client.csv"
+                  separator=";"
+                  tableName="brokerage_client"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-3" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_product.csv"
+                  separator=";"
+                  tableName="brokerage_product"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-4" author="leandro"> <!-- context="dev"> -->
         <loadData encoding="UTF-8"
                   file="config/liquibase/brokerages.csv"
                   separator=";"
                   tableName="brokerage"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-5" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_brokerage_assistance.csv"
+                  separator=";"
+                  tableName="brokerage_brokerage_assistance"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-6" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_brokerage_product.csv"
+                  separator=";"
+                  tableName="brokerage_brokerage_product"/>
+    </changeSet>
+
+    <changeSet id="20181216163000-7" author="leandro"> <!-- context="dev"> -->
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/brokerages_brokerage_client.csv"
+                  separator=";"
+                  tableName="brokerage_brokerage_client"/>
     </changeSet>
 
 </databaseChangeLog>

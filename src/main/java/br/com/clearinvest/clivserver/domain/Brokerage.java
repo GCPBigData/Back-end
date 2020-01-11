@@ -8,6 +8,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -30,28 +32,24 @@ public class Brokerage implements Serializable {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @NotNull
-    @Size(min = 14, max = 14)
-    @Column(name = "cnpj", length = 14, nullable = false, unique = true)
+    @Size(min = 14, max = 18)
+    @Column(name = "cnpj", length = 18, unique = true)
     private String cnpj;
 
-    @NotNull
     @Size(max = 100)
-    @Column(name = "address", length = 100, nullable = false)
+    @Column(name = "address", length = 100)
     private String address;
 
     @Size(max = 100)
     @Column(name = "address_neighborhood", length = 100)
     private String addressNeighborhood;
 
-    @NotNull
     @Size(max = 100)
-    @Column(name = "address_city", length = 100, nullable = false)
+    @Column(name = "address_city", length = 100)
     private String addressCity;
 
-    @NotNull
-    @Size(min = 2, max = 2)
-    @Column(name = "address_state", length = 2, nullable = false)
+    @Size(max = 50)
+    @Column(name = "address_state", length = 50)
     private String addressState;
 
     @NotNull
@@ -91,6 +89,39 @@ public class Brokerage implements Serializable {
     @DecimalMax(value = "100.00")
     @Column(name = "iss", precision = 10, scale = 2)
     private BigDecimal iss;
+
+    @Size(max = 50)
+    @Column(name = "phone", length = 50)
+    private String phone;
+
+    @Size(max = 100)
+    @Column(name = "website", length = 100)
+    private String website;
+
+    @Size(max = 100)
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "brokerage_brokerage_client",
+               joinColumns = @JoinColumn(name = "brokerages_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "brokerage_clients_id", referencedColumnName = "id"))
+    private Set<BrokerageClient> brokerageClients = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "brokerage_brokerage_product",
+               joinColumns = @JoinColumn(name = "brokerages_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "brokerage_products_id", referencedColumnName = "id"))
+    private Set<BrokerageProduct> brokerageProducts = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "brokerage_brokerage_assistance",
+               joinColumns = @JoinColumn(name = "brokerages_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "brokerage_assistances_id", referencedColumnName = "id"))
+    private Set<BrokerageAssistance> brokerageAssistances = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -295,6 +326,120 @@ public class Brokerage implements Serializable {
     public void setIss(BigDecimal iss) {
         this.iss = iss;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public Brokerage phone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public Brokerage website(String website) {
+        this.website = website;
+        return this;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Brokerage email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<BrokerageClient> getBrokerageClients() {
+        return brokerageClients;
+    }
+
+    public Brokerage brokerageClients(Set<BrokerageClient> brokerageClients) {
+        this.brokerageClients = brokerageClients;
+        return this;
+    }
+
+    public Brokerage addBrokerageClient(BrokerageClient brokerageClient) {
+        this.brokerageClients.add(brokerageClient);
+        brokerageClient.getBrokerages().add(this);
+        return this;
+    }
+
+    public Brokerage removeBrokerageClient(BrokerageClient brokerageClient) {
+        this.brokerageClients.remove(brokerageClient);
+        brokerageClient.getBrokerages().remove(this);
+        return this;
+    }
+
+    public void setBrokerageClients(Set<BrokerageClient> brokerageClients) {
+        this.brokerageClients = brokerageClients;
+    }
+
+    public Set<BrokerageProduct> getBrokerageProducts() {
+        return brokerageProducts;
+    }
+
+    public Brokerage brokerageProducts(Set<BrokerageProduct> brokerageProducts) {
+        this.brokerageProducts = brokerageProducts;
+        return this;
+    }
+
+    public Brokerage addBrokerageProduct(BrokerageProduct brokerageProduct) {
+        this.brokerageProducts.add(brokerageProduct);
+        brokerageProduct.getBrokerages().add(this);
+        return this;
+    }
+
+    public Brokerage removeBrokerageProduct(BrokerageProduct brokerageProduct) {
+        this.brokerageProducts.remove(brokerageProduct);
+        brokerageProduct.getBrokerages().remove(this);
+        return this;
+    }
+
+    public void setBrokerageProducts(Set<BrokerageProduct> brokerageProducts) {
+        this.brokerageProducts = brokerageProducts;
+    }
+
+    public Set<BrokerageAssistance> getBrokerageAssistances() {
+        return brokerageAssistances;
+    }
+
+    public Brokerage brokerageAssistances(Set<BrokerageAssistance> brokerageAssistances) {
+        this.brokerageAssistances = brokerageAssistances;
+        return this;
+    }
+
+    public Brokerage addBrokerageAssistance(BrokerageAssistance brokerageAssistance) {
+        this.brokerageAssistances.add(brokerageAssistance);
+        brokerageAssistance.getBrokerages().add(this);
+        return this;
+    }
+
+    public Brokerage removeBrokerageAssistance(BrokerageAssistance brokerageAssistance) {
+        this.brokerageAssistances.remove(brokerageAssistance);
+        brokerageAssistance.getBrokerages().remove(this);
+        return this;
+    }
+
+    public void setBrokerageAssistances(Set<BrokerageAssistance> brokerageAssistances) {
+        this.brokerageAssistances = brokerageAssistances;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -336,6 +481,9 @@ public class Brokerage implements Serializable {
             ", loginToken='" + isLoginToken() + "'" +
             ", fee=" + getFee() +
             ", iss=" + getIss() +
+            ", phone='" + getPhone() + "'" +
+            ", website='" + getWebsite() + "'" +
+            ", email='" + getEmail() + "'" +
             "}";
     }
 }

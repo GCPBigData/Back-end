@@ -59,6 +59,15 @@ public class BrokerageService {
             .map(brokerageMapper::toDto);
     }
 
+    /**
+     * Get all the Brokerage with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    public Page<BrokerageDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return brokerageRepository.findAllWithEagerRelationships(pageable).map(brokerageMapper::toDto);
+    }
+    
 
     /**
      * Get one brokerage by id.
@@ -69,7 +78,7 @@ public class BrokerageService {
     @Transactional(readOnly = true)
     public Optional<BrokerageDTO> findOne(Long id) {
         log.debug("Request to get Brokerage : {}", id);
-        return brokerageRepository.findById(id)
+        return brokerageRepository.findOneWithEagerRelationships(id)
             .map(brokerageMapper::toDto);
     }
 

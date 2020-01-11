@@ -25,12 +25,12 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="cnpj" type="varchar(14)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_brokerage_cnpj" />
+            <column name="cnpj" type="varchar(18)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_brokerage_cnpj" />
             </column>
 
             <column name="address" type="varchar(100)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
             <column name="address_neighborhood" type="varchar(100)">
@@ -38,11 +38,11 @@
             </column>
 
             <column name="address_city" type="varchar(100)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
 
-            <column name="address_state" type="varchar(2)">
-                <constraints nullable="false" />
+            <column name="address_state" type="varchar(50)">
+                <constraints nullable="true" />
             </column>
 
             <column name="swing_trade" type="boolean">
@@ -81,8 +81,53 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="phone" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="website" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="email" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        
+        <createTable tableName="brokerage_brokerage_client">
+            <column name="brokerage_clients_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brokerages_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="brokerages_id, brokerage_clients_id" tableName="brokerage_brokerage_client"/>
+        
+        <createTable tableName="brokerage_brokerage_product">
+            <column name="brokerage_products_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brokerages_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="brokerages_id, brokerage_products_id" tableName="brokerage_brokerage_product"/>
+        
+        <createTable tableName="brokerage_brokerage_assistance">
+            <column name="brokerage_assistances_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brokerages_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="brokerages_id, brokerage_assistances_id" tableName="brokerage_brokerage_assistance"/>
         
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

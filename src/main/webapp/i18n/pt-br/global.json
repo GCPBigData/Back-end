@@ -7,9 +7,13 @@
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entidades",
-                "marketSector": "Setor",
                 "stock": "Ação",
+                "marketSector": "Setor",
                 "stockWatch": "Ação em Vista",
+                "brokerage": "Corretotas",
+                "brokerageClient": "Corretotas - Clientes",
+                "brokerageProduct": "Corretoras - Produtos",
+                "brokerageAssistance": "Corretoras - Serviços",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

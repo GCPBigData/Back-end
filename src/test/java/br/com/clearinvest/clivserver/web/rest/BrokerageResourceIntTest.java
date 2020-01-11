@@ -12,9 +12,12 @@ import br.com.clearinvest.clivserver.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,12 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
 import static br.com.clearinvest.clivserver.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -58,8 +63,8 @@ public class BrokerageResourceIntTest {
     private static final String DEFAULT_ADDRESS_CITY = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS_CITY = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ADDRESS_STATE = "AA";
-    private static final String UPDATED_ADDRESS_STATE = "BB";
+    private static final String DEFAULT_ADDRESS_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_STATE = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_SWING_TRADE = false;
     private static final Boolean UPDATED_SWING_TRADE = true;
@@ -88,11 +93,26 @@ public class BrokerageResourceIntTest {
     private static final BigDecimal DEFAULT_ISS = new BigDecimal(0);
     private static final BigDecimal UPDATED_ISS = new BigDecimal(1);
 
+    private static final String DEFAULT_PHONE = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
+    private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+
     @Autowired
     private BrokerageRepository brokerageRepository;
 
+    @Mock
+    private BrokerageRepository brokerageRepositoryMock;
+
     @Autowired
     private BrokerageMapper brokerageMapper;
+
+    @Mock
+    private BrokerageService brokerageServiceMock;
 
     @Autowired
     private BrokerageService brokerageService;
@@ -146,7 +166,10 @@ public class BrokerageResourceIntTest {
             .loginPassword(DEFAULT_LOGIN_PASSWORD)
             .loginToken(DEFAULT_LOGIN_TOKEN)
             .fee(DEFAULT_FEE)
-            .iss(DEFAULT_ISS);
+            .iss(DEFAULT_ISS)
+            .phone(DEFAULT_PHONE)
+            .website(DEFAULT_WEBSITE)
+            .email(DEFAULT_EMAIL);
         return brokerage;
     }
 
@@ -186,6 +209,9 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.isLoginToken()).isEqualTo(DEFAULT_LOGIN_TOKEN);
         assertThat(testBrokerage.getFee()).isEqualTo(DEFAULT_FEE);
         assertThat(testBrokerage.getIss()).isEqualTo(DEFAULT_ISS);
+        assertThat(testBrokerage.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testBrokerage.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
+        assertThat(testBrokerage.getEmail()).isEqualTo(DEFAULT_EMAIL);
     }
 
     @Test
@@ -214,82 +240,6 @@ public class BrokerageResourceIntTest {
         int databaseSizeBeforeTest = brokerageRepository.findAll().size();
         // set the field null
         brokerage.setName(null);
-
-        // Create the Brokerage, which fails.
-        BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
-
-        restBrokerageMockMvc.perform(post("/api/brokerages")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(brokerageDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Brokerage> brokerageList = brokerageRepository.findAll();
-        assertThat(brokerageList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkCnpjIsRequired() throws Exception {
-        int databaseSizeBeforeTest = brokerageRepository.findAll().size();
-        // set the field null
-        brokerage.setCnpj(null);
-
-        // Create the Brokerage, which fails.
-        BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
-
-        restBrokerageMockMvc.perform(post("/api/brokerages")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(brokerageDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Brokerage> brokerageList = brokerageRepository.findAll();
-        assertThat(brokerageList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkAddressIsRequired() throws Exception {
-        int databaseSizeBeforeTest = brokerageRepository.findAll().size();
-        // set the field null
-        brokerage.setAddress(null);
-
-        // Create the Brokerage, which fails.
-        BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
-
-        restBrokerageMockMvc.perform(post("/api/brokerages")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(brokerageDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Brokerage> brokerageList = brokerageRepository.findAll();
-        assertThat(brokerageList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkAddressCityIsRequired() throws Exception {
-        int databaseSizeBeforeTest = brokerageRepository.findAll().size();
-        // set the field null
-        brokerage.setAddressCity(null);
-
-        // Create the Brokerage, which fails.
-        BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
-
-        restBrokerageMockMvc.perform(post("/api/brokerages")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(brokerageDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Brokerage> brokerageList = brokerageRepository.findAll();
-        assertThat(brokerageList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkAddressStateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = brokerageRepository.findAll().size();
-        // set the field null
-        brokerage.setAddressState(null);
 
         // Create the Brokerage, which fails.
         BrokerageDTO brokerageDTO = brokerageMapper.toDto(brokerage);
@@ -480,9 +430,45 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.[*].loginPassword").value(hasItem(DEFAULT_LOGIN_PASSWORD.booleanValue())))
             .andExpect(jsonPath("$.[*].loginToken").value(hasItem(DEFAULT_LOGIN_TOKEN.booleanValue())))
             .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.intValue())))
-            .andExpect(jsonPath("$.[*].iss").value(hasItem(DEFAULT_ISS.intValue())));
+            .andExpect(jsonPath("$.[*].iss").value(hasItem(DEFAULT_ISS.intValue())))
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())))
+            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllBrokeragesWithEagerRelationshipsIsEnabled() throws Exception {
+        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock);
+        when(brokerageServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restBrokerageMockMvc = MockMvcBuilders.standaloneSetup(brokerageResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restBrokerageMockMvc.perform(get("/api/brokerages?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(brokerageServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllBrokeragesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock);
+            when(brokerageServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restBrokerageMockMvc = MockMvcBuilders.standaloneSetup(brokerageResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restBrokerageMockMvc.perform(get("/api/brokerages?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(brokerageServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getBrokerage() throws Exception {
@@ -508,7 +494,10 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.loginPassword").value(DEFAULT_LOGIN_PASSWORD.booleanValue()))
             .andExpect(jsonPath("$.loginToken").value(DEFAULT_LOGIN_TOKEN.booleanValue()))
             .andExpect(jsonPath("$.fee").value(DEFAULT_FEE.intValue()))
-            .andExpect(jsonPath("$.iss").value(DEFAULT_ISS.intValue()));
+            .andExpect(jsonPath("$.iss").value(DEFAULT_ISS.intValue()))
+            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()))
+            .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()))
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()));
     }
 
     @Test
@@ -546,7 +535,10 @@ public class BrokerageResourceIntTest {
             .loginPassword(UPDATED_LOGIN_PASSWORD)
             .loginToken(UPDATED_LOGIN_TOKEN)
             .fee(UPDATED_FEE)
-            .iss(UPDATED_ISS);
+            .iss(UPDATED_ISS)
+            .phone(UPDATED_PHONE)
+            .website(UPDATED_WEBSITE)
+            .email(UPDATED_EMAIL);
         BrokerageDTO brokerageDTO = brokerageMapper.toDto(updatedBrokerage);
 
         restBrokerageMockMvc.perform(put("/api/brokerages")
@@ -573,6 +565,9 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.isLoginToken()).isEqualTo(UPDATED_LOGIN_TOKEN);
         assertThat(testBrokerage.getFee()).isEqualTo(UPDATED_FEE);
         assertThat(testBrokerage.getIss()).isEqualTo(UPDATED_ISS);
+        assertThat(testBrokerage.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testBrokerage.getWebsite()).isEqualTo(UPDATED_WEBSITE);
+        assertThat(testBrokerage.getEmail()).isEqualTo(UPDATED_EMAIL);
     }
 
     @Test

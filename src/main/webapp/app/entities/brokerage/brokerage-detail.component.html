@@ -1,0 +1,113 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="brokerage">
+            <h2><span jhiTranslate="clivServerApp.brokerage.detail.title">Brokerage</span> {{brokerage.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="clivServerApp.brokerage.name">Name</span></dt>
+                <dd>
+                    <span>{{brokerage.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.cnpj">Cnpj</span></dt>
+                <dd>
+                    <span>{{brokerage.cnpj}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.address">Address</span></dt>
+                <dd>
+                    <span>{{brokerage.address}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.addressNeighborhood">Address Neighborhood</span></dt>
+                <dd>
+                    <span>{{brokerage.addressNeighborhood}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.addressCity">Address City</span></dt>
+                <dd>
+                    <span>{{brokerage.addressCity}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.addressState">Address State</span></dt>
+                <dd>
+                    <span>{{brokerage.addressState}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.swingTrade">Swing Trade</span></dt>
+                <dd>
+                    <span>{{brokerage.swingTrade}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.dayTrade">Day Trade</span></dt>
+                <dd>
+                    <span>{{brokerage.dayTrade}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.loginEmail">Login Email</span></dt>
+                <dd>
+                    <span>{{brokerage.loginEmail}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.loginAccessCode">Login Access Code</span></dt>
+                <dd>
+                    <span>{{brokerage.loginAccessCode}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.loginCpf">Login Cpf</span></dt>
+                <dd>
+                    <span>{{brokerage.loginCpf}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.loginPassword">Login Password</span></dt>
+                <dd>
+                    <span>{{brokerage.loginPassword}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.loginToken">Login Token</span></dt>
+                <dd>
+                    <span>{{brokerage.loginToken}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.fee">Fee</span></dt>
+                <dd>
+                    <span>{{brokerage.fee}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.iss">Iss</span></dt>
+                <dd>
+                    <span>{{brokerage.iss}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.phone">Phone</span></dt>
+                <dd>
+                    <span>{{brokerage.phone}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.website">Website</span></dt>
+                <dd>
+                    <span>{{brokerage.website}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.email">Email</span></dt>
+                <dd>
+                    <span>{{brokerage.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.brokerageClient">Brokerage Client</span></dt>
+                <dd>
+                    <span *ngFor="let brokerageClient of brokerage.brokerageClients; let last = last">
+                        <a [routerLink]="['/brokerage-client', brokerageClient?.id, 'view' ]">{{brokerageClient.name}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.brokerageProduct">Brokerage Product</span></dt>
+                <dd>
+                    <span *ngFor="let brokerageProduct of brokerage.brokerageProducts; let last = last">
+                        <a [routerLink]="['/brokerage-product', brokerageProduct?.id, 'view' ]">{{brokerageProduct.name}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.brokerageAssistance">Brokerage Assistance</span></dt>
+                <dd>
+                    <span *ngFor="let brokerageAssistance of brokerage.brokerageAssistances; let last = last">
+                        <a [routerLink]="['/brokerage-assistance', brokerageAssistance?.id, 'view' ]">{{brokerageAssistance.name}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/brokerage', brokerage.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

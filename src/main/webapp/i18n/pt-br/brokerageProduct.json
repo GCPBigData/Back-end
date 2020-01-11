@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageProduct": {
+            "home": {
+                "title": "Corretora - Produtos",
+                "createLabel": "Criar novo Produto de Corretora",
+                "createOrEditLabel": "Criar ou editar Produto de Corretora"
+            },
+            "created": "Um novo Produto de Corretora foi criado com o identificador {{ param }}",
+            "updated": "Um Produto de Corretora foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Produto de Corretora foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Produto de Corretora {{ id }}?"
+            },
+            "detail": {
+                "title": "Produto de Corretora"
+            },
+            "name": "Nome",
+            "brokerage": "Corretora"
+        }
+    }
+}

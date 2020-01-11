@@ -3,6 +3,8 @@ package br.com.clearinvest.clivserver.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -16,23 +18,19 @@ public class BrokerageDTO implements Serializable {
     @Size(max = 100)
     private String name;
 
-    @NotNull
-    @Size(min = 14, max = 14)
+    @Size(min = 14, max = 18)
     private String cnpj;
 
-    @NotNull
     @Size(max = 100)
     private String address;
 
     @Size(max = 100)
     private String addressNeighborhood;
 
-    @NotNull
     @Size(max = 100)
     private String addressCity;
 
-    @NotNull
-    @Size(min = 2, max = 2)
+    @Size(max = 50)
     private String addressState;
 
     @NotNull
@@ -63,6 +61,21 @@ public class BrokerageDTO implements Serializable {
     @DecimalMin(value = "0")
     @DecimalMax(value = "100.00")
     private BigDecimal iss;
+
+    @Size(max = 50)
+    private String phone;
+
+    @Size(max = 100)
+    private String website;
+
+    @Size(max = 100)
+    private String email;
+
+    private Set<BrokerageClientDTO> brokerageClients = new HashSet<>();
+
+    private Set<BrokerageProductDTO> brokerageProducts = new HashSet<>();
+
+    private Set<BrokerageAssistanceDTO> brokerageAssistances = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -192,6 +205,54 @@ public class BrokerageDTO implements Serializable {
         this.iss = iss;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<BrokerageClientDTO> getBrokerageClients() {
+        return brokerageClients;
+    }
+
+    public void setBrokerageClients(Set<BrokerageClientDTO> brokerageClients) {
+        this.brokerageClients = brokerageClients;
+    }
+
+    public Set<BrokerageProductDTO> getBrokerageProducts() {
+        return brokerageProducts;
+    }
+
+    public void setBrokerageProducts(Set<BrokerageProductDTO> brokerageProducts) {
+        this.brokerageProducts = brokerageProducts;
+    }
+
+    public Set<BrokerageAssistanceDTO> getBrokerageAssistances() {
+        return brokerageAssistances;
+    }
+
+    public void setBrokerageAssistances(Set<BrokerageAssistanceDTO> brokerageAssistances) {
+        this.brokerageAssistances = brokerageAssistances;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -232,6 +293,9 @@ public class BrokerageDTO implements Serializable {
             ", loginToken='" + isLoginToken() + "'" +
             ", fee=" + getFee() +
             ", iss=" + getIss() +
+            ", phone='" + getPhone() + "'" +
+            ", website='" + getWebsite() + "'" +
+            ", email='" + getEmail() + "'" +
             "}";
     }
 }

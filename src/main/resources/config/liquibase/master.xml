@@ -18,6 +18,9 @@
     <include file="config/liquibase/changelog/20190601120001_added_entity_BrokerageFlow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120000_added_entity_ExecReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120003_added_entity_ChatMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200111072724_added_entity_BrokerageClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200111075427_added_entity_BrokerageProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200111075824_added_entity_BrokerageAssistance.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20181216152622_added_entity_constraints_Stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181216181907_added_entity_constraints_StockWatch.xml" relativeToChangelogFile="false"/>
@@ -30,6 +33,7 @@
     <include file="config/liquibase/changelog/20190601120001_added_entity_constraints_BrokerageFlow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120000_added_entity_constraints_ExecReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190526120003_added_entity_constraints_ChatMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190212230309_added_entity_constraints_Brokerage.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20181216163000_load_data_maket_sector_stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190212230310_load_data_brokerages.xml" relativeToChangelogFile="false"/>

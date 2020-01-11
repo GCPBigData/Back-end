@@ -1,0 +1,22 @@
+{
+    "clivServerApp": {
+        "brokerageProduct": {
+            "home": {
+                "title": "Brokerage Products",
+                "createLabel": "Crear nuevo Brokerage Product",
+                "createOrEditLabel": "Crear o editar Brokerage Product"
+            },
+            "created": "Un nuevo Brokerage Product ha sido creado con el identificador {{ param }}",
+            "updated": "Un Brokerage Product ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Brokerage Product ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Brokerage Product {{ id }}?"
+            },
+            "detail": {
+                "title": "Brokerage Product"
+            },
+            "name": "Name",
+            "brokerage": "Brokerage"
+        }
+    }
+}

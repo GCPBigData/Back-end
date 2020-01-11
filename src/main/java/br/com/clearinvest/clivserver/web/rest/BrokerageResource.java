@@ -86,14 +86,20 @@ public class BrokerageResource {
      * GET  /brokerages : get all the brokerages.
      *
      * @param pageable the pagination information
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of brokerages in body
      */
     @GetMapping("/brokerages")
     @Timed
-    public ResponseEntity<List<BrokerageDTO>> getAllBrokerages(Pageable pageable) {
+    public ResponseEntity<List<BrokerageDTO>> getAllBrokerages(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Brokerages");
-        Page<BrokerageDTO> page = brokerageService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/brokerages");
+        Page<BrokerageDTO> page;
+        if (eagerload) {
+            page = brokerageService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = brokerageService.findAll(pageable);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/brokerages?eagerload=%b", eagerload));
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

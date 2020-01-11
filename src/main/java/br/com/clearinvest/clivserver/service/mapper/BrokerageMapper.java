@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Brokerage and its DTO BrokerageDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {BrokerageClientMapper.class, BrokerageProductMapper.class, BrokerageAssistanceMapper.class})
 public interface BrokerageMapper extends EntityMapper<BrokerageDTO, Brokerage> {
 
 

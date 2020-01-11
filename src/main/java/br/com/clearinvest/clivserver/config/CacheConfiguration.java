@@ -53,6 +53,15 @@ public class CacheConfiguration {
             cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageFlow.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.ExecReport.class.getName(), jcacheConfiguration);
             cm.createCache(br.com.clearinvest.clivserver.domain.ChatMessage.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageClient.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.Brokerage.class.getName() + ".brokerageClients", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageClient.class.getName() + ".brokerages", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageProduct.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageProduct.class.getName() + ".brokerages", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.Brokerage.class.getName() + ".brokerageProducts", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageAssistance.class.getName(), jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.BrokerageAssistance.class.getName() + ".brokerages", jcacheConfiguration);
+            cm.createCache(br.com.clearinvest.clivserver.domain.Brokerage.class.getName() + ".brokerageAssistances", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
