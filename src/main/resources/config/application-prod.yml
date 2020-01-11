@@ -115,7 +115,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 31536000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: cliv_server@localhost
-        base-url: http://3.16.133.186:8080/cliv # Modify according to your server's URL
+        base-url: http://177.47.18.202 # Modify according to your server's URL
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true
@@ -143,5 +143,5 @@ jhipster:
 # application:
 
 cliv:
-    serverIpAndName: 3.16.133.186#test01
+    serverIpAndName: 177.47.18.202#test01
     createFakeOrderInProdMode: false

@@ -9,4 +9,4 @@ services:
             - POSTGRES_PASSWORD=cliv
         ports:
             - 5432:5432
-        network_mode: "host"
+#        network_mode: "host"
