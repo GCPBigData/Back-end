@@ -22,7 +22,8 @@
             "main_activity": "Atividade Principal",
             "market_sector": "Classificação Setorial",
             "website": "Website",
-            "marketSector": "Setor"
+            "marketSector": "Setor",
+            "activated": "Activated"
         }
     }
 }

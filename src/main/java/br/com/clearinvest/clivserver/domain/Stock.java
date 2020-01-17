@@ -56,6 +56,10 @@ public class Stock implements Serializable {
     @Column(name = "website", length = 100)
     private String website;
 
+    @NotNull
+    @Column(name = "activated", nullable = false)
+    private Boolean activated;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
@@ -161,6 +165,19 @@ public class Stock implements Serializable {
         this.website = website;
     }
 
+    public Boolean isActivated() {
+        return activated;
+    }
+
+    public Stock activated(Boolean activated) {
+        this.activated = activated;
+        return this;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
     public MarketSector getMarketSector() {
         return marketSector;
     }
@@ -206,6 +223,7 @@ public class Stock implements Serializable {
             ", main_activity='" + getMain_activity() + "'" +
             ", market_sector='" + getMarket_sector() + "'" +
             ", website='" + getWebsite() + "'" +
+            ", activated='" + isActivated() + "'" +
             "}";
     }
 }

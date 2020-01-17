@@ -22,6 +22,7 @@
             <th jhiSortBy="main_activity"><span jhiTranslate="clivServerApp.stock.main_activity">Main Activity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="market_sector"><span jhiTranslate="clivServerApp.stock.market_sector">Market Sector</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="website"><span jhiTranslate="clivServerApp.stock.website">Website</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="activated"><span jhiTranslate="clivServerApp.stock.activated">Activated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="marketSectorName"><span jhiTranslate="clivServerApp.stock.marketSector">Market Sector</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -36,6 +37,7 @@
                 <td>{{stock.main_activity}}</td>
                 <td>{{stock.market_sector}}</td>
                 <td>{{stock.website}}</td>
+                <td>{{stock.activated}}</td>
                 <td>
                     <div *ngIf="stock.marketSectorId">
                         <a [routerLink]="['../market-sector', stock.marketSectorId , 'view' ]" >{{stock.marketSectorName}}</a>

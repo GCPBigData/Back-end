@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(StockService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Stock(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+            elemDefault = new Stock(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false);
         });
 
         describe('Service methods', async () => {
@@ -61,7 +61,8 @@ describe('Service Tests', () => {
                         cnpj: 'BBBBBB',
                         main_activity: 'BBBBBB',
                         market_sector: 'BBBBBB',
-                        website: 'BBBBBB'
+                        website: 'BBBBBB',
+                        activated: true
                     },
                     elemDefault
                 );
@@ -84,7 +85,8 @@ describe('Service Tests', () => {
                         cnpj: 'BBBBBB',
                         main_activity: 'BBBBBB',
                         market_sector: 'BBBBBB',
-                        website: 'BBBBBB'
+                        website: 'BBBBBB',
+                        activated: true
                     },
                     elemDefault
                 );

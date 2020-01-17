@@ -49,6 +49,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="activated" type="boolean">
+                <constraints nullable="false" />
+            </column>
+
             <column name="market_sector_id" type="bigint">
                 <constraints nullable="false" />
             </column>

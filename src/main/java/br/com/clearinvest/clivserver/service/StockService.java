@@ -59,7 +59,7 @@ public class StockService {
     @Transactional(readOnly = true)
     public Page<StockDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Stocks");
-        return stockRepository.findAll(pageable)
+        return stockRepository.findAllActivated(pageable)
             .map(stockMapper::toDto);
     }
 

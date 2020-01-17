@@ -64,6 +64,9 @@ public class StockResourceIntTest {
     private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
     private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVATED = false;
+    private static final Boolean UPDATED_ACTIVATED = true;
+
     @Autowired
     private StockRepository stockRepository;
 
@@ -114,7 +117,8 @@ public class StockResourceIntTest {
             .cnpj(DEFAULT_CNPJ)
             .main_activity(DEFAULT_MAIN_ACTIVITY)
             .market_sector(DEFAULT_MARKET_SECTOR)
-            .website(DEFAULT_WEBSITE);
+            .website(DEFAULT_WEBSITE)
+            .activated(DEFAULT_ACTIVATED);
         // Add required entity
         MarketSector marketSector = MarketSectorResourceIntTest.createEntity(em);
         em.persist(marketSector);
@@ -151,6 +155,7 @@ public class StockResourceIntTest {
         assertThat(testStock.getMain_activity()).isEqualTo(DEFAULT_MAIN_ACTIVITY);
         assertThat(testStock.getMarket_sector()).isEqualTo(DEFAULT_MARKET_SECTOR);
         assertThat(testStock.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
+        assertThat(testStock.isActivated()).isEqualTo(DEFAULT_ACTIVATED);
     }
 
     @Test
@@ -232,6 +237,25 @@ public class StockResourceIntTest {
 
     @Test
     @Transactional
+    public void checkActivatedIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setActivated(null);
+
+        // Create the Stock, which fails.
+        StockDTO stockDTO = stockMapper.toDto(stock);
+
+        restStockMockMvc.perform(post("/api/stocks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(stockDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllStocks() throws Exception {
         // Initialize the database
         stockRepository.saveAndFlush(stock);
@@ -247,7 +271,8 @@ public class StockResourceIntTest {
             .andExpect(jsonPath("$.[*].cnpj").value(hasItem(DEFAULT_CNPJ.toString())))
             .andExpect(jsonPath("$.[*].main_activity").value(hasItem(DEFAULT_MAIN_ACTIVITY.toString())))
             .andExpect(jsonPath("$.[*].market_sector").value(hasItem(DEFAULT_MARKET_SECTOR.toString())))
-            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())));
+            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())));
     }
     
     @Test
@@ -267,7 +292,8 @@ public class StockResourceIntTest {
             .andExpect(jsonPath("$.cnpj").value(DEFAULT_CNPJ.toString()))
             .andExpect(jsonPath("$.main_activity").value(DEFAULT_MAIN_ACTIVITY.toString()))
             .andExpect(jsonPath("$.market_sector").value(DEFAULT_MARKET_SECTOR.toString()))
-            .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()));
+            .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()))
+            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()));
     }
 
     @Test
@@ -297,7 +323,8 @@ public class StockResourceIntTest {
             .cnpj(UPDATED_CNPJ)
             .main_activity(UPDATED_MAIN_ACTIVITY)
             .market_sector(UPDATED_MARKET_SECTOR)
-            .website(UPDATED_WEBSITE);
+            .website(UPDATED_WEBSITE)
+            .activated(UPDATED_ACTIVATED);
         StockDTO stockDTO = stockMapper.toDto(updatedStock);
 
         restStockMockMvc.perform(put("/api/stocks")
@@ -316,6 +343,7 @@ public class StockResourceIntTest {
         assertThat(testStock.getMain_activity()).isEqualTo(UPDATED_MAIN_ACTIVITY);
         assertThat(testStock.getMarket_sector()).isEqualTo(UPDATED_MARKET_SECTOR);
         assertThat(testStock.getWebsite()).isEqualTo(UPDATED_WEBSITE);
+        assertThat(testStock.isActivated()).isEqualTo(UPDATED_ACTIVATED);
     }
 
     @Test

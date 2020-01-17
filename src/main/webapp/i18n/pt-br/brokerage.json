@@ -2,41 +2,41 @@
     "clivServerApp": {
         "brokerage": {
             "home": {
-                "title": "Brokerages",
-                "createLabel": "Criar novo Brokerage",
-                "createOrEditLabel": "Criar ou editar Brokerage"
+                "title": "Corretoras",
+                "createLabel": "Criar nova Corretora",
+                "createOrEditLabel": "Criar ou editar Corretora"
             },
-            "created": "Um novo Brokerage foi criado com o identificador {{ param }}",
-            "updated": "Um Brokerage foi atualizado com o identificador {{ param }}",
-            "deleted": "Um Brokerage foi deletado com o identificador {{ param }}",
+            "created": "Um novo Corretora foi criada com o identificador {{ param }}",
+            "updated": "Um Corretora foi atualizada com o identificador {{ param }}",
+            "deleted": "Um Corretora foi deletada com o identificador {{ param }}",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Brokerage {{ id }}?"
+                "question": "Tem certeza de que deseja excluir Corretora {{ id }}?"
             },
             "detail": {
-                "title": "Brokerage"
+                "title": "Corretora"
             },
-            "name": "Name",
-            "cnpj": "Cnpj",
-            "address": "Address",
-            "addressNeighborhood": "Address Neighborhood",
-            "addressCity": "Address City",
-            "addressState": "Address State",
+            "name": "Nome",
+            "cnpj": "CNPJ",
+            "address": "Endereço",
+            "addressNeighborhood": "Bairro",
+            "addressCity": "Cidade",
+            "addressState": "Estado",
             "swingTrade": "Swing Trade",
             "dayTrade": "Day Trade",
             "loginEmail": "Login Email",
             "loginAccessCode": "Login Access Code",
-            "loginCpf": "Login Cpf",
+            "loginCpf": "Login CPF",
             "loginPassword": "Login Password",
             "loginToken": "Login Token",
-            "fee": "Fee",
-            "iss": "Iss",
-            "phone": "Phone",
+            "fee": "Imposto",
+            "iss": "ISS",
+            "phone": "Telefone",
             "website": "Website",
             "email": "Email",
             "logo": "Logo",
-            "brokerageClient": "Brokerage Client",
-            "brokerageProduct": "Brokerage Product",
-            "brokerageAssistance": "Brokerage Assistance"
+            "brokerageClient": "Corretora - Clientes",
+            "brokerageProduct": "Corretora - Produtos",
+            "brokerageAssistance": "Corretora - Serviços"
         }
     }
 }

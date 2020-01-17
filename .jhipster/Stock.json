@@ -73,6 +73,13 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "activated",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181216152622",

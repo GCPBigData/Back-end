@@ -18,8 +18,14 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query(
         "select s from Stock s " +
             "left join StockWatch sw on sw.stock = s " +
-            "where sw.user.login = ?#{principal.username} " +
+            "where sw.user.login = ?#{principal.username} and activated = true " +
             "order by s.symbol")
     Page<Stock> findAllWatched(Pageable pageable);
+
+    @Query(
+        "select s from Stock s " +
+            "where activated = true " +
+            "order by s.symbol")
+    Page<Stock> findAllActivated(Pageable pageable);
 
 }
