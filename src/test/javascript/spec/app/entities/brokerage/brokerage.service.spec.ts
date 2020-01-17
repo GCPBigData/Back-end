@@ -40,6 +40,7 @@ describe('Service Tests', () => {
                 0,
                 'AAAAAAA',
                 'AAAAAAA',
+                'AAAAAAA',
                 'AAAAAAA'
             );
         });
@@ -92,7 +93,8 @@ describe('Service Tests', () => {
                         iss: 1,
                         phone: 'BBBBBB',
                         website: 'BBBBBB',
-                        email: 'BBBBBB'
+                        email: 'BBBBBB',
+                        logo: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -126,7 +128,8 @@ describe('Service Tests', () => {
                         iss: 1,
                         phone: 'BBBBBB',
                         website: 'BBBBBB',
-                        email: 'BBBBBB'
+                        email: 'BBBBBB',
+                        logo: 'BBBBBB'
                     },
                     elemDefault
                 );

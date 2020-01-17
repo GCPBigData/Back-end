@@ -2,25 +2,25 @@
     "clivServerApp": {
         "brokerage": {
             "home": {
-                "title": "Corretoras",
-                "createLabel": "Criar novo Corretora",
-                "createOrEditLabel": "Criar ou editar Corretora"
+                "title": "Brokerages",
+                "createLabel": "Criar novo Brokerage",
+                "createOrEditLabel": "Criar ou editar Brokerage"
             },
-            "created": "Uma nova Corretora foi criada com o identificador {{ param }}",
-            "updated": "Uma Corretora foi atualizada com o identificador {{ param }}",
-            "deleted": "Uma Corretora foi deletada com o identificador {{ param }}",
+            "created": "Um novo Brokerage foi criado com o identificador {{ param }}",
+            "updated": "Um Brokerage foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Brokerage foi deletado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Corretora {{ id }}?"
+                "question": "Tem certeza de que deseja excluir Brokerage {{ id }}?"
             },
             "detail": {
-                "title": "Corretora"
+                "title": "Brokerage"
             },
-            "name": "Nome",
-            "cnpj": "CNPJ",
-            "address": "Endereço",
-            "addressNeighborhood": "Bairro",
-            "addressCity": "Cidade",
-            "addressState": "Estado",
+            "name": "Name",
+            "cnpj": "Cnpj",
+            "address": "Address",
+            "addressNeighborhood": "Address Neighborhood",
+            "addressCity": "Address City",
+            "addressState": "Address State",
             "swingTrade": "Swing Trade",
             "dayTrade": "Day Trade",
             "loginEmail": "Login Email",
@@ -28,14 +28,15 @@
             "loginCpf": "Login Cpf",
             "loginPassword": "Login Password",
             "loginToken": "Login Token",
-            "fee": "Imposto",
-            "iss": "ISS",
-            "phone": "Telefone",
+            "fee": "Fee",
+            "iss": "Iss",
+            "phone": "Phone",
             "website": "Website",
             "email": "Email",
-            "brokerageClient": "Corretora - Clientes",
-            "brokerageProduct": "Corretora - Produtos",
-            "brokerageAssistance": "Corretora - Serviços"
+            "logo": "Logo",
+            "brokerageClient": "Brokerage Client",
+            "brokerageProduct": "Brokerage Product",
+            "brokerageAssistance": "Brokerage Assistance"
         }
     }
 }

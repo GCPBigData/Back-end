@@ -71,6 +71,9 @@ public class BrokerageDTO implements Serializable {
     @Size(max = 100)
     private String email;
 
+    @Size(max = 50)
+    private String logo;
+
     private Set<BrokerageClientDTO> brokerageClients = new HashSet<>();
 
     private Set<BrokerageProductDTO> brokerageProducts = new HashSet<>();
@@ -229,6 +232,14 @@ public class BrokerageDTO implements Serializable {
         this.email = email;
     }
 
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     public Set<BrokerageClientDTO> getBrokerageClients() {
         return brokerageClients;
     }
@@ -296,6 +307,7 @@ public class BrokerageDTO implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", website='" + getWebsite() + "'" +
             ", email='" + getEmail() + "'" +
+            ", logo='" + getLogo() + "'" +
             "}";
     }
 }

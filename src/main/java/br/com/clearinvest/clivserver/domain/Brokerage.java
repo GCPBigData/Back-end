@@ -102,6 +102,10 @@ public class Brokerage implements Serializable {
     @Column(name = "email", length = 100)
     private String email;
 
+    @Size(max = 50)
+    @Column(name = "logo", length = 50)
+    private String logo;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "brokerage_brokerage_client",
@@ -366,6 +370,19 @@ public class Brokerage implements Serializable {
         this.email = email;
     }
 
+    public String getLogo() {
+        return logo;
+    }
+
+    public Brokerage logo(String logo) {
+        this.logo = logo;
+        return this;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     public Set<BrokerageClient> getBrokerageClients() {
         return brokerageClients;
     }
@@ -484,6 +501,7 @@ public class Brokerage implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", website='" + getWebsite() + "'" +
             ", email='" + getEmail() + "'" +
+            ", logo='" + getLogo() + "'" +
             "}";
     }
 }

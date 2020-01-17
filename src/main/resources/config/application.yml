@@ -35,6 +35,12 @@ management:
         enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 2KB
+            max-file-size: 500KB
+            max-request-size: 1MB
     application:
         name: cliv_server
     profiles:
@@ -61,6 +67,11 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
+
+## File Storage Properties
+# All files uploaded through the REST API will be stored in this directory
+file:
+    upload-dir: /opt/meliora/cliv-server/files
 
 server:
     servlet:

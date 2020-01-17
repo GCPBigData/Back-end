@@ -22,6 +22,7 @@ export interface IBrokerage {
     phone?: string;
     website?: string;
     email?: string;
+    logo?: string;
     brokerageClients?: IBrokerageClient[];
     brokerageProducts?: IBrokerageProduct[];
     brokerageAssistances?: IBrokerageAssistance[];
@@ -48,6 +49,7 @@ export class Brokerage implements IBrokerage {
         public phone?: string,
         public website?: string,
         public email?: string,
+        public logo?: string,
         public brokerageClients?: IBrokerageClient[],
         public brokerageProducts?: IBrokerageProduct[],
         public brokerageAssistances?: IBrokerageAssistance[]

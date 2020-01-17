@@ -1,14 +1,24 @@
 package br.com.clearinvest.clivserver.web.rest;
 
-import br.com.clearinvest.clivserver.ClivServerApp;
+import static br.com.clearinvest.clivserver.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import br.com.clearinvest.clivserver.ClivServerApp;
 import br.com.clearinvest.clivserver.domain.Brokerage;
 import br.com.clearinvest.clivserver.repository.BrokerageRepository;
 import br.com.clearinvest.clivserver.service.BrokerageService;
+import br.com.clearinvest.clivserver.service.FileStorageService;
 import br.com.clearinvest.clivserver.service.dto.BrokerageDTO;
 import br.com.clearinvest.clivserver.service.mapper.BrokerageMapper;
 import br.com.clearinvest.clivserver.web.rest.errors.ExceptionTranslator;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +27,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,19 +34,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-
-import static br.com.clearinvest.clivserver.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the BrokerageResource REST controller.
@@ -102,6 +98,9 @@ public class BrokerageResourceIntTest {
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_LOGO = "AAAAAAAAAA";
+    private static final String UPDATED_LOGO = "BBBBBBBBBB";
+
     @Autowired
     private BrokerageRepository brokerageRepository;
 
@@ -114,8 +113,14 @@ public class BrokerageResourceIntTest {
     @Mock
     private BrokerageService brokerageServiceMock;
 
+    @Mock
+    private FileStorageService fileStorageServiceMock;
+
     @Autowired
     private BrokerageService brokerageService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -136,7 +141,7 @@ public class BrokerageResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BrokerageResource brokerageResource = new BrokerageResource(brokerageService);
+        final BrokerageResource brokerageResource = new BrokerageResource(brokerageService, fileStorageService);
         this.restBrokerageMockMvc = MockMvcBuilders.standaloneSetup(brokerageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -169,7 +174,8 @@ public class BrokerageResourceIntTest {
             .iss(DEFAULT_ISS)
             .phone(DEFAULT_PHONE)
             .website(DEFAULT_WEBSITE)
-            .email(DEFAULT_EMAIL);
+            .email(DEFAULT_EMAIL)
+            .logo(DEFAULT_LOGO);
         return brokerage;
     }
 
@@ -212,6 +218,7 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testBrokerage.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
         assertThat(testBrokerage.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testBrokerage.getLogo()).isEqualTo(DEFAULT_LOGO);
     }
 
     @Test
@@ -433,12 +440,13 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.[*].iss").value(hasItem(DEFAULT_ISS.intValue())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())));
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
+            .andExpect(jsonPath("$.[*].logo").value(hasItem(DEFAULT_LOGO.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllBrokeragesWithEagerRelationshipsIsEnabled() throws Exception {
-        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock);
+        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock, fileStorageServiceMock);
         when(brokerageServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restBrokerageMockMvc = MockMvcBuilders.standaloneSetup(brokerageResource)
@@ -455,7 +463,7 @@ public class BrokerageResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllBrokeragesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock);
+        BrokerageResource brokerageResource = new BrokerageResource(brokerageServiceMock, fileStorageServiceMock);
             when(brokerageServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restBrokerageMockMvc = MockMvcBuilders.standaloneSetup(brokerageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -497,7 +505,8 @@ public class BrokerageResourceIntTest {
             .andExpect(jsonPath("$.iss").value(DEFAULT_ISS.intValue()))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()))
             .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()));
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
+            .andExpect(jsonPath("$.logo").value(DEFAULT_LOGO.toString()));
     }
 
     @Test
@@ -538,7 +547,8 @@ public class BrokerageResourceIntTest {
             .iss(UPDATED_ISS)
             .phone(UPDATED_PHONE)
             .website(UPDATED_WEBSITE)
-            .email(UPDATED_EMAIL);
+            .email(UPDATED_EMAIL)
+            .logo(UPDATED_LOGO);
         BrokerageDTO brokerageDTO = brokerageMapper.toDto(updatedBrokerage);
 
         restBrokerageMockMvc.perform(put("/api/brokerages")
@@ -568,6 +578,7 @@ public class BrokerageResourceIntTest {
         assertThat(testBrokerage.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testBrokerage.getWebsite()).isEqualTo(UPDATED_WEBSITE);
         assertThat(testBrokerage.getEmail()).isEqualTo(UPDATED_EMAIL);
+        assertThat(testBrokerage.getLogo()).isEqualTo(UPDATED_LOGO);
     }
 
     @Test

@@ -33,6 +33,7 @@
             "phone": "Phone",
             "website": "Website",
             "email": "Email",
+            "logo": "Logo",
             "brokerageClient": "Brokerage Client",
             "brokerageProduct": "Brokerage Product",
             "brokerageAssistance": "Brokerage Assistance"

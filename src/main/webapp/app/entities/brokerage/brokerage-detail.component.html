@@ -77,6 +77,10 @@
                 <dd>
                     <span>{{brokerage.email}}</span>
                 </dd>
+                <dt><span jhiTranslate="clivServerApp.brokerage.logo">Logo</span></dt>
+                <dd>
+                    <span>{{brokerage.logo}}</span>
+                </dd>
                 <dt><span jhiTranslate="clivServerApp.brokerage.brokerageClient">Brokerage Client</span></dt>
                 <dd>
                     <span *ngFor="let brokerageClient of brokerage.brokerageClients; let last = last">

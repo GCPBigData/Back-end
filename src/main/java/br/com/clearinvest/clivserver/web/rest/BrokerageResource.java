@@ -1,27 +1,33 @@
 package br.com.clearinvest.clivserver.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
+import static org.apache.commons.io.IOUtils.toByteArray;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
+
 import br.com.clearinvest.clivserver.service.BrokerageService;
+import br.com.clearinvest.clivserver.service.FileStorageService;
+import br.com.clearinvest.clivserver.service.dto.BrokerageDTO;
 import br.com.clearinvest.clivserver.web.rest.errors.BadRequestAlertException;
+import br.com.clearinvest.clivserver.web.rest.model.UploadFileResponse;
 import br.com.clearinvest.clivserver.web.rest.util.HeaderUtil;
 import br.com.clearinvest.clivserver.web.rest.util.PaginationUtil;
-import br.com.clearinvest.clivserver.service.dto.BrokerageDTO;
+import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * REST controller for managing Brokerage.
@@ -34,10 +40,14 @@ public class BrokerageResource {
 
     private static final String ENTITY_NAME = "brokerage";
 
-    private final BrokerageService brokerageService;
+    public static final String DEFAULT_LOGO_DIR = "brokerages/";
 
-    public BrokerageResource(BrokerageService brokerageService) {
+    private final BrokerageService brokerageService;
+    private final FileStorageService fileStorageService;
+
+    public BrokerageResource(BrokerageService brokerageService, FileStorageService fileStorageService) {
         this.brokerageService = brokerageService;
+        this.fileStorageService = fileStorageService;
     }
 
     /**
@@ -56,8 +66,8 @@ public class BrokerageResource {
         }
         BrokerageDTO result = brokerageService.save(brokerageDTO);
         return ResponseEntity.created(new URI("/api/brokerages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -77,15 +87,15 @@ public class BrokerageResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         BrokerageDTO result = brokerageService.save(brokerageDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, brokerageDTO.getId().toString()))
-            .body(result);
+        return ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, brokerageDTO.getId().toString()))
+                .body(result);
     }
 
     /**
      * GET  /brokerages : get all the brokerages.
      *
-     * @param pageable the pagination information
+     * @param pageable  the pagination information
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of brokerages in body
      */
@@ -100,7 +110,7 @@ public class BrokerageResource {
             page = brokerageService.findAll(pageable);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/brokerages?eagerload=%b", eagerload));
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -128,6 +138,25 @@ public class BrokerageResource {
     public ResponseEntity<Void> deleteBrokerage(@PathVariable Long id) {
         log.debug("REST request to delete Brokerage : {}", id);
         brokerageService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    @PostMapping("/brokerages/logo")
+    public UploadFileResponse uploadLogo(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file, DEFAULT_LOGO_DIR);
+
+        String fileDownloadUri = fromCurrentContextPath()
+                .path("/api/brokerages/logo/")
+                .path(fileName)
+                .toUriString();
+
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+
+    @GetMapping(value = "/brokerages/logo/{file_name}", produces = IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getLogo(@PathVariable("file_name") String fileName) throws IOException {
+        return toByteArray(fileStorageService.loadFileAsResource(DEFAULT_LOGO_DIR + fileName).getInputStream());
+    }
+
 }
