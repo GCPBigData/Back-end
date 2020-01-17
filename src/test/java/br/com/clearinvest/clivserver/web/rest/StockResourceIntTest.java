@@ -43,11 +43,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ClivServerApp.class)
 public class StockResourceIntTest {
 
-    private static final String DEFAULT_SYMBOL = "AAAAAAAA";
-    private static final String UPDATED_SYMBOL = "BBBBBBBB";
+    private static final String DEFAULT_SYMBOL = "AAAAAAAAAA";
+    private static final String UPDATED_SYMBOL = "BBBBBBBBBB";
 
     private static final String DEFAULT_COMPANY = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BDR = "AAAAAAAAAA";
+    private static final String UPDATED_BDR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CNPJ = "AAAAAAAAAAAAAA";
+    private static final String UPDATED_CNPJ = "BBBBBBBBBBBBBB";
+
+    private static final String DEFAULT_MAIN_ACTIVITY = "AAAAAAAAAA";
+    private static final String UPDATED_MAIN_ACTIVITY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_MARKET_SECTOR = "AAAAAAAAAA";
+    private static final String UPDATED_MARKET_SECTOR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
+    private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
 
     @Autowired
     private StockRepository stockRepository;
@@ -94,7 +109,12 @@ public class StockResourceIntTest {
     public static Stock createEntity(EntityManager em) {
         Stock stock = new Stock()
             .symbol(DEFAULT_SYMBOL)
-            .company(DEFAULT_COMPANY);
+            .company(DEFAULT_COMPANY)
+            .bdr(DEFAULT_BDR)
+            .cnpj(DEFAULT_CNPJ)
+            .main_activity(DEFAULT_MAIN_ACTIVITY)
+            .market_sector(DEFAULT_MARKET_SECTOR)
+            .website(DEFAULT_WEBSITE);
         // Add required entity
         MarketSector marketSector = MarketSectorResourceIntTest.createEntity(em);
         em.persist(marketSector);
@@ -126,6 +146,11 @@ public class StockResourceIntTest {
         Stock testStock = stockList.get(stockList.size() - 1);
         assertThat(testStock.getSymbol()).isEqualTo(DEFAULT_SYMBOL);
         assertThat(testStock.getCompany()).isEqualTo(DEFAULT_COMPANY);
+        assertThat(testStock.getBdr()).isEqualTo(DEFAULT_BDR);
+        assertThat(testStock.getCnpj()).isEqualTo(DEFAULT_CNPJ);
+        assertThat(testStock.getMain_activity()).isEqualTo(DEFAULT_MAIN_ACTIVITY);
+        assertThat(testStock.getMarket_sector()).isEqualTo(DEFAULT_MARKET_SECTOR);
+        assertThat(testStock.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
     }
 
     @Test
@@ -188,6 +213,25 @@ public class StockResourceIntTest {
 
     @Test
     @Transactional
+    public void checkBdrIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setBdr(null);
+
+        // Create the Stock, which fails.
+        StockDTO stockDTO = stockMapper.toDto(stock);
+
+        restStockMockMvc.perform(post("/api/stocks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(stockDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllStocks() throws Exception {
         // Initialize the database
         stockRepository.saveAndFlush(stock);
@@ -198,7 +242,12 @@ public class StockResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stock.getId().intValue())))
             .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL.toString())))
-            .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY.toString())));
+            .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY.toString())))
+            .andExpect(jsonPath("$.[*].bdr").value(hasItem(DEFAULT_BDR.toString())))
+            .andExpect(jsonPath("$.[*].cnpj").value(hasItem(DEFAULT_CNPJ.toString())))
+            .andExpect(jsonPath("$.[*].main_activity").value(hasItem(DEFAULT_MAIN_ACTIVITY.toString())))
+            .andExpect(jsonPath("$.[*].market_sector").value(hasItem(DEFAULT_MARKET_SECTOR.toString())))
+            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())));
     }
     
     @Test
@@ -213,7 +262,12 @@ public class StockResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(stock.getId().intValue()))
             .andExpect(jsonPath("$.symbol").value(DEFAULT_SYMBOL.toString()))
-            .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY.toString()));
+            .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY.toString()))
+            .andExpect(jsonPath("$.bdr").value(DEFAULT_BDR.toString()))
+            .andExpect(jsonPath("$.cnpj").value(DEFAULT_CNPJ.toString()))
+            .andExpect(jsonPath("$.main_activity").value(DEFAULT_MAIN_ACTIVITY.toString()))
+            .andExpect(jsonPath("$.market_sector").value(DEFAULT_MARKET_SECTOR.toString()))
+            .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()));
     }
 
     @Test
@@ -238,7 +292,12 @@ public class StockResourceIntTest {
         em.detach(updatedStock);
         updatedStock
             .symbol(UPDATED_SYMBOL)
-            .company(UPDATED_COMPANY);
+            .company(UPDATED_COMPANY)
+            .bdr(UPDATED_BDR)
+            .cnpj(UPDATED_CNPJ)
+            .main_activity(UPDATED_MAIN_ACTIVITY)
+            .market_sector(UPDATED_MARKET_SECTOR)
+            .website(UPDATED_WEBSITE);
         StockDTO stockDTO = stockMapper.toDto(updatedStock);
 
         restStockMockMvc.perform(put("/api/stocks")
@@ -252,6 +311,11 @@ public class StockResourceIntTest {
         Stock testStock = stockList.get(stockList.size() - 1);
         assertThat(testStock.getSymbol()).isEqualTo(UPDATED_SYMBOL);
         assertThat(testStock.getCompany()).isEqualTo(UPDATED_COMPANY);
+        assertThat(testStock.getBdr()).isEqualTo(UPDATED_BDR);
+        assertThat(testStock.getCnpj()).isEqualTo(UPDATED_CNPJ);
+        assertThat(testStock.getMain_activity()).isEqualTo(UPDATED_MAIN_ACTIVITY);
+        assertThat(testStock.getMarket_sector()).isEqualTo(UPDATED_MARKET_SECTOR);
+        assertThat(testStock.getWebsite()).isEqualTo(UPDATED_WEBSITE);
     }
 
     @Test

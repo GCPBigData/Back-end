@@ -17,6 +17,11 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="symbol"><span jhiTranslate="clivServerApp.stock.symbol">Symbol</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="company"><span jhiTranslate="clivServerApp.stock.company">Company</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="bdr"><span jhiTranslate="clivServerApp.stock.bdr">Bdr</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="cnpj"><span jhiTranslate="clivServerApp.stock.cnpj">Cnpj</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="main_activity"><span jhiTranslate="clivServerApp.stock.main_activity">Main Activity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="market_sector"><span jhiTranslate="clivServerApp.stock.market_sector">Market Sector</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="website"><span jhiTranslate="clivServerApp.stock.website">Website</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="marketSectorName"><span jhiTranslate="clivServerApp.stock.marketSector">Market Sector</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -26,6 +31,11 @@
                 <td><a [routerLink]="['/stock', stock.id, 'view' ]">{{stock.id}}</a></td>
                 <td>{{stock.symbol}}</td>
                 <td>{{stock.company}}</td>
+                <td>{{stock.bdr}}</td>
+                <td>{{stock.cnpj}}</td>
+                <td>{{stock.main_activity}}</td>
+                <td>{{stock.market_sector}}</td>
+                <td>{{stock.website}}</td>
                 <td>
                     <div *ngIf="stock.marketSectorId">
                         <a [routerLink]="['../market-sector', stock.marketSectorId , 'view' ]" >{{stock.marketSectorName}}</a>

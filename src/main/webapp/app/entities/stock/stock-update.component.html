@@ -12,15 +12,15 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="clivServerApp.stock.symbol" for="field_symbol">Symbol</label>
                     <input type="text" class="form-control" name="symbol" id="field_symbol"
-                        [(ngModel)]="stock.symbol" required maxlength="8"/>
+                        [(ngModel)]="stock.symbol" required maxlength="100"/>
                     <div [hidden]="!(editForm.controls.symbol?.dirty && editForm.controls.symbol?.invalid)">
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.symbol?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.symbol?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 8 }">
-                        This field cannot be longer than 8 characters.
+                        [hidden]="!editForm.controls.symbol?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
                         </small>
                     </div>
                 </div>
@@ -36,6 +36,69 @@
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.company?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 200 }">
                         This field cannot be longer than 200 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.bdr" for="field_bdr">Bdr</label>
+                    <input type="text" class="form-control" name="bdr" id="field_bdr"
+                        [(ngModel)]="stock.bdr" required maxlength="30"/>
+                    <div [hidden]="!(editForm.controls.bdr?.dirty && editForm.controls.bdr?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.bdr?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.bdr?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 30 }">
+                        This field cannot be longer than 30 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.cnpj" for="field_cnpj">Cnpj</label>
+                    <input type="text" class="form-control" name="cnpj" id="field_cnpj"
+                        [(ngModel)]="stock.cnpj" minlength="14" maxlength="18"/>
+                    <div [hidden]="!(editForm.controls.cnpj?.dirty && editForm.controls.cnpj?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cnpj?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 14 }">
+                        This field is required to be at least 14 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cnpj?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 18 }">
+                        This field cannot be longer than 18 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.main_activity" for="field_main_activity">Main Activity</label>
+                    <input type="text" class="form-control" name="main_activity" id="field_main_activity"
+                        [(ngModel)]="stock.main_activity" maxlength="300"/>
+                    <div [hidden]="!(editForm.controls.main_activity?.dirty && editForm.controls.main_activity?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.main_activity?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 300 }">
+                        This field cannot be longer than 300 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.market_sector" for="field_market_sector">Market Sector</label>
+                    <input type="text" class="form-control" name="market_sector" id="field_market_sector"
+                        [(ngModel)]="stock.market_sector" maxlength="200"/>
+                    <div [hidden]="!(editForm.controls.market_sector?.dirty && editForm.controls.market_sector?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.market_sector?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 200 }">
+                        This field cannot be longer than 200 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.website" for="field_website">Website</label>
+                    <input type="text" class="form-control" name="website" id="field_website"
+                        [(ngModel)]="stock.website" maxlength="100"/>
+                    <div [hidden]="!(editForm.controls.website?.dirty && editForm.controls.website?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.website?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        This field cannot be longer than 100 characters.
                         </small>
                     </div>
                 </div>

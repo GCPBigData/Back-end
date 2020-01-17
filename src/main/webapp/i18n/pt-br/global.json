@@ -14,7 +14,6 @@
                 "brokerageClient": "Corretotas - Clientes",
                 "brokerageProduct": "Corretoras - Produtos",
                 "brokerageAssistance": "Corretoras - Serviços",
-                "brokerage": "Brokerage",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -44,8 +43,8 @@
         "form": {
             "username": "Usuário",
             "username.placeholder": "Seu usuário",
-            "currentpassword": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword": "Senha atual",
+            "currentpassword.placeholder": "Senha atual",
             "newpassword": "Nova senha",
             "newpassword.placeholder": "Nova senha",
             "confirmpassword": "Confirmação de nova senha",

@@ -1,18 +1,20 @@
 id;name
 1;Consumo e Varejo
-2;Energia e Saneamento
-3;Financeiro
-4;Holding
-5;Imobiliário e Construção
-6;Industrial
-7;Mineração
-8;Outros
-9;Papel e Celulose
-10;Petróleo e Gás
+2;Educação
+3;Energia e Saneamento
+4;Financeiro
+5;Holding
+6;Imobiliário e Construção
+7;Industrial
+8;Mineração
+9;Outros
+10;Papel e Celulose
 11;Petroquímico
-12;Saúde
-13;Seguros
-14;Siderúrgico
-15;Tecnologia e Internet
-16;Telecomunicações
-17;Transporte e Logística
+12;Petróleo e Gás
+13;Saúde
+14;Seguros
+15;Siderúrgico
+16;Tecnologia da Informação
+17;Tecnologia e Internet
+18;Telecomunicações
+19;Transporte e Logística

@@ -17,6 +17,11 @@
             },
             "symbol": "Symbol",
             "company": "Company",
+            "bdr": "Bdr",
+            "cnpj": "Cnpj",
+            "main_activity": "Main Activity",
+            "market_sector": "Market Sector",
+            "website": "Website",
             "marketSector": "Market Sector"
         }
     }

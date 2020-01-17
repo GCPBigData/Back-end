@@ -18,10 +18,9 @@
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
-                "unique",
                 "maxlength"
             ],
-            "fieldValidateRulesMaxlength": "8"
+            "fieldValidateRulesMaxlength": "100"
         },
         {
             "fieldName": "company",
@@ -31,6 +30,49 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "200"
+        },
+        {
+            "fieldName": "bdr",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "cnpj",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "14",
+            "fieldValidateRulesMaxlength": "18"
+        },
+        {
+            "fieldName": "main_activity",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "300"
+        },
+        {
+            "fieldName": "market_sector",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "200"
+        },
+        {
+            "fieldName": "website",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
         }
     ],
     "changelogDate": "20181216152622",

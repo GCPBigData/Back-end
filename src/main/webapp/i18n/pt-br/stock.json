@@ -6,17 +6,22 @@
                 "createLabel": "Criar nova Ação",
                 "createOrEditLabel": "Criar ou editar Ação"
             },
-            "created": "Uma nova Ação foi criada com o identificador {{ param }}",
-            "updated": "Uma Ação foi atualizada com o identificador {{ param }}",
-            "deleted": "Uma Ação foi deletada com o identificador {{ param }}",
+            "created": "Um novo Ação foi criada com o identificador {{ param }}",
+            "updated": "Um Ação foi atualizada com o identificador {{ param }}",
+            "deleted": "Um Ação foi deletada com o identificador {{ param }}",
             "delete": {
-                "question": "Tem certeza de que deseja excluir a Ação {{ id }}?"
+                "question": "Tem certeza de que deseja excluir Ação {{ id }}?"
             },
             "detail": {
                 "title": "Ação"
             },
-            "symbol": "Símbolo",
-            "company": "Empresa",
+            "symbol": "Código de Negociação",
+            "company": "Nome do Pregão",
+            "bdr": "Mercado Nacional BR e Internacional (BDRs)",
+            "cnpj": "CNPJ",
+            "main_activity": "Atividade Principal",
+            "market_sector": "Classificação Setorial",
+            "website": "Website",
             "marketSector": "Setor"
         }
     }
