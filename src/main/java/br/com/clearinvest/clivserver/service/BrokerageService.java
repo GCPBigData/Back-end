@@ -1,18 +1,20 @@
 package br.com.clearinvest.clivserver.service;
 
+import static java.util.stream.Collectors.toList;
+
 import br.com.clearinvest.clivserver.domain.Brokerage;
 import br.com.clearinvest.clivserver.repository.BrokerageRepository;
 import br.com.clearinvest.clivserver.service.dto.BrokerageDTO;
+import br.com.clearinvest.clivserver.service.dto.BrokerageNameDTO;
 import br.com.clearinvest.clivserver.service.mapper.BrokerageMapper;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing Brokerage.
@@ -56,7 +58,7 @@ public class BrokerageService {
     public Page<BrokerageDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Brokerages");
         return brokerageRepository.findAll(pageable)
-            .map(brokerageMapper::toDto);
+                .map(brokerageMapper::toDto);
     }
 
     /**
@@ -67,7 +69,7 @@ public class BrokerageService {
     public Page<BrokerageDTO> findAllWithEagerRelationships(Pageable pageable) {
         return brokerageRepository.findAllWithEagerRelationships(pageable).map(brokerageMapper::toDto);
     }
-    
+
 
     /**
      * Get one brokerage by id.
@@ -79,7 +81,7 @@ public class BrokerageService {
     public Optional<BrokerageDTO> findOne(Long id) {
         log.debug("Request to get Brokerage : {}", id);
         return brokerageRepository.findOneWithEagerRelationships(id)
-            .map(brokerageMapper::toDto);
+                .map(brokerageMapper::toDto);
     }
 
     /**
@@ -90,5 +92,11 @@ public class BrokerageService {
     public void delete(Long id) {
         log.debug("Request to delete Brokerage : {}", id);
         brokerageRepository.deleteById(id);
+    }
+
+    public List<BrokerageNameDTO> getAllBrokerageNames() {
+        return brokerageRepository.findAll().stream().map(
+                brokerage -> new BrokerageNameDTO(brokerage.getId(), brokerage.getName())
+        ).collect(toList());
     }
 }

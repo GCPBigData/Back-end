@@ -8,6 +8,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import br.com.clearinvest.clivserver.service.BrokerageService;
 import br.com.clearinvest.clivserver.service.FileStorageService;
 import br.com.clearinvest.clivserver.service.dto.BrokerageDTO;
+import br.com.clearinvest.clivserver.service.dto.BrokerageNameDTO;
 import br.com.clearinvest.clivserver.web.rest.errors.BadRequestAlertException;
 import br.com.clearinvest.clivserver.web.rest.model.UploadFileResponse;
 import br.com.clearinvest.clivserver.web.rest.util.HeaderUtil;
@@ -155,8 +156,16 @@ public class BrokerageResource {
     }
 
     @GetMapping(value = "/brokerages/logo/{file_name}", produces = IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getLogo(@PathVariable("file_name") String fileName) throws IOException {
+    public @ResponseBody
+    byte[] getLogo(@PathVariable("file_name") String fileName) throws IOException {
         return toByteArray(fileStorageService.loadFileAsResource(DEFAULT_LOGO_DIR + fileName).getInputStream());
     }
 
+    @Timed
+    @GetMapping("/brokerages/name")
+    public ResponseEntity<List<BrokerageNameDTO>> getAllBrokerageNames() {
+        log.debug("REST request to getAll Brokerage Names");
+        List<BrokerageNameDTO> brokerageNamesDTO = brokerageService.getAllBrokerageNames();
+        return ok().body(brokerageNamesDTO);
+    }
 }
