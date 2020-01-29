@@ -1,20 +1,20 @@
 package br.com.clearinvest.clivserver.service;
 
+import static java.util.stream.Collectors.toList;
+
 import br.com.clearinvest.clivserver.domain.MarketSector;
 import br.com.clearinvest.clivserver.repository.MarketSectorRepository;
 import br.com.clearinvest.clivserver.service.dto.MarketSectorDTO;
+import br.com.clearinvest.clivserver.service.dto.StockDTO;
 import br.com.clearinvest.clivserver.service.mapper.MarketSectorMapper;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing MarketSector.
@@ -57,8 +57,9 @@ public class MarketSectorService {
     @Transactional(readOnly = true)
     public Page<MarketSectorDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MarketSectors");
-        return marketSectorRepository.findAll(pageable)
-            .map(marketSectorMapper::toDto);
+        Page<MarketSectorDTO> marketSectorDTOS = marketSectorRepository.findAll(pageable).map(marketSectorMapper::toDto);
+        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        return marketSectorDTOS;
     }
 
     /**
@@ -68,12 +69,14 @@ public class MarketSectorService {
      */
     @Transactional(readOnly = true)
     public List<MarketSectorDTO> findAllWithStocks() {
-        return marketSectorRepository.findAllWithStocks()
-            .stream()
-            .map(marketSectorMapper::toDto)
-            .collect(Collectors.toList());
+        List<MarketSectorDTO> marketSectorDTOS = marketSectorRepository.findAllWithStocks()
+                .stream()
+                .map(marketSectorMapper::toDto)
+                .collect(toList());
+        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        return marketSectorDTOS;
     }
-
+    
     /**
      * Get one marketSector by id.
      *
@@ -83,8 +86,10 @@ public class MarketSectorService {
     @Transactional(readOnly = true)
     public Optional<MarketSectorDTO> findOne(Long id) {
         log.debug("Request to get MarketSector : {}", id);
-        return marketSectorRepository.findById(id)
-            .map(marketSectorMapper::toDto);
+        Optional<MarketSectorDTO> marketSectorDTO = marketSectorRepository.findById(id)
+                .map(marketSectorMapper::toDto);
+        marketSectorDTO.ifPresent(mktDTO -> mktDTO.setStocks(marketSectorDTO.get().getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        return marketSectorDTO;
     }
 
     /**
