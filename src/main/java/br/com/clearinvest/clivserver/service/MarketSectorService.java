@@ -58,7 +58,7 @@ public class MarketSectorService {
     public Page<MarketSectorDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MarketSectors");
         Page<MarketSectorDTO> marketSectorDTOS = marketSectorRepository.findAll(pageable).map(marketSectorMapper::toDto);
-        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isEnabled).collect(toList())));
         return marketSectorDTOS;
     }
 
@@ -73,10 +73,10 @@ public class MarketSectorService {
                 .stream()
                 .map(marketSectorMapper::toDto)
                 .collect(toList());
-        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        marketSectorDTOS.forEach(x -> x.setStocks(x.getStocks().stream().filter(StockDTO::isEnabled).collect(toList())));
         return marketSectorDTOS;
     }
-    
+
     /**
      * Get one marketSector by id.
      *
@@ -88,7 +88,7 @@ public class MarketSectorService {
         log.debug("Request to get MarketSector : {}", id);
         Optional<MarketSectorDTO> marketSectorDTO = marketSectorRepository.findById(id)
                 .map(marketSectorMapper::toDto);
-        marketSectorDTO.ifPresent(mktDTO -> mktDTO.setStocks(marketSectorDTO.get().getStocks().stream().filter(StockDTO::isActivated).collect(toList())));
+        marketSectorDTO.ifPresent(mktDTO -> mktDTO.setStocks(marketSectorDTO.get().getStocks().stream().filter(StockDTO::isEnabled).collect(toList())));
         return marketSectorDTO;
     }
 

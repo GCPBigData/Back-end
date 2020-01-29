@@ -1,4 +1,4 @@
-id;company;market_sector_id;symbol;bdr;cnpj;main_activity;market_sector;website;activated
+id;company;market_sector_id;symbol;bdr;cnpj;main_activity;market_sector;website;enabled
 1;3M;7;MMMC34;BDRs DRN Não Patrocinado;00.000.000/0000-00;Não Informado;Financeiro / Holdings Diversificadas / Holdings Diversificadas;www.3m.com;true
 2;ABBOTT;13;ABTT34;BDRs DRN Não Patrocinado;00.000.000/0000-00;Não Informado;Saúde / Medicamentos e Outros Produtos / Medicamentos e Outros Produtos;www.abbott.com;true
 3;ABBVIE;13;ABBV34;BDRs DRN Não Patrocinado;00.000.000/0000-00;Não Informado;Consumo não Cíclico / Saúde / Medicamentos e Outros Produtos;http://www.abbvie.com;true

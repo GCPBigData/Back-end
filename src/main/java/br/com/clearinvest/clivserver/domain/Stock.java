@@ -57,8 +57,8 @@ public class Stock implements Serializable {
     private String website;
 
     @NotNull
-    @Column(name = "activated", nullable = false)
-    private Boolean activated;
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -165,17 +165,17 @@ public class Stock implements Serializable {
         this.website = website;
     }
 
-    public Boolean isActivated() {
-        return activated;
+    public Boolean isEnabled() {
+        return enabled;
     }
 
-    public Stock activated(Boolean activated) {
-        this.activated = activated;
+    public Stock enabled(Boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 
-    public void setActivated(Boolean activated) {
-        this.activated = activated;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public MarketSector getMarketSector() {
@@ -223,7 +223,7 @@ public class Stock implements Serializable {
             ", main_activity='" + getMain_activity() + "'" +
             ", market_sector='" + getMarket_sector() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", activated='" + isActivated() + "'" +
+            ", enabled='" + isEnabled() + "'" +
             "}";
     }
 }

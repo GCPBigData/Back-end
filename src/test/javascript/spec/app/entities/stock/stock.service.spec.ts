@@ -62,7 +62,7 @@ describe('Service Tests', () => {
                         main_activity: 'BBBBBB',
                         market_sector: 'BBBBBB',
                         website: 'BBBBBB',
-                        activated: true
+                        enabled: true
                     },
                     elemDefault
                 );
@@ -86,7 +86,7 @@ describe('Service Tests', () => {
                         main_activity: 'BBBBBB',
                         market_sector: 'BBBBBB',
                         website: 'BBBBBB',
-                        activated: true
+                        enabled: true
                     },
                     elemDefault
                 );

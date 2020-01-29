@@ -36,13 +36,13 @@ public class StockDTO implements Serializable {
     private String website;
 
     @NotNull
-    private Boolean activated;
+    private Boolean enabled;
+
+    private Boolean watch;
 
     private Long marketSectorId;
 
     private String marketSectorName;
-
-    private Boolean watch;
 
     public Long getId() {
         return id;
@@ -108,12 +108,20 @@ public class StockDTO implements Serializable {
         this.website = website;
     }
 
-    public Boolean isActivated() {
-        return activated;
+    public Boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActivated(Boolean activated) {
-        this.activated = activated;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getWatch() {
+        return watch;
+    }
+
+    public void setWatch(Boolean watch) {
+        this.watch = watch;
     }
 
     public Long getMarketSectorId() {
@@ -130,18 +138,6 @@ public class StockDTO implements Serializable {
 
     public void setMarketSectorName(String marketSectorName) {
         this.marketSectorName = marketSectorName;
-    }
-
-    public Boolean getActivated() {
-        return activated;
-    }
-
-    public Boolean getWatch() {
-        return watch;
-    }
-
-    public void setWatch(Boolean watch) {
-        this.watch = watch;
     }
 
     @Override
@@ -176,11 +172,10 @@ public class StockDTO implements Serializable {
             ", main_activity='" + getMain_activity() + "'" +
             ", market_sector='" + getMarket_sector() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", activated='" + isActivated() + "'" +
+            ", enabled='" + isEnabled() + "'" +
             ", marketSector=" + getMarketSectorId() +
             ", marketSector='" + getMarketSectorName() + "'" +
             ", watch='" + getWatch() + "'" +
-            ", activated='" + getActivated() + "'" +
             "}";
     }
 }

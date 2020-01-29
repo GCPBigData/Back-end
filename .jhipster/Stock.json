@@ -75,7 +75,7 @@
             "fieldValidateRulesMaxlength": "100"
         },
         {
-            "fieldName": "activated",
+            "fieldName": "enabled",
             "fieldType": "Boolean",
             "fieldValidateRules": [
                 "required"

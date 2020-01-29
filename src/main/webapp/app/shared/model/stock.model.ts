@@ -7,7 +7,7 @@ export interface IStock {
     main_activity?: string;
     market_sector?: string;
     website?: string;
-    activated?: boolean;
+    enabled?: boolean;
     marketSectorName?: string;
     marketSectorId?: number;
 }
@@ -22,10 +22,10 @@ export class Stock implements IStock {
         public main_activity?: string,
         public market_sector?: string,
         public website?: string,
-        public activated?: boolean,
+        public enabled?: boolean,
         public marketSectorName?: string,
         public marketSectorId?: number
     ) {
-        this.activated = this.activated || false;
+        this.enabled = this.enabled || false;
     }
 }

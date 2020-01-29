@@ -103,12 +103,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.activated" for="field_activated">Activated</label>
-                    <input type="checkbox" class="form-control" name="activated" id="field_activated"
-                        [(ngModel)]="stock.activated" />
-                    <div [hidden]="!(editForm.controls.activated?.dirty && editForm.controls.activated?.invalid)">
+                    <label class="form-control-label" jhiTranslate="clivServerApp.stock.enabled" for="field_enabled">Enabled</label>
+                    <input type="checkbox" class="form-control" name="enabled" id="field_enabled"
+                        [(ngModel)]="stock.enabled" />
+                    <div [hidden]="!(editForm.controls.enabled?.dirty && editForm.controls.enabled?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.activated?.errors?.required" jhiTranslate="entity.validation.required">
+                        [hidden]="!editForm.controls.enabled?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>

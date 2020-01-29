@@ -64,8 +64,8 @@ public class StockResourceIntTest {
     private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
     private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_ACTIVATED = false;
-    private static final Boolean UPDATED_ACTIVATED = true;
+    private static final Boolean DEFAULT_ENABLED = false;
+    private static final Boolean UPDATED_ENABLED = true;
 
     @Autowired
     private StockRepository stockRepository;
@@ -118,7 +118,7 @@ public class StockResourceIntTest {
             .main_activity(DEFAULT_MAIN_ACTIVITY)
             .market_sector(DEFAULT_MARKET_SECTOR)
             .website(DEFAULT_WEBSITE)
-            .activated(DEFAULT_ACTIVATED);
+            .enabled(DEFAULT_ENABLED);
         // Add required entity
         MarketSector marketSector = MarketSectorResourceIntTest.createEntity(em);
         em.persist(marketSector);
@@ -155,7 +155,7 @@ public class StockResourceIntTest {
         assertThat(testStock.getMain_activity()).isEqualTo(DEFAULT_MAIN_ACTIVITY);
         assertThat(testStock.getMarket_sector()).isEqualTo(DEFAULT_MARKET_SECTOR);
         assertThat(testStock.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
-        assertThat(testStock.isActivated()).isEqualTo(DEFAULT_ACTIVATED);
+        assertThat(testStock.isEnabled()).isEqualTo(DEFAULT_ENABLED);
     }
 
     @Test
@@ -237,10 +237,10 @@ public class StockResourceIntTest {
 
     @Test
     @Transactional
-    public void checkActivatedIsRequired() throws Exception {
+    public void checkEnabledIsRequired() throws Exception {
         int databaseSizeBeforeTest = stockRepository.findAll().size();
         // set the field null
-        stock.setActivated(null);
+        stock.setEnabled(null);
 
         // Create the Stock, which fails.
         StockDTO stockDTO = stockMapper.toDto(stock);
@@ -272,7 +272,7 @@ public class StockResourceIntTest {
             .andExpect(jsonPath("$.[*].main_activity").value(hasItem(DEFAULT_MAIN_ACTIVITY.toString())))
             .andExpect(jsonPath("$.[*].market_sector").value(hasItem(DEFAULT_MARKET_SECTOR.toString())))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
-            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())));
+            .andExpect(jsonPath("$.[*].enabled").value(hasItem(DEFAULT_ENABLED.booleanValue())));
     }
     
     @Test
@@ -293,7 +293,7 @@ public class StockResourceIntTest {
             .andExpect(jsonPath("$.main_activity").value(DEFAULT_MAIN_ACTIVITY.toString()))
             .andExpect(jsonPath("$.market_sector").value(DEFAULT_MARKET_SECTOR.toString()))
             .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()))
-            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()));
+            .andExpect(jsonPath("$.enabled").value(DEFAULT_ENABLED.booleanValue()));
     }
 
     @Test
@@ -324,7 +324,7 @@ public class StockResourceIntTest {
             .main_activity(UPDATED_MAIN_ACTIVITY)
             .market_sector(UPDATED_MARKET_SECTOR)
             .website(UPDATED_WEBSITE)
-            .activated(UPDATED_ACTIVATED);
+            .enabled(UPDATED_ENABLED);
         StockDTO stockDTO = stockMapper.toDto(updatedStock);
 
         restStockMockMvc.perform(put("/api/stocks")
@@ -343,7 +343,7 @@ public class StockResourceIntTest {
         assertThat(testStock.getMain_activity()).isEqualTo(UPDATED_MAIN_ACTIVITY);
         assertThat(testStock.getMarket_sector()).isEqualTo(UPDATED_MARKET_SECTOR);
         assertThat(testStock.getWebsite()).isEqualTo(UPDATED_WEBSITE);
-        assertThat(testStock.isActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(testStock.isEnabled()).isEqualTo(UPDATED_ENABLED);
     }
 
     @Test
