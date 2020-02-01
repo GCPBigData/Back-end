@@ -36,7 +36,7 @@ public class FixMessageFactory {
     public void setAuditFields(Message message) {
         if (!isNullOrEmpty(serverIpAndName)) {
             message.setString(10719, getCurrentServerIpAndName());
-            message.setString(9933, "CLEAR INVEST");
+            message.setString(9933, "Mult3");
         }
     }
 

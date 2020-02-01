@@ -76,8 +76,8 @@ public class MailService {
 
     @Async
     public void sendContactUsEmail(ContactUsMessageDTO messageDTO) {
-        String from = "clearinvestapp@gmail.com";
-        String to = "clearinvestapp@gmail.com";
+        String from = "suporte@mult3.com.br";
+        String to = "suporte@mult3.com.br";
         String replyTo = messageDTO.getSenderEmail();
         String subject = String.format("Fale Conosco: %s", messageDTO.getSubject());
 

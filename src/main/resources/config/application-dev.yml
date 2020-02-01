@@ -55,16 +55,16 @@ spring:
     liquibase:
         contexts: dev
     mail:
-        host: smtp.gmail.com
+        host: email-ssl.com.br
         port: 587
-        username: clearinvestapp@gmail.com
-        password: zsPXzo4697Dd9BC
+        username: suporte@mult3.com.br
+        password: Sup0rt3@mult3
         protocol: smtp
         tls: true
         properties.mail.smtp:
             auth: true
             starttls.enable: true
-            ssl.trust: smtp.gmail.com
+            ssl.trust: email-ssl.com.br
     messages:
         cache-duration: PT1S # 1 second, see the ISO 8601 standard
     thymeleaf:
@@ -104,7 +104,7 @@ jhipster:
                 # Token is valid 1 year
                 token-validity-in-seconds-for-remember-me: 31536000
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: cliv_server@localhost
+        from: suporte@mult3.com.br
         base-url: http://127.0.0.1:8080
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
